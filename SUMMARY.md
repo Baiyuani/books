@@ -9,4 +9,4 @@
 ### k8s
 
 - [etcd](k8s/etcd.md)
-
+- [GPU](k8s/GPU.md)
