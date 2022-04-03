@@ -1,11 +1,9 @@
-# 忽略所有文件
 
-# 不忽略目录
-!*/
 *.docx
 *.sql
 *.txt
 *.pdf
+.jpg
 
 /Other/
 /.idea/
