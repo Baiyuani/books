@@ -5,4 +5,7 @@
 *.docx
 *.sql
 *.txt
-Other
+*.pdf
+
+/Other/
+/.idea/
