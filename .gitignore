@@ -3,6 +3,4 @@
 # 不忽略目录
 !*/
 
-!.gitignore
-!*.md
 Other
