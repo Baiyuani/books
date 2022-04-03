@@ -3,4 +3,6 @@
 # 不忽略目录
 !*/
 *.docx
+*.sql
+*.txt
 Other
