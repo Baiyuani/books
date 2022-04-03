@@ -3,7 +3,7 @@
 *.sql
 *.txt
 *.pdf
-.jpg
+*.jpg
 
 /Other/
 /.idea/
