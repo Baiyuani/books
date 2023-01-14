@@ -1,4 +1,4 @@
- ## time
+## time
 
 ```python
 import time
@@ -79,3 +79,76 @@ logging.debug('End of program')
 
 
 ## requests库的get()方法使用 https://blog.csdn.net/qq_44728587/article/details/123090304
+
+## 随机模块
+
+```python
+import random
+
+# 打印1-10中随机一个数
+print(random.randrange(1, 10))
+
+```
+
+## 获取长度
+```python
+a = "Hello, World!"
+print(len(a))
+```
+
+## function 任意参数
+```python
+# Arbitrary Arguments, *args
+# Arbitrary Arguments are often shortened to *args in Python documentations.
+def my_function(*kids):
+  print("The youngest child is " + kids[2])
+
+my_function("Emil", "Tobias", "Linus")
+
+# 可避免由于入参过多导致报错
+def my_function(a, b, *args):
+  print("The youngest child is " + a + ' ' + b)
+
+my_function("Emil", "Tobias", "Linus")
+
+```
+
+## function 关键字参数
+```python
+# 使用 key = value 语法发送参数。 这样参数的顺序无关紧要。
+def my_function(child3, child2, child1):
+  print("The youngest child is " + child3)
+
+my_function(child1 = "Emil", child2 = "Tobias", child3 = "Linus")
+```
+
+
+## function 任意关键字参数
+```python
+# Arbitrary Kword Arguments are often shortened to **kwargs in Python documentations.
+def my_function(**kid):
+  print("His last name is " + kid["lname"])
+
+my_function(fname = "Tobias", lname = "Refsnes")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
