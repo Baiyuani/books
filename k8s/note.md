@@ -266,3 +266,15 @@ spec:
   type: ExternalName
 
 ```
+
+
+# 命令行补全
+```shell
+# windows
+PS C:\Users\Tracy> helm completion powershell | Out-String | Invoke-Expression
+PS C:\Users\Tracy> kubectl completion powershell | Out-String | Invoke-Expression
+
+# linux
+source <(helm completion bash)
+helm completion bash > /etc/bash_completion.d/helm
+```
