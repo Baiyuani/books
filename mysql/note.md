@@ -63,13 +63,19 @@ https://blog.csdn.net/haibo0668/article/details/81262323
 ```sql
 # 排除一些库
 mysql -uroot -p'P@ssw0rd01!' -h192.171.225.227 -N -e "show databases;"|grep -Ev "information_schema|performance_schema|sys|mysql"|xargs mysqldump -uroot -p'P@ssw0rd01!' -h192.171.225.227 --databases > yewu-20220928.sql
-
-
 ```
 
-# 8. 修改用户密码
+
+# 8. 恢复
+```shell
+# 从备份sql中过滤
+cat 2023-02-23_all.sql | sed -n '/INSERT INTO `ykpjgl` VALUES/p' > /tmp/xxx.sql
+```
+
+
+
+# 9. 修改用户密码
 
 
 ```shell
 ALTER USER root@'%' IDENTIFIED BY 'newpasswd3';
-```
