@@ -67,3 +67,9 @@ mysql -uroot -p'P@ssw0rd01!' -h192.171.225.227 -N -e "show databases;"|grep -Ev 
 
 ```
 
+# 8. 修改用户密码
+
+
+```shell
+ALTER USER root@'%' IDENTIFIED BY 'newpasswd3';
+```
