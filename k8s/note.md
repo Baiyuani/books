@@ -278,3 +278,12 @@ PS C:\Users\Tracy> kubectl completion powershell | Out-String | Invoke-Expressio
 source <(helm completion bash)
 helm completion bash > /etc/bash_completion.d/helm
 ```
+
+
+
+# 批量解密secret的所有key
+
+```shell
+kubectl -o go-template='
+{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\n"}}{{end}}' get secret -n 
+```
