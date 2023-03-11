@@ -3,7 +3,7 @@
 ```shell
 #获取release实际加载的模板
 helm get manifest rancher
-hel mget all rancher
+helm get all rancher
 
 #查找repo中charts的版本
 helm search repo --versions
