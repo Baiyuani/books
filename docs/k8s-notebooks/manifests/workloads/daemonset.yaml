@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata: 
+  name: example
+#  namespace: app1
+spec: 
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: example
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 25%
+    type: RollingUpdate  # 有两种更新方式，RollingUpdate和OnDelete
+  template:
+    metadata:
+      labels:
+        app: example
+    spec: 
+      nodeSelector: 
+        app: example
+#        kubernetes.io/hostname: cn-shanghai.172.16.0.128
+      containers:
+      - image: registry.cn-shanghai.aliyuncs.com/baiyuani/web1:0.0.1
+        imagePullPolicy: IfNotPresent
+        name: example
+        resources:
+          requests:
+            cpu: 250m
+            memory: 125Mi
+      imagePullSecrets:
+        - name: docker-registry
+      restartPolicy: Always  
+      terminationGracePeriodSeconds: 50
+

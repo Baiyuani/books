@@ -1,0 +1,20 @@
+
+users:
+  "admin": $2a$10$XLJNPqto6mxnLpmp1DngmuF.eokJKO2IYEUlqkVb29Wh5QSb9xSym
+auths:
+  "admin":
+  - target: .*
+    useRegexp: true
+    actions:
+    - pull
+    - push
+    - delete
+  - target: catalog
+    type: registry
+    actions:
+    - "*"
+  _anonymous:
+  - target: .*
+    useRegexp: true
+    actions:
+    - pull

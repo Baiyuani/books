@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata: 
+  labels:
+    app: example
+  name: example-clusterip
+#  namespace: app1
+spec:
+  ports: 
+  - protocol: TCP 
+    port: 80
+    targetPort: 80
+    name: http
+  selector:
+    app: example
+  sessionAffinity: None
+  type: ClusterIP

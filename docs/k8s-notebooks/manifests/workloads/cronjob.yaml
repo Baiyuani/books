@@ -1,0 +1,33 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata: 
+  name: hello
+#  namespace: app1  # 指定命名空间
+spec: 
+  schedule: '*/1 * * * *'  # cronjob执行策略，语法同 crontab
+  startingDeadlineSeconds: 120  # job启动的超时时间，超过该时间还未启动的job会被停止
+  concurrencyPolicy: Allow  # 是否允许并行运行
+  successfulJobsHistoryLimit: 3  # 保留运行成功job的数量
+  failedJobsHistoryLimit: 6  # 保留运行失败job的数量
+  suspend: false  # 是否挂起
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 45  # job运行的超时时间，超过该时间job会被停止运行
+      backoffLimit: 3
+      completions: 4
+      parallelism: 2
+      template: 
+        spec: 
+          containers:
+          - name: hello
+            image: registry-vpc.cn-shanghai.aliyuncs.com/pro1/ng1:v3
+            imagePullPolicy: IfNotPresent
+            command: 
+            - /bin/bash
+            args: 
+            - -c 
+            - date; echo Hello World
+          imagePullSecrets:
+            - name: image-sec
+          restartPolicy: OnFailure
+          terminationGracePeriodSeconds: 50

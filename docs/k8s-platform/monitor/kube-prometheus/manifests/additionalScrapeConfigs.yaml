@@ -1,0 +1,22 @@
+- job_name: 'blackbox'
+  metrics_path: /probe
+  params:
+    module: [http_2xx]  # Look for a HTTP 200 response.
+  static_configs:
+    - targets:
+      - 'https://gitlab.baiyuani.top'
+      - 'http://es.baiyuani.top'
+      - 'http://kb.baiyuani.top'
+      - 'https://demo.baiyuani.top/'
+#      - http://prometheus.io    # Target to probe with http.
+#      - https://prometheus.io   # Target to probe with https.
+#      - http://example.com:8080 # Target to probe with http on port 8080.
+      labels:
+        group: web
+  relabel_configs:
+    - source_labels: [__address__]
+      target_label: __param_target
+    - source_labels: [__param_target]
+      target_label: instance
+    - target_label: __address__
+      replacement: kube-prometheus-blackbox-exporter:19115  # The blackbox exporter's real hostname:port.

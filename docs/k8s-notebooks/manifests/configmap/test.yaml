@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: test
+#  namespace: app1
+data:
+  nginx.conf: |
+    {
+      "name": "cr0", 
+      "type": "flannel", 
+      "delegate": {
+        "isDefaultGateway": True, 
+      }
+    }

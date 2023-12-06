@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: restore-pvc
+spec: 
+  dataSource:  #指定PV的数据源
+    name: disk-snapshot 
+    kind: VolumeSnapshot   #从snapshot中恢复数据到新生成的PV中
+    apiGroup: snapshot.storage.k8s.io
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: csi-disk

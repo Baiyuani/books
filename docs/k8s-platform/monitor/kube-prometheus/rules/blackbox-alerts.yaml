@@ -1,0 +1,31 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    app.kubernetes.io/component: prometheus
+    app.kubernetes.io/instance: kube-prometheus
+    app.kubernetes.io/name: kube-prometheus
+  name: blackbox-alerts
+spec:
+  groups:
+  - name: web_probe
+    rules:
+    - alert: WebProbeStateAbnormal
+      annotations:
+        description: "{{ $labels.instance }} HttpCode：{{ $value }}"
+        summary: Website status is abnormal
+      expr: probe_http_status_code > 399
+      for: 5m
+      labels:
+        group: web
+        severity: critical
+    - alert: SSLCertificateExpiration
+      annotations:
+        description: "{{ $labels.instance }} expire days: {{ $value }}"
+        summary: SSL certificate expiration warning
+      expr: ceil((probe_ssl_earliest_cert_expiry - time()) / 60 / 60 / 24) <= 3
+      for: 5m
+      labels:
+        group: web
+        severity: warning
+

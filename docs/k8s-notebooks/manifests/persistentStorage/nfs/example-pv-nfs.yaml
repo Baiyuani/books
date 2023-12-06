@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: example-pv-nfs
+  labels: 
+    app: example
+spec:
+  accessModes:
+    - ReadWriteMany  #该volume可以被多个node上的pod挂载使用并且都具有读写权限。   ReadWriteOnce
+  capacity:
+    storage: '1Gi' #该volume的容量大小
+#  csi:
+#    driver: nasplugin.csi.alibabacloud.com  #指定由什么colume plugin来挂载该volume（需要提前部署）
+#    volumeAttributes:
+#      path: ''  #默认挂载根路径
+#      server: 3199f4b6d0-vtx16.cn-shanghai.nas.aliyuncs.com
+#      vers: '3'
+#    volumeHandle: pv-nfs
+  persistentVolumeReclaimPolicy: Retain   #该volume被使用后，等它的使用方 pod 以及 PVC 被删除之后，这个 PV的回收策略
+#  storageClassName: nas
+  volumeMode: Filesystem

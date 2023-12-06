@@ -1,0 +1,47 @@
+# # Global variables are applied to all deployments and used as the default value of
+# # the deployments if a specific deployment value is missing.
+global:
+  # tidb 程序运行用户
+  user: "tidb"
+  # 中控机链接各服务器的ssh端口
+  ssh_port: 22
+  # 程序部署目录
+  deploy_dir: "/tidb-deploy"
+  # 数据目录
+  data_dir: "/tidb-data"
+
+pd_servers:
+  - host: 10.0.1.4
+  - host: 10.0.1.5
+  - host: 10.0.1.6
+
+tidb_servers:
+  - host: 10.0.1.4
+  - host: 10.0.1.5
+  - host: 10.0.1.6
+
+tikv_servers:
+  - host: 10.0.1.4
+  - host: 10.0.1.5
+  - host: 10.0.1.6
+
+# 如果需要开启binlog，则启用pump
+# pump_servers:
+#   - host: 10.0.1.4
+#   - host: 10.0.1.5
+#   - host: 10.0.1.6
+
+# 如果需要搭建主从同步，则启动cdc
+# cdc_servers:
+#   - host: 10.0.1.4
+#   - host: 10.0.1.5
+#   - host: 10.0.1.6
+
+# monitoring_servers:
+#   - host: 10.0.1.10
+
+# grafana_servers:
+#   - host: 10.0.1.10
+
+# alertmanager_servers:
+#   - host: 10.0.1.10

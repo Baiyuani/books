@@ -1,0 +1,94 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    app.kubernetes.io/component: prometheus
+    app.kubernetes.io/instance: kube-prometheus
+    app.kubernetes.io/name: kube-prometheus
+  name: coredns-alerts
+spec:
+  "groups":
+  - "name": "coredns"
+    "rules":
+    - "alert": "CoreDNSDown"
+      "annotations":
+        "message": "CoreDNS has disappeared from Prometheus target discovery."
+      "expr": |
+        absent(up{job="kube-prometheus-coredns"} == 1)
+      "for": "15m"
+      "labels":
+        "severity": "critical"
+    - "alert": "CoreDNSLatencyHigh"
+      "annotations":
+        "message": "CoreDNS has 99th percentile latency of {{ $value }} seconds for server {{ $labels.server }} zone {{ $labels.zone }} ."
+      "expr": |
+        histogram_quantile(0.99, sum(rate(coredns_dns_request_duration_seconds_bucket{job="kube-prometheus-coredns"}[5m])) by(server, zone, le)) > 4
+      "for": "10m"
+      "labels":
+        "severity": "critical"
+    - "alert": "CoreDNSErrorsHigh"
+      "annotations":
+        "message": "CoreDNS is returning SERVFAIL for {{ $value | humanizePercentage }} of requests."
+      "expr": |
+        sum(rate(coredns_dns_responses_total{job="kube-prometheus-coredns",rcode="SERVFAIL"}[5m]))
+          /
+        sum(rate(coredns_dns_responses_total{job="kube-prometheus-coredns"}[5m])) > 0.03
+      "for": "10m"
+      "labels":
+        "severity": "critical"
+    - "alert": "CoreDNSErrorsHigh"
+      "annotations":
+        "message": "CoreDNS is returning SERVFAIL for {{ $value | humanizePercentage }} of requests."
+      "expr": |
+        sum(rate(coredns_dns_responses_total{job="kube-prometheus-coredns",rcode="SERVFAIL"}[5m]))
+          /
+        sum(rate(coredns_dns_responses_total{job="kube-prometheus-coredns"}[5m])) > 0.01
+      "for": "10m"
+      "labels":
+        "severity": "warning"
+  - "name": "coredns_forward"
+    "rules":
+    - "alert": "CoreDNSForwardLatencyHigh"
+      "annotations":
+        "message": "CoreDNS has 99th percentile latency of {{ $value }} seconds forwarding requests to {{ $labels.to }}."
+      "expr": |
+        histogram_quantile(0.99, sum(rate(coredns_forward_request_duration_seconds_bucket{job="kube-prometheus-coredns"}[5m])) by(to, le)) > 4
+      "for": "10m"
+      "labels":
+        "severity": "critical"
+    - "alert": "CoreDNSForwardErrorsHigh"
+      "annotations":
+        "message": "CoreDNS is returning SERVFAIL for {{ $value | humanizePercentage }} of forward requests to {{ $labels.to }}."
+      "expr": |
+        sum(rate(coredns_forward_responses_total{job="kube-prometheus-coredns",rcode="SERVFAIL"}[5m]))
+          /
+        sum(rate(coredns_forward_responses_total{job="kube-prometheus-coredns"}[5m])) > 0.03
+      "for": "10m"
+      "labels":
+        "severity": "critical"
+    - "alert": "CoreDNSForwardErrorsHigh"
+      "annotations":
+        "message": "CoreDNS is returning SERVFAIL for {{ $value | humanizePercentage }} of forward requests to {{ $labels.to }}."
+      "expr": |
+        sum(rate(coredns_forward_responses_total{job="kube-prometheus-coredns",rcode="SERVFAIL"}[5m]))
+          /
+        sum(rate(coredns_forward_responses_total{job="kube-prometheus-coredns"}[5m])) > 0.01
+      "for": "10m"
+      "labels":
+        "severity": "warning"
+    - "alert": "CoreDNSForwardHealthcheckFailureCount"
+      "annotations":
+        "message": "CoreDNS health checks have failed to upstream server {{ $labels.to }}."
+      "expr": |
+        sum(rate(coredns_forward_healthcheck_failures_total{job="kube-prometheus-coredns"}[5m])) by (to) > 0
+      "for": "10m"
+      "labels":
+        "severity": "warning"
+    - "alert": "CoreDNSForwardHealthcheckBrokenCount"
+      "annotations":
+        "message": "CoreDNS health checks have failed for all upstream servers."
+      "expr": |
+        sum(rate(coredns_forward_healthcheck_broken_total{job="kube-prometheus-coredns"}[5m])) > 0
+      "for": "10m"
+      "labels":
+        "severity": "warning"

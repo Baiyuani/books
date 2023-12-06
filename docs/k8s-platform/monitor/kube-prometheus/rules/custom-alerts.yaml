@@ -1,0 +1,77 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    app.kubernetes.io/component: prometheus
+    app.kubernetes.io/instance: kube-prometheus
+    app.kubernetes.io/name: kube-prometheus
+  name: custom-alerts
+spec:
+  groups:
+  - name: custom
+    rules:
+    - alert: KubernetesDaemonsetUnavailable
+      annotations:
+        description: |-
+          Some DaemonSet Pods are not running
+          DaemonSet: {{ $labels.daemonset }}
+        summary: Kubernetes DaemonSet unavailable
+      expr: kube_daemonset_status_number_unavailable > 0
+      for: 5m
+      labels:
+        severity: critical
+#    - alert: KubernetesDeploymentUnavailable
+#      annotations:
+#        description: |-
+#          Some Deployment have unavailable pods
+#          Deployment: {{ $labels.deployment }}
+#        summary: Kubernetes DaemonSet unavailable
+#      expr: kube_deployment_status_replicas_unavailable > 0
+#      for: 5m
+#      labels:
+#        severity: critical
+#    - alert: KubernetesPodUnavailable
+#      annotations:
+#        description: |-
+#          Pod {{ $labels.pod }} is not running
+#          Namespace: {{ $labels.namespace }}
+#          Phase: {{ $labels.phase }}
+#        summary: Kubernetes Pods unavailable
+#      expr: kube_pod_status_phase{phase=~'Failed|Pending|Unknown'} > 0
+#      for: 5m
+#      labels:
+#        severity: critical
+#    - alert: KubernetesPodRestarted
+#      annotations:
+#        description: |-
+#          Pod {{ $labels.pod }} has restarted
+#          Namespace: {{ $labels.namespace }}
+#        summary: Kubernetes pod restarted in the last 30 minutes
+#      expr: changes(kube_pod_container_status_restarts_total[30m]) > 0
+#      for: 5m
+#      labels:
+#        severity: critical
+#    - alert: ContainerRestartsContinuously
+#      annotations:
+#        description: |-
+#          Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) has restarts continuously.
+#        summary: Kubernetes pod container restarts continuously in the last 20 minutes
+#      expr: |
+#        ((time() - kube_pod_container_state_started{namespace='default'}) / 60  ) * on(namespace, pod) group_left(owner_kind) topk by(namespace, pod) (
+#        1, kube_pod_owner{owner_kind!="Job"})  < 10
+#      for: 20m
+#      labels:
+#        severity: ContainerRestartsContinuously
+    - alert: ContainerRestartsContinuously
+      annotations:
+        description: |-
+           Container {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) has restarts continuously.
+        summary: Kubernetes pod container restarts continuously in the last 20 minutes
+      expr: |
+        count by (namespace, pod, container) (last_over_time(kube_pod_container_status_restarts_total{namespace='default'}[20m]))
+        > 3
+      for: 5m
+      labels:
+        severity: warning
+
+

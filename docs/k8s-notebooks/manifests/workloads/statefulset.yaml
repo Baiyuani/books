@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: example
+  name: example
+#  namespace: app1
+spec: 
+  podManagementPolicy: OrderedReady  #默认为OrderedReady，可选Parallel
+#OrderedReady：扩缩容按照 Order 顺序来执行，必须要等前面的所有 Pod 状态为 Ready 之后，才能扩容下一个 Pod。在缩容的时候，倒序删除，序号从大到小进行删除。
+#Parallel：并行扩缩容，不需要等前面的 Pod 都 Ready 或者删除后再处理下一个
+  revisionHistoryLimit: 10
+  selector: 
+    matchLabels: 
+      app: example
+  serviceName: "example-headless"  #通过这个 serviceName 来指定这个 StatefulSet 要对应哪一个 Service
+  replicas: 1
+  template: 
+    metadata: 
+      labels: 
+        app: example
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: node
+      containers: 
+      - name: nginx
+        image: nginx
+        ports: 
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        volumeMounts: 
+        - name: example-pvc-nfs
+          mountPath: /data
+        securityContext: 
+          privileged: true
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      imagePullSecrets: #  使用云平台上的镜像仓库时，不需要配置此项，默认pod使用的serviceAccount包含了该配置
+        - name: registry-sec
+  updateStrategy:   #升级策略
+    rollingUpdate:
+      partition: 0   #滚动升级时，保留旧版本pod的数量
+#假设当前有个 replicas 为 10 的 StatefulSet，当更新版本的时候，如果 Partition 是 8，并不是表示要把 8 个 Pod 更新为新版本，而是表示需要保留 8 个 Pod 为旧版本，只更新 2 个新版本作为灰度。当 Replica 为 10 的时候，下面的 Pod 序号为 [0,9)，因此当配置 Partition 为 8 的时候，其实还是保留 [0,7) 这 8个 Pod 为旧版本，只有 [8,9) 进入新版本。
+    type: RollingUpdate  #滚动升级，可选OnDelete
+  volumeClaimTemplates:   #实现每个pod拥有一个独立的PVC
+  - metadata:
+      name: example-pvc-nfs
+    spec: 
+      accessModes: 
+      - ReadWriteOnce
+      resources: 
+        requests: 
+          storage: 20Gi
+      storageClassName: nfs-client
+

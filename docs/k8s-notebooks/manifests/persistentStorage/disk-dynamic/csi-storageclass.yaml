@@ -1,0 +1,17 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: csi-disk
+provisioner: diskplugin.csi.alibabacloud.com
+parameters:
+  regionId: cn-shanghai
+  zoneId: cn-shanghai-g
+  fsType: ext4
+  type: cloud_efficiency
+volumeBindingMode: WaitForFirstConsumer
+allowedTopologies:  #限制动态创建的PV只能在可用区cn-shanghai-g被使用
+  - matchLabelExpressions:
+    - key: topology.diskplugin.csi.alibabacloud.com/zone
+      values:
+      - cn-shanghai-g
+reclaimPolicy: Delete

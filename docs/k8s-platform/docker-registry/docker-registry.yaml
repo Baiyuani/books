@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata: 
+  name: docker-registry
+  labels: 
+    app: docker-registry
+spec: 
+  podManagementPolicy: OrderedReady
+  revisionHistoryLimit: 10
+  selector: 
+    matchLabels: 
+      app: docker-registry
+  serviceName: "docker-registry"
+  replicas: 1
+  updateStrategy:
+    rollingUpdate:
+      partition: 0
+    type: RollingUpdate
+  template: 
+    metadata: 
+      labels: 
+        app: docker-registry
+    spec:
+      containers:
+      - name: docker-registry
+        image: registry:2
+        ports: 
+        - containerPort: 5000
+          name: docker-registry
+          protocol: TCP
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/registry
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteMany
+      resources:
+        requests:
+          storage: 5Gi
+      storageClassName: nfs-client
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: docker-registry
+  labels:
+    app: docker-registry
+spec:
+  clusterIP: 172.31.2.178
+  selector:
+    app: docker-registry
+  ports:
+  - name: docker-registry
+    protocol: TCP
+    port: 5000
+    targetPort: 5000
+  sessionAffinity: None
+  type: NodePort

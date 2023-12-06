@@ -1,0 +1,252 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    scheduler.alpha.kubernetes.io/critical-pod: ""
+  labels:
+    component: registry
+    tier: control-plane
+  name: registry
+  namespace: kube-system
+spec:
+  enableServiceLinks: false
+  initContainers:
+    - name: prepare-minio
+      image: 172.17.1.119:60080/acp/minio:v3.8.12
+      command:
+        - /bin/sh
+      args:
+        - -ec
+        - |
+          chown -R 697:697 /volume1 /volume2
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      volumeMounts:
+        - mountPath: /volume1
+          name: minio-volume1
+          readOnly: false
+        - mountPath: /volume2
+          name: minio-volume2
+          readOnly: false
+    - name: prepare-k8s-dir
+      command:
+      - /bin/sh
+      args:
+      - -c
+      - 'cp -a /mnt/etc/kubernetes/ /etc/ && chown -R 697:697 /etc/kubernetes/'
+      image: 172.17.1.119:60080/ait/registry:v2.7.1-alauda-f06a2bd1-v3.8
+      imagePullPolicy: IfNotPresent
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      volumeMounts:
+        - mountPath: /mnt/etc/kubernetes
+          name: k8s
+          readOnly: true
+        - mountPath: /etc/kubernetes
+          name: k8s-duplication
+  containers:
+    - name: auth
+      args:
+        - --server-port=60080
+        - --server-tls-cert-file=/etc/kubernetes/pki/apiserver.crt
+        - --server-tls-key-file=/etc/kubernetes/pki/apiserver.key
+        - --auth-public-cert-file=/etc/kubernetes/pki/ca.crt
+        - --auth-private-key-file=/etc/kubernetes/pki/ca.key
+        - --auth-config-file=/etc/kubernetes/registry/auth.yaml
+      image: 172.17.1.119:60080/ait/registry-auth:v3.8.1
+      securityContext:
+        runAsUser: 697
+        runAsGroup: 697
+      volumeMounts:
+        - mountPath: /etc/kubernetes
+          name: k8s-duplication
+          readOnly: true
+      livenessProbe:
+        httpGet:
+          path: /health
+          port: 60080
+          scheme: HTTPS
+        initialDelaySeconds: 60
+        periodSeconds: 10
+      readinessProbe:
+        httpGet:
+          path: /health
+          port: 60080
+          scheme: HTTPS
+        initialDelaySeconds: 15
+        periodSeconds: 5
+    - name: registry
+      command:
+      - /init.sh
+      image: 172.17.1.119:60080/ait/registry:v2.7.1-alauda-f06a2bd1-v3.8
+      imagePullPolicy: IfNotPresent
+      securityContext:
+        runAsUser: 697
+        runAsGroup: 697
+      env:
+        - name: REGISTRY_STORAGE
+          value: s3
+        - name: REGISTRY_HEALTH_STORAGEDRIVER_ENABLED
+          value: "false"
+        - name: REGISTRY_STORAGE_S3_ACCESSKEY
+          value: NORlqoGGL7xcVbj2E7Hj
+        - name: REGISTRY_STORAGE_S3_SECRETKEY
+          value: QJ09mwMyTN9H451n3c4xjQiy8k2Xp6MLlhslOX75
+        - name: REGISTRY_STORAGE_S3_REGIONENDPOINT
+          value: http://127.0.0.1:9000
+        - name: REGISTRY_STORAGE_S3_BUCKET
+          value: registry
+        - name: REGISTRY_STORAGE_CACHE_BLOBDESCRIPTOR
+          value: inmemory
+        - name: REGISTRY_STORAGE_S3_REGION
+          value: ignored-for-minio
+        - name: REGISTRY_STORAGE_S3_SECURE
+          value: "false"
+        - name: REGISTRY_STORAGE_DELETE_ENABLED
+          value: "true"
+        - name: REGISTRY_STORAGE_REDIRECT_DISABLE
+          value: "true"
+        - name: REGISTRY_HTTP_ADDR
+          value: 127.0.0.1:5000
+        - name: REGISTRY_HTTP_SECRET
+          value: "registrysecret"
+        - name: REGISTRY_HTTP_DEBUG_ADDR
+          value: "127.0.0.1:5001"
+        - name: REGISTRY_AUTH_TOKEN_AUTOREDIRECT
+          value: "true"
+        - name: REGISTRY_AUTH_TOKEN_REALM
+          value: /auth/token
+        - name: REGISTRY_AUTH_TOKEN_SERVICE
+          value: token-service
+        - name: REGISTRY_AUTH_TOKEN_ISSUER
+          value: registry-token-issuer
+        - name: REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE
+          value: /etc/kubernetes/pki/ca.crt
+        - name: REGISTRY_LOG_LEVEL
+          value: error
+      volumeMounts:
+        - mountPath: /etc/kubernetes
+          name: k8s-duplication
+          readOnly: true
+      livenessProbe:
+        httpGet:
+          host: 127.0.0.1
+          path: /
+          port: 5000
+          scheme: HTTP
+        initialDelaySeconds: 60
+        periodSeconds: 10
+      readinessProbe:
+        httpGet:
+          host: 127.0.0.1
+          path: /
+          port: 5000
+          scheme: HTTP
+        initialDelaySeconds: 15
+        periodSeconds: 5
+    - name: minio
+      image: 172.17.1.119:60080/acp/minio:v3.8.12
+      imagePullPolicy: IfNotPresent
+      securityContext:
+        runAsUser: 697
+        runAsGroup: 697
+      command:
+        - minio
+        - server
+        - --address
+        - :9000
+
+        - http://172.17.0.255/volume1
+        - http://172.17.0.255/volume2
+
+        - http://172.17.0.170/volume1
+        - http://172.17.0.170/volume2
+
+        - http://172.17.1.20/volume1
+        - http://172.17.1.20/volume2
+
+      env:
+        - name: MINIO_ACCESS_KEY
+          value: NORlqoGGL7xcVbj2E7Hj
+        - name: MINIO_DISK_USAGE_CRAWL_ENABLE
+          value: "false"
+        - name: MINIO_SECRET_KEY
+          value: QJ09mwMyTN9H451n3c4xjQiy8k2Xp6MLlhslOX75
+      volumeMounts:
+        - mountPath: /volume1
+          name: minio-volume1
+          readOnly: false
+        - mountPath: /volume2
+          name: minio-volume2
+          readOnly: false
+      livenessProbe:
+        httpGet:
+          path: /minio/health/live
+          port: 9000
+          scheme: HTTP
+        initialDelaySeconds: 3
+        periodSeconds: 1
+        timeoutSeconds: 1
+        successThreshold: 1
+        failureThreshold: 3
+      readinessProbe:
+        httpGet:
+          path: /minio/health/ready
+          port: 9000
+          scheme: HTTP
+        initialDelaySeconds: 3
+        periodSeconds: 10
+        timeoutSeconds: 10
+        successThreshold: 1
+        failureThreshold: 3
+    - name: operator
+      securityContext:
+        runAsUser: 697
+        runAsGroup: 697
+      image: 172.17.1.119:60080/3rdparty/mc:RELEASE.2022-08-11T00-30-48Z-v3.8.2
+      imagePullPolicy: IfNotPresent
+      command: ["/bin/sh"]
+      args:
+        - "-c"
+        - "mc alias set miniocluster http://127.0.0.1:9000 NORlqoGGL7xcVbj2E7Hj QJ09mwMyTN9H451n3c4xjQiy8k2Xp6MLlhslOX75 && mc admin heal -r miniocluster && mc mb -p miniocluster/registry &&  mc mb -p miniocluster/console-naga && mc policy set public  miniocluster/console-naga  && mc admin heal -r miniocluster/console-naga && mc admin heal -r miniocluster/registry && sleep 365d"
+      livenessProbe:
+        httpGet:
+          path: /minio/health/live
+          port: 9000
+          scheme: HTTP
+        initialDelaySeconds: 3
+        periodSeconds: 10
+        timeoutSeconds: 10
+        successThreshold: 1
+        failureThreshold: 3
+      readinessProbe:
+        httpGet:
+          path: /minio/health/ready
+          port: 9000
+          scheme: HTTP
+        initialDelaySeconds: 3
+        periodSeconds: 10
+        timeoutSeconds: 10
+        successThreshold: 1
+        failureThreshold: 3
+  hostNetwork: true
+  securityContext:
+    fsGroup: 697
+  priorityClassName: system-cluster-critical
+  volumes:
+    - hostPath:
+        path: /cpaas/minio/volume1
+        type: DirectoryOrCreate
+      name: minio-volume1
+    - hostPath:
+        path: /cpaas/minio/volume2
+        type: DirectoryOrCreate
+      name: minio-volume2
+    - hostPath:
+        path: /etc/kubernetes
+        type: DirectoryOrCreate
+      name: k8s
+    - name: k8s-duplication
+      emptyDir: {}

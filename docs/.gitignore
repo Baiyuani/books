@@ -1,0 +1,6 @@
+*.docx
+*.sql
+*.txt
+*.jpg
+
+/.idea/

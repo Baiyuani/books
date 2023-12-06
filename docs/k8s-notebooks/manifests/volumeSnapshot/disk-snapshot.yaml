@@ -1,0 +1,10 @@
+#提交这个 VolumeSnapshot 对象之后，集群中的相关组件它会找到这个 PVC 对应的 PV 存储，对这个 PV 存储做一次快照。
+apiVersion: snapshot.storage.k8s.io/v1beta1
+kind: VolumeSnapshot
+metadata:
+  name: disk-snapshot
+spec: 
+  snapshotClassName: disk-snapshotclass
+  source: 
+    name: disk-pvc  #Snapshot的数据源，即被快照的存储
+    kind: PersistentVolumeClaim
