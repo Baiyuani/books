@@ -1,3 +1,9 @@
+---
+tags:
+  - docker
+  - container
+---
+
 # [docker构建多架构镜像](https://www.zhaowenyu.com/docker-doc/best-practices/mult-arch-image.html#%E5%9F%BA%E4%BA%8E-manifest-%E7%9A%84%E6%96%B9%E5%BC%8F%E7%BB%84%E5%90%88%E5%A4%9A%E5%B9%B3%E5%8F%B0%E6%9E%B6%E6%9E%84%E9%95%9C%E5%83%8F)
 
 https://github.com/docker/buildx#manual-download

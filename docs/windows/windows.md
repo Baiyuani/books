@@ -1,3 +1,9 @@
+---
+tags:
+  - os
+  - win
+---
+# Windows文档
 
 ## 卸载win11左下角
 
@@ -25,3 +31,4 @@ netstat -ano | findstr ":80"
 # 删除上面的配置
 netsh interface portproxy delete v6tov4 listenport=80 listenaddress=2409:8a1e:70c2:4af0:41a1:144c:88aa:2441
 ```
+

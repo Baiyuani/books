@@ -1,3 +1,9 @@
+---
+tags:
+  - ci/cd
+  - gradle
+  - java
+---
 ## gradle plugin 设置插件仓库
 
 用于解决默认仓库https://plugins.gradle.org/m2/国内访问的网络问题

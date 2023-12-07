@@ -1,3 +1,10 @@
+---
+tags:
+  - shell
+  - docker
+  
+---
+
 # 使用shell脚本作为容器启动命令
 
 

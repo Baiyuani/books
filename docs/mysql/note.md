@@ -1,4 +1,11 @@
+---
+tags:
+  - mysql
+  - mariadb
+  - database
+---
 
+# Note
 
 ## 1.授权
 ```sql

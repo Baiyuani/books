@@ -1,4 +1,14 @@
+---
+tags:
+  - automation
+  - ansible
+  - deployment
+status: new
+---
+
 # Note
+
+**重点**
 
 ## debug
 

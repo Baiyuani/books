@@ -1,3 +1,10 @@
+---
+tags:
+  - shell
+  - linux
+  - cli
+---
+  - # Note
 
 ## 设置系统代理 
 
