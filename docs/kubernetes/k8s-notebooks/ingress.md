@@ -10,14 +10,14 @@ metadata:
   annotations:
 #    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
     nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/upstream-vhost: prometheus.baiyuani.top
+    nginx.ingress.kubernetes.io/upstream-vhost: prometheus.site.domain
     nginx.ingress.kubernetes.io/use-regex: "true"
   name: test
   namespace: dev
 spec:
   ingressClassName: nginx
   rules:
-  - host: test.baiyuani.top
+  - host: test.site.domain
     http:
       paths:
       - backend:
@@ -29,7 +29,7 @@ spec:
         pathType: ImplementationSpecific
 #  tls:
 #  - hosts:
-#    - 'test.baiyuani.top'
+#    - 'test.site.domain'
 #    secretName: domain-tls
 
 ---
@@ -39,7 +39,7 @@ metadata:
   name: test
   namespace: dev
 spec:
-  externalName: prometheus.baiyuani.top
+  externalName: prometheus.site.domain
   sessionAffinity: None
   type: ExternalName
 

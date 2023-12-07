@@ -87,7 +87,7 @@ cat 2023-02-23_all.sql | sed -n '/INSERT INTO `ykpjgl` VALUES/p' > /tmp/xxx.sql
 
 
 ```shell
-ALTER USER root@'%' IDENTIFIED BY 'newpasswd3';
+ALTER USER root@'%' IDENTIFIED BY 'xxxx';
 ```
 
 
@@ -97,17 +97,17 @@ ALTER USER root@'%' IDENTIFIED BY 'newpasswd3';
 -- primary执行
 show master status;
 
-create user 'replicater1'@'%' identified by 'XhDxll$qgxag4sfQ';
+create user 'replicater1'@'%' identified by 'xxxx';
 
 -- 仅MySQL，遇到报错时
-ALTER USER 'replicater1'@'%' IDENTIFIED WITH mysql_native_password BY 'XhDxll$qgxag4sfQ';
+ALTER USER 'replicater1'@'%' IDENTIFIED WITH mysql_native_password BY 'xxxx';
     
 grant replication slave on *.* to 'replicater1'@'%';
 
 -- secondary执行
 stop slave;
 reset slave;
-change master to MASTER_HOST='10.81.40.146',MASTER_PORT=3306,MASTER_USER='replicater1',MASTER_PASSWORD='XhDxll$qgxag4sfQ',MASTER_LOG_FILE='mysql_bin.000012',MASTER_LOG_POS=4112;
+change master to MASTER_HOST='10.81.40.146',MASTER_PORT=3306,MASTER_USER='replicater1',MASTER_PASSWORD='xxxx',MASTER_LOG_FILE='mysql_bin.000012',MASTER_LOG_POS=4112;
 start slave;
 show slave status \G
 
@@ -117,7 +117,7 @@ set global sql_slave_skip_counter =1;
 start slave; 
 show slave status \G
 
-xtrabackup --defaults-file=/etc/my.cnf --backup --user=root --password=pfo_gu3ovVSf --target-dir=/mnt/full-$(date +%F-%H%M)
+xtrabackup --defaults-file=/etc/my.cnf --backup --user=root --password=xxxx --target-dir=/mnt/full-$(date +%F-%H%M)
 xtrabackup --prepare --target-dir=/home/infoplus/full-2023-07-06-0957
 xtrabackup --defaults-file=/etc/my.cnf --copy-back --target-dir=/home/infoplus/full-2023-07-06-0957
 ```

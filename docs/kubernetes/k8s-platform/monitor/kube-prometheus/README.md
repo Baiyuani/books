@@ -84,9 +84,9 @@ helm upgrade --install kube-prometheus bitnami/kube-prometheus -n prometheus \
 --set prometheus.retention=15d \
 --set prometheus.retentionSize=""  \
 --set prometheus.ingress.enabled=true  \
---set prometheus.ingress.hostname=prometheus.baiyuani.top \
+--set prometheus.ingress.hostname=prometheus.site.domain \
 --set alertmanager.ingress.enabled=true \
---set alertmanager.ingress.hostname=alertmanager.baiyuani.top \
+--set alertmanager.ingress.hostname=alertmanager.site.domain \
 --set alertmanager.persistence.enabled="true" \
 --set alertmanager.persistence.size="8Gi" \
 --set alertmanager.retention=120h \

@@ -29,7 +29,7 @@ helm upgrade --install rancher rancher-stable/rancher \
 helm upgrade --install rancher rancher-stable/rancher \
 -n cattle-system --create-namespace \
 --version=2.6.11 \
---set hostname=rancher.baiyuani.top \
+--set hostname=rancher.site.domain \
 --set ingress.tls.source=letsEncrypt \
 --set replicas=1
 ```

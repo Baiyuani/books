@@ -13,7 +13,7 @@ data:
         }
         ready
         hosts {
-           192.168.0.204 kas.baiyuani.top minio.baiyuani.top registry.baiyuani.top gitlab.baiyuani.top harbor.baiyuani.top
+           192.168.0.204 kas.site.domain minio.site.domain registry.site.domain gitlab.site.domain harbor.site.domain
            fallthrough
         }
         template IN A dzh.com {

@@ -43,19 +43,19 @@ EOF
 - 使用
 ```shell
 #1. 手动创建证书
-cat <<EOF >  rancher.baiyuani.top.yaml
+cat <<EOF >  rancher.site.domain.yaml
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: rancher.baiyuani.top-tls
+  name: rancher.site.domain-tls
   namespace: cattle-system
 spec:
-  secretName: rancher.baiyuani.top-tls
+  secretName: rancher.site.domain-tls
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
-  - rancher.baiyuani.top
+  - rancher.site.domain
 EOF
 
 #2. 配置ingress自动获取证书
@@ -67,8 +67,8 @@ EOF
   
 tls:
  - hosts:
-   - rancher.baiyuani.top
-   secretName: rancher.baiyuani.top-tls
+   - rancher.site.domain
+   secretName: rancher.site.domain-tls
     
     
 #证书过期处理

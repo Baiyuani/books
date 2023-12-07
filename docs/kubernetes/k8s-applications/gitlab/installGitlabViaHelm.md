@@ -15,7 +15,7 @@ helm repo add gitlab https://charts.gitlab.io/
 helm repo update
 helm upgrade --install gitlab gitlab/gitlab -n gitlab --create-namespace \
   --timeout 900s \
-  --set global.hosts.domain=baiyuani.top \
+  --set global.hosts.domain=site.domain \
   --set global.hosts.externalIP=8.210.43.192 \
   --set certmanager-issuer.email=13835518617@163.com \
   --set postgresql.image.tag=13.6.0 \

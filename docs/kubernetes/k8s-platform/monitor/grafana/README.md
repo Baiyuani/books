@@ -1,3 +1,11 @@
+---
+tags: 
+  - monitor
+  - dashboard
+
+---
+
+
 # 部署
 
 > [bitnami charts](https://github.com/bitnami/charts/tree/dc8c5401abbd03e63ff102e120979faeba0ee365/bitnami/grafana)
@@ -16,10 +24,10 @@ helm upgrade --install grafana bitnami/grafana -n prometheus  \
 --set global.storageClass='nfs-client'  \
 --set persistence.size=10Gi \
 --set ingress.enabled=true \
---set ingress.hostname=grafana.baiyuani.top \
+--set ingress.hostname=grafana.site.domain \
 --set ingress.ingressClassName=nginx \
 --set admin.user='admin' \
---set admin.password='qhr732hguhfeu3u' 
+--set admin.password='xxxx' 
 ```
 
 
@@ -36,7 +44,7 @@ helm upgrade --install grafana bitnami/grafana -n prometheus  \
 
 - 导入dashboard
 
-[dashboards](dashboards)(需要到git仓库查看)
+[dashboards](https://github.com/Baiyuani/books/tree/main/docs/kubernetes/k8s-platform/monitor/grafana/dashboards)
 
 
 | ID  | Description | Data origin | 
