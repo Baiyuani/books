@@ -1,6 +1,6 @@
-# mariadb
+# 部署mariadb
 
-## 部署mariadb
+## 服务器直接部署
 
 - 安装
 
@@ -25,12 +25,17 @@ sudo apt-get install mariadb-server
 - 自动备份
 
 
-
-## helm部署mariadb(测试环境)
+## 使用helm部署
 
 > https://github.com/bitnami/charts/tree/db82355a553763690aad85629120e97976ca396b/bitnami/mariadb
 
+相关资源：
+
+[mariadb-10.5.1.tgz](mariadb-10.5.1.tgz)
+
 [values.yaml](values.yaml)
+
+### helm部署mariadb(测试环境)
 
 ```bash
 #auth.rootPassword 数据库root密码
@@ -54,8 +59,7 @@ helm upgrade --install mariadb-local mariadb-10.5.1.tgz -f values.yaml  \
 ```
 
 
-## helm部署mariadb(正式环境)
-> https://github.com/bitnami/charts/tree/db82355a553763690aad85629120e97976ca396b/bitnami/mariadb
+### helm部署mariadb(正式环境)
 
 - 正式环境部署，要求mariadb示例单独运行在固定的节点上，并且使用高性能存储。
 
