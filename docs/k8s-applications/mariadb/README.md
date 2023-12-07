@@ -2,9 +2,6 @@
 
 ## 部署mariadb
 
-    注意：数据库需要和北京时间一致，故安装前必须设置服务器时区`timedatectl set-timezone Asia/Shanghai`，并配置时间同步服务
-
-
 - 安装
 
 [访问链接](https://mariadb.org/download/?t=repo-config&d=20.04+%22focal%22&v=10.5&r_m=aliyun)获取安装源，建议版本10.5
@@ -27,12 +24,13 @@ sudo apt-get install mariadb-server
 
 - 自动备份
 
-参考[backup/README.md](backup/README.md)
-
 
 
 ## helm部署mariadb(测试环境)
+
 > https://github.com/bitnami/charts/tree/db82355a553763690aad85629120e97976ca396b/bitnami/mariadb
+
+[values.yaml](values.yaml)
 
 ```bash
 #auth.rootPassword 数据库root密码
@@ -99,5 +97,4 @@ helm upgrade --install mariadb-local mariadb-10.5.1.tgz -f values.yaml  \
 --set secondary.persistence.size=20Gi  \
 --set secondary.extraEnvVars[0].name='TZ' \
 --set secondary.extraEnvVars[0].value='Asia/Shanghai' 
-
 ```
