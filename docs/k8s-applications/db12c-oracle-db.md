@@ -1,3 +1,47 @@
+
+
+## 使用oracle账号创建镜像拉取密钥
+
+
+
+```shell
+kubectl create secret docker-registry oracle-office-zhdong -n $NS \
+--docker-username= \
+--docker-password='' \
+--docker-server=container-registry.oracle.com  \
+--dry-run=client -o yaml | kubectl apply -f -
+```
+   
+
+
+## 创建数据卷
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db12c-oracle-db
+  namespace: ketanyun
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 30Gi
+  storageClassName: nfs-client
+  volumeMode: Filesystem
+```
+
+## 设置oracle密码
+
+```shell
+kubectl create secret generic db12c-oracle-db -n ketanyun \
+--from-literal=oracle_pwd='' \
+--dry-run=client -o yaml | kubectl apply -f -
+```
+
+## 部署
+
+```yaml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -102,9 +146,6 @@ spec:
           storage: 200Gi
       storageClassName: nfs-client
 
-
-
-
 ---
 
 apiVersion: v1
@@ -125,4 +166,4 @@ spec:
     qcloud-app: db12c-oracle-db
   sessionAffinity: None
   type: ClusterIP
-
+```

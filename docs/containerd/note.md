@@ -1,4 +1,4 @@
-# crictl load镜像
+## crictl load镜像
 
 ```shell
 # 查看命名空间

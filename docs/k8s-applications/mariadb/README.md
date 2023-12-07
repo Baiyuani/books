@@ -1,3 +1,5 @@
+# mariadb
+
 ## 部署mariadb
 
     注意：数据库需要和北京时间一致，故安装前必须设置服务器时区`timedatectl set-timezone Asia/Shanghai`，并配置时间同步服务

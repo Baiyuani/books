@@ -1,10 +1,8 @@
 # [docker构建多架构镜像](https://www.zhaowenyu.com/docker-doc/best-practices/mult-arch-image.html#%E5%9F%BA%E4%BA%8E-manifest-%E7%9A%84%E6%96%B9%E5%BC%8F%E7%BB%84%E5%90%88%E5%A4%9A%E5%B9%B3%E5%8F%B0%E6%9E%B6%E6%9E%84%E9%95%9C%E5%83%8F)
 
-
-
 https://github.com/docker/buildx#manual-download
 
-- 创建构建器
+## 创建构建器
 
 ```shell
 # 创建构建器
@@ -29,7 +27,7 @@ docker buildx rm multiarch
 ```
 
 
-- 修改Dockerfile
+## 修改Dockerfile
 
 ```shell
 FROM  --platform=$TARGETPLATFORM golang AS builder
@@ -47,7 +45,7 @@ COPY --from=builder /gobuild/get-cpu-os .
 CMD ["./get-cpu-os"]
 ```
 
-- 开始构建
+## 开始构建
 
 ```shell
 # -t 指定镜像地址，需要指定正确的registry+repo:tag，因为构建完就要推送到远程仓库
@@ -58,7 +56,7 @@ docker buildx build --builder multiarch -t test:1 --platform linux/amd64,linux/a
 docker buildx imagetools inspect <username>/<image>:latest
 ```
 
-# 如果没有使用docker desktop，则需要手动启用qemu
+## 如果没有使用docker desktop，则需要手动启用qemu
 
 https://github.com/multiarch/qemu-user-static#getting-started
 
