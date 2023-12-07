@@ -15,7 +15,7 @@ https://docs.pingcap.com/zh/tidb/dev/replicate-between-primary-and-secondary-clu
 
 #### [上游tidb部署ticdc](https://docs.pingcap.com/zh/tidb-in-kubernetes/stable/deploy-ticdc)
 
-- 1. 修改[tidb-cluster.yaml](./manifests/tidb-cluster.yaml)，ticdc部分
+- 1. 修改[tidb-cluster.yaml](manifests/tidb-cluster.yaml)，ticdc部分
 
 ```yaml
   ## TiCDC is a tool for replicating the incremental data of TiDB

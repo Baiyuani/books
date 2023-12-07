@@ -1,8 +1,10 @@
-# cert-manager
+# 使用helm部署
+
 > [helm安装cert-manager官方文档](https://cert-manager.io/docs/installation/helm/)  \
 > [其他参考](https://blog.csdn.net/ai524719755/article/details/116712931)
 
 - 安装
+
 ```shell
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
@@ -37,7 +39,6 @@ spec:
           class: nginx
 EOF
 ```
-
 
 - 使用
 ```shell
@@ -81,3 +82,4 @@ tls:
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm install my-release bitnami/cert-manager
 ```
+

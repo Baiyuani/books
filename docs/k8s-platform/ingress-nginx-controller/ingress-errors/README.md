@@ -2,6 +2,9 @@
 
 可以参照[官方](https://kubernetes.github.io/ingress-nginx/examples/customization/custom-errors/)的文档说明，配置流程如下。
 
+[custom-default-backend.yaml](custom-default-backend.yaml)
+
+
 ### 1. 部署默认后端
 ```shell
 kubectl -n ingress-nginx create -f custom-default-backend.yaml

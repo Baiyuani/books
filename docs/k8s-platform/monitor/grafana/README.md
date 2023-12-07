@@ -1,3 +1,4 @@
+# 部署
 
 > [bitnami charts](https://github.com/bitnami/charts/tree/dc8c5401abbd03e63ff102e120979faeba0ee365/bitnami/grafana)
 - 如果helm安装失败，可以使用[yaml安装](https://grafana.com/docs/grafana/v9.0/setup-grafana/installation/kubernetes/)
@@ -28,11 +29,15 @@ helm upgrade --install grafana bitnami/grafana -n prometheus  \
 - 访问grafana
 
 - 配置Prometheus为数据源
+
 ```shell
 #TODO
 ```
 
 - 导入dashboard
+
+[dashboards](dashboards)(需要到git仓库查看)
+
 
 | ID  | Description | Data origin | 
 |-----|-------------|-------------|

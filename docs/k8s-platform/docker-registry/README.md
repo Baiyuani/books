@@ -168,3 +168,8 @@ ExecStart=/usr/bin/docker run --name %N \
 WantedBy=multi-user.target
 ```
 
+
+## 6. k8s yaml
+
+[docker-registry.yaml](docker-registry.yaml)
+

@@ -1,3 +1,5 @@
+# helm安装(bitnami)
+
 > 该文档内的域名local.domain可以替换
 
 ## 1. 生成证书

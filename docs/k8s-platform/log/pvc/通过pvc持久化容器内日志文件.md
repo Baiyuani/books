@@ -1,3 +1,7 @@
+# 通过pvc持久化容器内日志文件
+
+## 配置
+
 ### 1. 配置服务
 ```bash
 #存储服务器安装nfs服务
@@ -34,6 +38,9 @@ helm install nfs-client-log nfs-subdir-external-provisioner/nfs-subdir-external-
 
 
 ### 3.应用配置(java)
+
+[deploy-log-pvc.yaml](deploy-log-pvc.yaml)
+
 ```yaml
       - env:
         - name: JAVA_TOOL_OPTIONS
@@ -75,7 +82,6 @@ helm install nfs-client-log nfs-subdir-external-provisioner/nfs-subdir-external-
 ### 4.特殊应用
 ```yaml
 #infoplus
-
         volumeMounts:
         - mountPath: /usr/local/tomcat/logs
           name: infopluslogs
@@ -90,7 +96,9 @@ helm install nfs-client-log nfs-subdir-external-provisioner/nfs-subdir-external-
         requests: 
           storage: 100Gi
       storageClassName: nfs-client-log
-
-
-
 ```
+
+## 定期清理
+
+[log_auto_handle.sh](log_auto_handle.sh)
+

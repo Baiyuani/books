@@ -1,9 +1,17 @@
-##
-> [es官方charts](https://artifacthub.io/packages/helm/elastic/elasticsearch)    \
-> [filebeat官方charts](https://artifacthub.io/packages/helm/elastic/filebeat)  \
-> [kibana官方charts](https://artifacthub.io/packages/helm/elastic/kibana)
+# 使用helm部署
 
-## 1.安装
+- [es官方charts](https://artifacthub.io/packages/helm/elastic/elasticsearch) 
+
+- [filebeat官方charts](https://artifacthub.io/packages/helm/elastic/filebeat) 
+
+- [kibana官方charts](https://artifacthub.io/packages/helm/elastic/kibana)
+
+
+[filebeat-sidecar.yaml](filebeat-sidecar.yaml)
+
+[values.yaml](values.yaml)
+
+
 ```shell
 # 前提条件，执行以下命令将想要使用的存储类设置为默认，注意替换nfs-client
 kubectl patch storageclass nfs-client -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
@@ -53,7 +61,13 @@ helm install kibana elastic/kibana \
 ```
 
 
+filebeat配置参考[filebeat.yml](filebeat.yml)
+
+
 - logstash
+
+[logstash-values.yaml](logstash-values.yaml)
+
 ```shell
 helm upgrade --install logstash elastic/logstash --version 7.17.3 \
 -n loki \

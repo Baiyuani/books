@@ -13,3 +13,85 @@ export http_proxy=http://192.168.182.1:29998
 EOF
 
 ```
+
+## 切换中文及添加中文字体
+
+```shell
+# 查看系统语言
+locale
+
+# 如果系统语言不是“zh_CN.UTF-8”的话，则执行步骤2修改系统语言为“zh_CN.UTF-8”
+# centos
+vi  /etc/locale.conf
+# ubuntu
+vim /etc/default/locale
+
+# 添加
+export LC_ALL="zh_CN.UTF-8"
+
+# 立即生效
+source /etc/default/locale
+
+# 再次查看
+locale
+```
+
+```shell
+# 从windows C盘字体目录C:\Windows\Fonts获取字体文件
+
+# linux 服务器创建字体存放目录
+mkdir -p /usr/share/fonts/truetype   
+
+# 修改权限
+chmod  -R  755  /usr/share/fonts/truetype
+
+# 加载缓存
+fc-cache
+```
+
+## 时间同步
+
+#### centos6
+
+```shell
+vim /etc/ntp.conf
+
+# 立即找服务器同步时间，危险操作！时间差异较大时直接同步可能会出问题
+ntpd -gq
+
+service ntpd start 
+# 开机自启
+chkconfig ntpd on 
+```
+
+#### centos7
+
+```shell
+vim /etc/chronyd.conf
+
+#查看时间同步源：
+chronyc sources -v
+
+systemctl start chronyd
+
+#立即手工同步,危险操作！时间差异较大时直接同步可能会出问题
+chronyc -a makestep
+
+systemctl enable chronyd
+```
+
+#### ubuntu 
+```shell
+vim /etc/chrony/chronyd.conf
+
+#查看时间同步源：
+chronyc sources -v
+
+systemctl start chronyd
+
+#立即手工同步,危险操作！时间差异较大时直接同步可能会出问题
+chronyc -a makestep
+
+systemctl enable chronyd
+```
+

@@ -1,4 +1,5 @@
 # Loki
+
 [官方](https://grafana.com/oss/loki/)
 
 [grafana所有charts](https://github.com/grafana/helm-charts/tree/main/charts)
@@ -86,6 +87,9 @@ helm upgrade --install promtail grafana/promtail -n loki \
 
 
 #### 方式二：安装loki，使用operator，需要编写cr，[参考PodLogs.yaml](PodLogs.yaml)，通过cr控制收集k8s里哪些pod的日志
+
+[PodLogs.yaml](PodLogs.yaml)
+
 ```shell
 # loki 4.6.1
 helm upgrade --install loki grafana/loki -n loki \
@@ -162,3 +166,10 @@ minio:
 --set extraVolumeMounts[0].mountPath='/data/docker/containers' \
 --set extraVolumeMounts[0].readOnly=true \
 ```
+
+
+## sidecar示例
+
+[infoplus-sts.yaml](infoplus-sts.yaml)
+
+[promtail-sidecar.yaml](promtail-sidecar.yaml)

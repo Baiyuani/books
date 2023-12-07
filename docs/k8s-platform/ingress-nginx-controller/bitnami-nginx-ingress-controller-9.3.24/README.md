@@ -1,12 +1,16 @@
+# bitnami 9.3.24
+
 ## 1. bitnami（镜像源是docker.io，可以直接使用）
 
 > chart: https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller   \
 > 9.3.24版本：https://github.com/bitnami/charts/tree/19e4632397176172c143a226ec0e30e0a1bcb86c/bitnami/nginx-ingress-controller
-> 
+
 
 #### Prerequisites
 Kubernetes 1.20+
 Helm 3.2.0+
+
+[values.yaml](values.yaml)
 
 
 ```shell

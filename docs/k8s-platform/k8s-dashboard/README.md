@@ -1,5 +1,10 @@
-### 部署
- > 参考文档：https://kubernetes.io/zh/docs/tasks/access-application-cluster/web-ui-dashboard/
+# 部署
+
+
+> 参考文档：https://kubernetes.io/zh/docs/tasks/access-application-cluster/web-ui-dashboard/
+
+[recommended.yaml](recommended.yaml)
+
 ```bash
 #如果无法访问可以配置host：https://github.com/ineo6/hosts
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml

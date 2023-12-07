@@ -1,7 +1,0 @@
-#创建一个no-provisioner的sc，目的是告诉PV Controler遇到.spec.storageClassName为local-storageclass的PVC暂时不做Binding操作
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: local-storageclass
-provisioner: kubernetes.io/no-provisioner
-volumeBindingMode: WaitForFirstConsumer   # deley binding

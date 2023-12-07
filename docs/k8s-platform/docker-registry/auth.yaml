@@ -1,6 +1,6 @@
 
 users:
-  "admin": $2a$10$XLJNPqto6mxnLpmp1DngmuF.eokJKO2IYEUlqkVb29Wh5QSb9xSym
+  "admin": xxxxxx
 auths:
   "admin":
   - target: .*

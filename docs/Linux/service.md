@@ -1,4 +1,4 @@
-# nginx.service
+## nginx.service
 
 pidFile和nginx执行文件根据编译安装可能位于不同的目录
 
@@ -74,7 +74,7 @@ WantedBy=multi-user.target
 
 
 
-# registry.socket
+## registry.socket
 
 `vim /lib/systemd/system/registry.socket`
 

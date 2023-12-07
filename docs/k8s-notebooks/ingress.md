@@ -1,5 +1,7 @@
+# ingress-nginx
 
-# ingress-nginx 代理外部域名
+## ingress-nginx 代理外部域名
+
 ```yaml
 ---
 apiVersion: networking.k8s.io/v1
@@ -45,7 +47,7 @@ spec:
 
 
 
-# ingress添加请求头
+## ingress添加请求头
 
 
 ```shell
@@ -69,6 +71,4 @@ spec:
 
       add_header Content-Security-Policy "default-src 'self' localhost:8080 'unsafe-inline' 'unsafe-eval' blob: data: ;";
       add_header X-Content-Type-Options nosniff;
-
 ```
-

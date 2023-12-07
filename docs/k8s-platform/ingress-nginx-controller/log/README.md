@@ -1,13 +1,22 @@
-未配置
-### 1.ingress添加PVC用于ingress日志存储
+# 日志挂载
+
+[ingress-log-pvc.yaml](ingress-log-pvc.yaml)
+[ingress-log-pv.yaml](ingress-log-pv.yaml)
+
+## 1.ingress添加PVC用于ingress日志存储
+
 ```bash
 kubectl apply -f ingress-log-pvc.yaml
 #kubectl apply -f ingress-log-pv.yaml
 ```
 
-### 2.ingress修改日志格式和存储位置
-```yaml
+## 2.ingress修改日志格式和存储位置
+
+```shell
 kubectl -n ingress-nginx edit cm ingress-nginx-controller 
+```
+
+```yaml
 data: 
   access-log-path: /var/log/ingress/access.log      
   error-log-path: /var/log/ingress/error.log    
@@ -26,7 +35,7 @@ data:
 
 ```
 
-### 3.ingress添加挂载(记得增加TZ/AsiaShanghai环境变量)
+## 3.ingress添加挂载(记得增加TZ/AsiaShanghai环境变量)
 ```bash
 kubectl -n ingress-nginx edit daemonsets.apps ingress-nginx-controller
         - name: TZ
@@ -43,7 +52,7 @@ kubectl -n ingress-nginx edit daemonsets.apps ingress-nginx-controller
           claimName: ingress-log
 ```
 
-### 4.配置清理脚本
+## 4.配置清理脚本
 
 ```bash
 chmod +x log_auto_handle.sh

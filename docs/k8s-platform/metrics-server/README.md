@@ -1,4 +1,13 @@
+# metrics-server
+
 ## 安装监控数据聚合器
+
+[components.yaml](components.yaml)
+
+[high-availability.yaml](high-availability.yaml)
+
+[high-availability-1.21+.yaml](high-availability-1.21%2B.yaml)
+
 
 ```bash
 wget https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.6.4/components.yaml

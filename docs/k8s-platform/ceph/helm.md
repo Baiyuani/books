@@ -3,6 +3,8 @@
 ## https://rook.io/docs/rook/v1.10/Helm-Charts/operator-chart/#installing
 
 
+[values.yaml](values.yaml)
+
 ## install operator
 ```shell
 helm repo add rook-release https://charts.rook.io/release

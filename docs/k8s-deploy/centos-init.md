@@ -199,3 +199,4 @@ cp -p linux-amd64/helm /usr/bin/
 source <(helm completion bash)
 echo "source <(helm completion bash)" >> ~/.bashrc
 ```
+

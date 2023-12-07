@@ -1,4 +1,6 @@
-# coredns配置泛域名hosts
+# coredns
+
+## coredns配置泛域名hosts
 
 ```shell
 apiVersion: v1
@@ -39,7 +41,7 @@ metadata:
   namespace: kube-system
 ```
 
-# coredns 配置dns
+## coredns 配置dns
 ```yaml
 apiVersion: v1
 data:

@@ -1,12 +1,12 @@
+# old
+
 ## Install cert-manager
 
 Note: cert-manager is only required for certificates issued by Rancher’s generated CA (ingress.tls.source=rancher) and Let’s Encrypt issued certificates (ingress.tls.source=letsEncrypt). You should skip this step if you are using your own certificate files (option ingress.tls.source=secret) or if you use TLS termination on an External Load Balancer.
 
-
 Install the CustomResourceDefinition resources separately
 ```shell
 kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.9/deploy/manifests/00-crds.yaml
-
 ```
 Create the namespace for cert-manager
 ```shell

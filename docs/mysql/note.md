@@ -1,4 +1,6 @@
-# 1.授权
+
+
+## 1.授权
 ```sql
 create database `sys` character set 'utf8mb4' collate 'utf8mb4_general_ci';
     
@@ -12,7 +14,7 @@ source
 
 
 
-# 2.[mysql查看某库表大小](https://www.cnblogs.com/nmap/p/6714142.html)
+## 2.[mysql查看某库表大小](https://www.cnblogs.com/nmap/p/6714142.html)
 
 **查询所有数据库占用磁盘空间大小**：
 
@@ -37,28 +39,28 @@ order by data_length desc;
 
 
 
-# 3. 主从异常处理方法
+## 3. 主从异常处理方法
 
 https://database.51cto.com/art/202011/632010.htm
 
 
-# 4. 查看非sleep进程
+## 4. 查看非sleep进程
 
 select * from information_schema.`PROCESSLIST` p where p.COMMAND != "sleep" ORDER BY p.TIME DESC;
 
 
-# 5. 后台执行命令
+## 5. 后台执行命令
 
 nohup mysql -usa -pabcd1234 -e 'source /db.sql' &
 nohup mysql -uroot -p1qaz@WSX -h192.168.1.11 -P32614 -e 'ALTER TABLE `dj1910`.`polls_choice` add INDEX choice_text(`choice_text`)' >/dev/null 2>& 1 &
 
 
-# 6. mysql:Prepared statement needs to be re-prepared解决办法
+## 6. mysql:Prepared statement needs to be re-prepared解决办法
 https://blog.csdn.net/haibo0668/article/details/81262323
 
 
 
-# 7. 备份
+## 7. 备份
 
 ```sql
 # 排除一些库
@@ -66,7 +68,7 @@ mysql -uroot -p'P@ssw0rd01!' -h192.171.225.227 -N -e "show databases;"|grep -Ev 
 ```
 
 
-# 8. 恢复
+## 8. 恢复
 ```shell
 # 从备份sql中过滤
 cat 2023-02-23_all.sql | sed -n '/INSERT INTO `ykpjgl` VALUES/p' > /tmp/xxx.sql
@@ -74,7 +76,7 @@ cat 2023-02-23_all.sql | sed -n '/INSERT INTO `ykpjgl` VALUES/p' > /tmp/xxx.sql
 
 
 
-# 9. 修改用户密码
+## 9. 修改用户密码
 
 
 ```shell
@@ -83,7 +85,7 @@ ALTER USER root@'%' IDENTIFIED BY 'newpasswd3';
 
 
 
-# 10. 主从恢复
+## 10. 主从恢复
 ```sql
 -- primary执行
 show master status;
@@ -115,7 +117,7 @@ xtrabackup --defaults-file=/etc/my.cnf --copy-back --target-dir=/home/infoplus/f
 
 
 
-## [mariadb-backup](https://mariadb.org/download/?t=repo-config&d=CentOS+7+%28x86_64%29&v=10.4&r_m=aliyun)热备和增量备份
+### [mariadb-backup](https://mariadb.org/download/?t=repo-config&d=CentOS+7+%28x86_64%29&v=10.4&r_m=aliyun)热备和增量备份
 
 > MariaDB基于percona xtrabackup开发了它自己的备份工具：MariaDB Backup。它基于xtrabackup开发，所以所用方法基本和xtrabackup相同，只是有些自己的特性。
 
@@ -173,7 +175,7 @@ systemctl start mysqld
 
 
 
-## 容器化mariadb如何使用mariabackup
+### 容器化mariadb如何使用mariabackup
 > 将mariadb的数据目录挂载进执行备份的容器实现
 
 ```shell
@@ -212,7 +214,7 @@ mariabackup --defaults-file=/mnt/my.cnf --backup --user=root --password='1qaz@WS
 ```
 
 
-# 11. 压测
+## 11. 压测
 
 
 ```shell

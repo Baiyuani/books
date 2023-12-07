@@ -1,4 +1,7 @@
-# 1. 配置静态IP
+# Note
+
+## 配置静态IP
+
 ```bash
 vim /etc/netplan/···.ymal
 # This is the network config written by 'subiquity'
@@ -25,7 +28,7 @@ https://blog.csdn.net/zhuwade/article/details/121853685
 
 
 
-# 2.启用root登录
+## 启用root登录
 
 https://blog.csdn.net/qq_29537425/article/details/116146693
 
@@ -44,7 +47,7 @@ sudo systemctl restart ssh
 ```
 
 
-# 3.dpkg（类似centos的rpm）
+## dpkg（类似centos的rpm）
 dpkg [参数]
 常用参数：
 -i	安装软件包
@@ -54,7 +57,7 @@ dpkg [参数]
 -c	显示软件包内文件列表
 
 
-# 4. 
+## 刷新磁盘
 
 ```shell
 [root@IChen~]#ls /sys/class/scsi_host/
@@ -76,7 +79,7 @@ done
 
 ```
 
-# 5. 更新服务器ca证书库
+## 更新服务器ca证书库
 
 ```shell
 apt install ca-certificates --reinstall

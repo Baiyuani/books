@@ -1,5 +1,9 @@
-# helm方式
+# calico
+
+## 使用helm部署
+
 > 官方文档：https://projectcalico.docs.tigera.io/getting-started/kubernetes/helm
+
 
 ```bash
 helm repo add projectcalico https://projectcalico.docs.tigera.io/charts
@@ -9,7 +13,19 @@ helm install calico projectcalico/tigera-operator --version v3.22.0
 helm show values projectcalico/tigera-operator --version v3.22.0
 ```
 
-# yaml方式
+## 使用yaml部署
+
+- 新版
+
+[calico.yaml](calico.yaml)
+[calico-vxlan.yaml](calico-vxlan.yaml)
+
+- 历史版本
+
+[calico-3.22.3.yaml](calico-3.22.3.yaml)
+[calico-vxlan-3.22.3.yaml](calico-vxlan-3.22.3.yaml)
+[calico-vxlan-3.19.1.yaml](calico-vxlan-3.19.1.yaml)
+
 
 ```bash
 #calico版本是v3.19.1

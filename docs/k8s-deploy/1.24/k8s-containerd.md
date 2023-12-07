@@ -1,4 +1,4 @@
-
+# 1.24版本安装记录
 
 ```shell
 hostnamectl set-hostname  k8s-master1
@@ -182,3 +182,5 @@ iptables -nvL
 
 
 ```
+
+[kube-config.yaml](kube-config.yaml)

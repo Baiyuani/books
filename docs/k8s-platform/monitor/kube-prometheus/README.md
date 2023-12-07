@@ -6,31 +6,45 @@
 > [chart仓库地址](https://github.com/bitnami/charts/tree/b0e5cc70bf1175e40034fcc49eafb733b5916e4c/bitnami/kube-prometheus)
 
 ### 1.配置告警接收人信息
-修改./alertmanager-configs/alertmanager.yaml
+
+[alertmanager.yaml](alertmanager-configs%2Falertmanager.yaml)
+
 ```shell
 #::TODO
 ```
 
 ### 2.配置告警信息模板
-修改./alertmanager-configs/*.tmpl
+
+[cluster.tmpl](alertmanager-configs%2Fcluster.tmpl)
+
+[node.tmpl](alertmanager-configs%2Fnode.tmpl)
+
+[web.tmpl](alertmanager-configs%2Fweb.tmpl)
+
 ```shell
 #::TODO
 ```
 
 ### 3.配置站点和接口监控地址
-修改./manifests/additionalScrapeConfigs.yaml
+
+[additionalScrapeConfigs.yaml](manifests%2FadditionalScrapeConfigs.yaml)
+
 ```shell
 #::TODO
 ```
 
 ### 4.（可选）修改prometheus rules
-修改./rules/*.yaml
+
+[rules](rules)(需到git仓库查看)
+
 ```shell
 #::TODO
 ```
 
 ### 5.（可选）部署企微群机器人adapter
-修改./manifests/webhook-adapter.yaml
+
+[webhook-adapter.yaml](manifests%2Fwebhook-adapter.yaml)
+
 ```shell
 #::TODO
 ```

@@ -1,4 +1,4 @@
-# Tidb部署
+# 虚拟化部署Tidb
 
 
 [软件和硬件环境建议配置](https://docs.pingcap.com/zh/tidb/stable/hardware-and-software-requirements)
@@ -19,6 +19,8 @@
 ## 3. [使用tiup部署](https://docs.pingcap.com/zh/tidb/stable/production-deployment-using-tiup)
 
 - 部署并启动
+
+[simple.yaml](config-templates/simple.yaml)
 
 ```shell
 # 安装tiup

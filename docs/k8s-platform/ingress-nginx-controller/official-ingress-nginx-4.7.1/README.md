@@ -1,4 +1,4 @@
-## 官方
+# 官方 4.7.1 
 
 > github： https://github.com/kubernetes/ingress-nginx     \
 > 部署文档： https://kubernetes.github.io/ingress-nginx/deploy/    \

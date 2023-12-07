@@ -1,4 +1,6 @@
-# https://docs.pingcap.com/zh/tidb-in-kubernetes/stable/prerequisites
+# 部署
+
+https://docs.pingcap.com/zh/tidb-in-kubernetes/stable/prerequisites
 
 
 ## 1. 配置storageclass
@@ -8,9 +10,9 @@
 
 - 部署[local-path-provisioner](https://github.com/rancher/local-path-provisioner)，提供本地存储。
 
+[local-path-storage.yaml](manifests/local-path-storage.yaml)
 
-  注意修改configmap中的存储路径
-
+- 注意修改configmap中的存储路径
 
 ```yaml
 kind: ConfigMap
@@ -30,7 +32,7 @@ data:
     }
 ```
 
-  修改reclaimPolicy
+- 修改reclaimPolicy
 
 ```yaml
 apiVersion: storage.k8s.io/v1
@@ -48,6 +50,8 @@ reclaimPolicy: Retain
 - 安装helm命令行
 
 - 安装crd
+
+[crd.yaml](manifests/crd.yaml)
 
 ```shell
 kubectl create -f https://raw.githubusercontent.com/pingcap/tidb-operator/v1.4.5/manifests/crd.yaml
@@ -95,6 +99,8 @@ kubectl label node k8s-node3 app.kubernetes.io/component=tidb
 > tidb是计算组件，本身不需要数据持久化
 > tikv是存储组件，需要数据持久化且对磁盘性能有要求，所以必须使用k8s本地存储。
 > pump是binlog相关组件，必须安装pump，才能开启binlog
+
+[tidb-cluster.yaml](manifests/tidb-cluster.yaml)
 
 
 #### 修改各组件副本数量
@@ -154,6 +160,8 @@ kubectl create secret generic tidb-secret --from-literal=root="123qqq...A" --nam
 ```
 
 - 修改tidb-init.yaml
+
+[tidb-init.yaml](manifests/tidb-init.yaml)
 
 ```yaml
 spec:

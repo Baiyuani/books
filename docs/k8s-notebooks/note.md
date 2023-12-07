@@ -1,4 +1,6 @@
-# 镜像仓库凭证
+# Note
+
+## 镜像仓库凭证
 
 创建imagePullSecret，并**覆盖旧的**
 
@@ -7,7 +9,7 @@ kubectl create secret docker-registry registry -n ketanyun --docker-server=docke
 ```
 
 
-# dashboard登录token生成
+## dashboard登录token生成
 dashboard创建用户，生成token
 ```shell
 kubectl create sa dashboard-admin -n kube-system
@@ -24,7 +26,7 @@ kubectl describe secrets -n kube-system $(kubectl -n kube-system get secret | aw
 
 
 
-# [kubectl 使用token的方式连接到集群](https://www.cnblogs.com/AnAng/p/12056963.html)
+## [kubectl 使用token的方式连接到集群](https://www.cnblogs.com/AnAng/p/12056963.html)
 
 首先得有一个账户
 
@@ -49,7 +51,7 @@ kubectl describe secrets -n kube-system $(kubectl -n kube-system get secret | aw
 
 
 
-# k8s集群添加新节点
+## k8s集群添加新节点
 
 ```shell
 # 添加node
@@ -78,7 +80,7 @@ kubeadm join 192.168.0.11:6443 --token mkfx10.hjw8sa2xf59bgs24 \
 
 
 
-# Unable to connect to the server: x509: certificate is valid for ingress.local
+## Unable to connect to the server: x509: certificate is valid for ingress.local
 ```shell
 kubectl ... --insecure-skip-tls-verify
 
@@ -92,13 +94,13 @@ clusters:
 - 
 ```
 
-# 重置节点后的操作
+## 重置节点后的操作
 
 rm -rf /etc/kubernetes/* && rm -rf ~/.kube/* && rm -rf /var/lib/etcd/*
 
 
 
-# taint
+## taint
 
 ```shell
 # 查看node的taints
@@ -120,19 +122,19 @@ kubectl edit -n ns deploy rancher
 
 
 
-# 修改kubelet和etcd的存储目录
+## 修改kubelet和etcd的存储目录
 https://blog.csdn.net/qq_39826987/article/details/126473129
 
 
 
 
-# linux安装kubectl-convert
+## linux安装kubectl-convert
 ```shell
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl-convert"
 sudo install -o root -g root -m 0755 kubectl-convert /usr/local/bin/kubectl-convert
 ```
 
-# 将docker-compose转成k8s的yaml格式配置
+## 将docker-compose转成k8s的yaml格式配置
 ```shell
 # 下载二进制包
 # https://github.com/kubernetes/kompose/releases
@@ -141,7 +143,7 @@ sudo install -o root -g root -m 0755 kubectl-convert /usr/local/bin/kubectl-conv
 ./kompose-linux-amd64 -f docker-compose.yml convert
 ```
 
-# 更换master节点
+## 更换master节点
 
 ```shell
 ## 背景，原master节点故障，已踢出集群，提供新服务器，ip等配置不变，重新加入
@@ -219,7 +221,7 @@ df8b283813118626, started, node130, https://192.168.3.130:2380, https://192.168.
 ```
 
 
-# k8s中的会话保持
+## k8s中的会话保持
 
 - 使用ingress-nginx
 
@@ -268,7 +270,7 @@ spec:
 ```
 
 
-# error: Metrics API not available
+## error: Metrics API not available
 
 ```shell
 [zhdong@k8s-master ~]$ kubectl top no 

@@ -1,6 +1,10 @@
-## 部署rancher
+# 部署rancher
 
-1. yaml部署
+
+## yaml部署
+
+[rancher.yaml](rancher.yaml)
+
 ```bash
 kubectl create ns rancher
 kubectl -n rancher create serviceaccount rancher 
@@ -8,7 +12,8 @@ kubectl create clusterrolebinding rancher --clusterrole=cluster-admin --servicea
 kubectl apply -f rancher.yaml
 ```
 
-2. helm部署
+## helm部署
+
 ```bash
 helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
 helm repo add rancher-mirror http://rancher-mirror.oss-cn-beijing.aliyuncs.com/server-charts/stable

@@ -1,5 +1,8 @@
 # Run OpenLDAP created by official helm chart on k8s
 
+[values.yaml](values.yaml)
+[defaultuser.ldif](defaultuser.ldif)
+
 
 ## Using Helm 3 installed OpenLDAP:
 ```bash

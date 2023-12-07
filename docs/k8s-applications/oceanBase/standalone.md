@@ -1,3 +1,7 @@
+# standalone
+
+## 部署
+
 ```shell
 helm template oceanbase-test ketanyun-stable/helper -n oceanbase-test \
 --create-namespace \
