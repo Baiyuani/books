@@ -1,8 +1,9 @@
 # 官方 4.7.1 
 
-> github： https://github.com/kubernetes/ingress-nginx     \
-> 部署文档： https://kubernetes.github.io/ingress-nginx/deploy/    \
-> charts:  https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx  \
+
+github： https://github.com/kubernetes/ingress-nginx     
+部署文档： https://kubernetes.github.io/ingress-nginx/deploy/    
+charts:  https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx  
 
 
 #### Prerequisites
