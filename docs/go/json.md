@@ -5,7 +5,7 @@ https://go.dev/blog/json
 [example](https://gobyexample.com/json)
 
 
-=== "main.go"
+=== "json.go"
 
     ```go
     package main
