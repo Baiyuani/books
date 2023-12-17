@@ -87,3 +87,17 @@ https://go.dev/blog/json
         enc.Encode(d)
     }
     ```
+
+## 结构体标签
+
+结构体标签（例如 json:"artist"）指定当结构体的内容序列化为 JSON 时字段的名称应该是什么。如果没有它们，JSON 将使用结构体的大写字段名称——这种风格在 JSON 中并不常见。
+
+```go
+// album represents data about a record album.
+type album struct {
+    ID     string  `json:"id"`
+    Title  string  `json:"title"`
+    Artist string  `json:"artist"`
+    Price  float64 `json:"price"`
+}
+```
