@@ -10,19 +10,20 @@
 
 
 ## 配置charts仓库
+
 ```shell
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 ```
 
-## 部署
+## 部署loki
 
 ### 一、[单节点部署](https://github.com/grafana/loki/tree/main/production/helm/loki)(优先使用，资源使用少)
 ```shell
-# loki 5.23.0
+# loki 5.41.4
 helm upgrade --install loki grafana/loki -n loki \
 --create-namespace \
---version 5.23.0 \
+--version 5.41.4 \
 --set loki.auth_enabled=false \
 --set monitoring.selfMonitoring.enabled=false \
 --set monitoring.selfMonitoring.grafanaAgent.installOperator=false \
@@ -31,6 +32,7 @@ helm upgrade --install loki grafana/loki -n loki \
 --set singleBinary.replicas=1 \
 --set singleBinary.persistence.size='20Gi' \
 --set singleBinary.persistence.storageClass='local-path' \
+--set singleBinary.nodeSelector.'kubernetes\.io/hostname'='k8s-node2' \
 --set loki.commonConfig.replication_factor=1 \
 --set minio.enabled=true \
 --set minio.mode='standalone' \
@@ -46,13 +48,6 @@ helm upgrade --install loki grafana/loki -n loki \
 #--set loki.commonConfig.replication_factor=1 \
 
 # singleBinary.persistence.storageClass 不能使用nfs，有性能要求
-
-# promtail 6.15.2
-# 注意：默认配置docker容器日志路径为/var/lib/docker/containers，可根据实际环境情况将正确的docker路径添加配置进去即可
-helm upgrade --install promtail grafana/promtail -n loki \
---version 6.15.2 \
---set configmap.enabled=true \
---set serviceMonitor.enabled=false 
 ```
 
 
@@ -74,14 +69,6 @@ helm upgrade --install loki grafana/loki -n loki \
 --set minio.consoleIngress.enabled=true \
 --set minio.consoleIngress.hosts[0]='loki-minio.xxx.xxx' \
 --set minio.consoleIngress.ingressClassName=nginx \
-
-
-# promtail 6.15.1
-# 注意：默认配置docker容器日志路径为/var/lib/docker/containers，可根据实际环境情况将正确的docker路径添加配置进去即可
-helm upgrade --install promtail grafana/promtail -n loki \
---version 6.15.1 \
---set configmap.enabled=true \
---set serviceMonitor.enabled=false 
 ```
 
 
@@ -97,9 +84,9 @@ helm upgrade --install loki grafana/loki -n loki \
 --set loki.auth_enabled=false
 ```
 
-### 三、可选参数
 
-- 以下为loki可选参数
+
+### loki可选参数
 
 ```shell
 # loki副本数配置，需要根据pod数量调整，默认3，即需要3个pod，且至少有2个pod存活时才能正常工作。如果设置为1，则可以调整pod数量为1
@@ -156,9 +143,27 @@ minio:
 --set monitoring.lokiCanary.enabled=false \
 ```
 
-- promtail可选参数
+
+## 部署promtail
 
 ```shell
+# promtail 6.15.3
+# 注意：默认配置docker容器日志路径为/var/lib/docker/containers，可根据实际环境情况将正确的docker路径添加配置进去即可
+helm upgrade --install promtail grafana/promtail -n loki \
+--version 6.15.3 \
+--set configmap.enabled=true \
+--set serviceMonitor.enabled=false 
+
+
+# 
+--set tolerations[0].key='node-role.kubernetes.io/master' \
+--set tolerations[0].operator='Exists' \
+--set tolerations[0].effect='NoSchedule' \
+--set tolerations[1].key='node-role.kubernetes.io/control-plane' \
+--set tolerations[1].operator='Exists' \
+--set tolerations[1].effect='NoSchedule' \
+
+
 # docker数据目录不是默认时，添加以下配置以使程序能读取到日志
 --set extraVolumes[0].name='containers2' \
 --set extraVolumes[0].hostPath.path='/data/docker/containers' \
@@ -173,3 +178,11 @@ minio:
 [infoplus-sts.yaml](infoplus-sts.yaml)
 
 [promtail-sidecar.yaml](promtail-sidecar.yaml)
+
+
+## grafana查询
+
+```logql
+# 解析json格式日志，只输出log内容
+{} | json | line_format `{{.log}}`
+```
