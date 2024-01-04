@@ -152,10 +152,11 @@ minio:
 helm upgrade --install promtail grafana/promtail -n loki \
 --version 6.15.3 \
 --set configmap.enabled=true \
---set serviceMonitor.enabled=false 
+--set serviceMonitor.enabled=false \
+--set tolerations[0].operator='Exists' 
 
 
-# 
+# 默认tolerations
 --set tolerations[0].key='node-role.kubernetes.io/master' \
 --set tolerations[0].operator='Exists' \
 --set tolerations[0].effect='NoSchedule' \
