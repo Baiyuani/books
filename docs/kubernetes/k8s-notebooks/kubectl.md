@@ -54,3 +54,31 @@ kubectl explain deploy --recursive
 
 kubectl explain deploy.spec.replicas
 ```
+
+## kubectl events
+
+> 是`kubectl get events`的增强，GA in v1.26.0
+
+```shell
+kubectl events -A
+```
+
+## [使用socks5代理访问集群](https://kubernetes.io/zh-cn/docs/tasks/extend-kubernetes/socks5-proxy-access-api/)
+
+## kubectl auth
+
+```shell
+root@tracy:~# kubectl auth 
+Inspect authorization.
+
+Available Commands:
+  can-i         Check whether an action is allowed
+  reconcile     Reconciles rules for RBAC role, role binding, cluster role, and cluster role binding objects
+  whoami        Experimental: Check self subject attributes
+
+Usage:
+  kubectl auth [flags] [options]
+
+Use "kubectl auth <command> --help" for more information about a given command.
+Use "kubectl options" for a list of global command-line options (applies to all commands).
+```

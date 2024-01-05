@@ -5,7 +5,11 @@
 创建imagePullSecret，并**覆盖旧的**
 
 ```shell
-kubectl create secret docker-registry registry -n ketanyun --docker-server=docker.qtgl.com.cn --docker-username=xx --docker-password=xx --dry-run=client -o yaml | kubectl apply -f -
+kubectl create secret docker-registry registry -n ketanyun \
+--docker-server=docker.qtgl.com.cn \
+--docker-username=xx \
+--docker-password=xx \
+--dry-run=client -o yaml | kubectl apply -f -
 ```
 
 
@@ -303,4 +307,17 @@ nodes                                                   metrics.k8s.io/v1beta1  
 pods                                                    metrics.k8s.io/v1beta1            true         PodMetrics
 metricsinstances                                        monitoring.grafana.com/v1alpha1   true         MetricsInstance
 ```
+
+## [Non-Graceful Node Shutdown节点非正常关闭](https://kubernetes.io/blog/2022/12/16/kubernetes-1-26-non-graceful-node-shutdown-beta/)
+
+> Kubernetes v1.24 introduced an alpha quality implementation of improvements for handling a non-graceful node shutdown
+> Kubernetes 1.26: Non-Graceful Node Shutdown Moves to Beta and enabled by default.
+
+- 该功能主要解决sts的pod在节点非正常关闭时会卡死，不会自动在其他节点启动
+
+```shell
+# 在确认非正常关闭的节点上打out-of-service污点，则触发节点上的 Pod 被强制删除。在该节点恢复后，应该去除该污点
+kubectl taint nodes <node-name> node.kubernetes.io/out-of-service=nodeshutdown:NoExecute
+```
+
 
