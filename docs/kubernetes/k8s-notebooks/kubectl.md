@@ -1,5 +1,15 @@
 # kubectl常用命令
 
+## kubectl apply可能会超出请求限制。使用kubectl create或kubectl replace
+
+apply会将包含用于创建对象的对象配置文件的内容记录在`annotations`的`kubectl.kubernetes.io/last-applied-configuration`中
+
+    https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/#how-to-create-objects
+    This sets the kubectl.kubernetes.io/last-applied-configuration: '{...}' annotation on each object. 
+    The annotation contains the contents of the object configuration file that was used to create the object. 
+
+
+
 ## 配置kubectl命令行补全
 
 ```shell
@@ -13,6 +23,26 @@ PS C:\Users\Tracy> kubectl completion powershell | Out-String | Invoke-Expressio
 source <(helm completion bash)
 helm completion bash > /etc/bash_completion.d/helm
 ```
+
+## 回滚工作负载
+
+```shell
+# 查看一个工作负载的history，保留数量由revisionHistoryLimit字段决定，默认是10
+kubectl -n devel rollout history sts infoplus 
+
+# describe version
+kubectl -n devel rollout history sts infoplus --revision 96
+
+# 查看指定version的yaml
+kubectl -n devel rollout history sts infoplus --revision 96 -o yaml
+
+# 回滚到上个版本
+kubectl -n devel rollout undo sts infoplus
+
+# 回滚到指定版本
+kubectl -n devel rollout undo sts infoplus --revision 96
+```
+
 
 ## 批量解密secret的所有key
 
