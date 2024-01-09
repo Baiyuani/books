@@ -6,6 +6,12 @@ tags:
 ---
 # calico
 
+> Update:2024/1/9
+
+## [architecture](https://docs.tigera.io/calico/latest/reference/architecture/overview)
+
+![architecture](https://docs.tigera.io/assets/images/architecture-calico-deae813300e472483f84d6bfb49650ab.svg)
+
 ## 一些技术细节
 
 ### NetworkPolicy
@@ -57,7 +63,61 @@ Calico有两个数据存储驱动程序可供选择
   - 允许您运行包含多个 Kubernetes 集群的Calico集群，例如，具有Calico主机保护的裸机服务器与 Kubernetes 集群或多个 Kubernetes 集群联动。
 
 
-## Network Configuration
+## [Network Configuration](https://docs.tigera.io/calico/latest/networking/configuring/)
+
+- 操作前阅读[确定最佳网络选项](https://docs.tigera.io/calico/latest/networking/determine-best-networking)
+
+!!! note 
+
+    一般集群建议：
+    1. 使用overlay网络的ipip模式（vxlan性能稍差一点），设置为仅跨子网时进行封装。但还需实际测试环境网络是否有拦截ipip流量，否则也可以使用vxlan
+    2. xvlan模式几乎可以在任何环境中运行，可以将该模式作为保底方案（`IPPool`设置`vxlanMode: Always`）
+
+### 配置calico与底层网络的BGP对等连接
+
+!!! note
+
+    calico与底层网络的BGP对等连接需要对底层网络有一定的配置操作，一般情况下使用overlay覆盖集群所有工作负载即可，仅有公布podip等类似需求是考虑BGP
+
+BGP是用于在网络中的路由器之间交换路由信息的标准协议。每台运行 BGP 的路由器都有一个或多个BGP 对等体- 它们通过 BGP 与其他路由器进行通信。您可以将 Calico 网络视为在每个节点上提供一个虚拟路由器。
+
+### [overlay networking](https://docs.tigera.io/calico/latest/networking/configuring/vxlan-ipip)
+
+!!! warning
+
+    - IP in IP supports only IPv4 addresses
+    - VXLAN in IPv6 is only supported for kernel versions ≥ 4.19.1 or redhat kernel version ≥ 4.18.0
+
+Calico 支持两种类型的封装：VXLAN 和 IP in IP。在某些不支持 IP in IP 的环境中（例如 Azure）支持 VXLAN。 VXLAN 的每个数据包开销稍高，因为标头较大，但除非您运行网络密集型工作负载，否则您通常不会注意到差异。两种封装类型之间的另一个小区别是 Calico 的 VXLAN 实现不使用 BGP，而 Calico 的 IP in IP 实现在 Calico 节点之间使用 BGP。
+
+!!! note
+
+    - 使用tigera-operator安装，且未明确配置时，默认使用ipip Always的overlay网络
+    - 部分云平台会拦截ipip流量，使用时可两种类型都试试
+
+Calico 可以选择选择性地仅封装跨越子网边界的流量。建议使用IP in IP 或 VXLAN 的跨子网选项（即子网内部不使用封装，仅跨子网时使用），以最大限度地减少封装开销。
+
+- `kubectl edit ippools default-ipv4-ippool`
+
+    ```yaml
+    apiVersion: projectcalico.org/v3
+    kind: IPPool
+    metadata:
+      creationTimestamp: "2024-01-09T02:54:32Z"
+      name: default-ipv4-ippool
+      resourceVersion: "30050"
+      uid: cc893d43-213c-4c1d-8f58-8de477cae79c
+    spec:
+      allowedUses:
+      - Workload
+      - Tunnel
+      blockSize: 26
+      cidr: 10.95.0.0/16
+      ipipMode: CrossSubnet
+      natOutgoing: true
+      nodeSelector: all()
+      vxlanMode: Never
+    ```
 
 ### [配置MTU](https://docs.tigera.io/calico/latest/networking/configuring/mtu)
 

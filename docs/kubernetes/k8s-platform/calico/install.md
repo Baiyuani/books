@@ -10,6 +10,10 @@ tags:
 
 ### [系统要求](https://docs.tigera.io/calico/latest/getting-started/kubernetes/requirements)
 
+- x86-64, arm64, ppc64le, or s390x processor
+
+- Calico must be able to manage `cali*` interfaces on the host. When IPIP is enabled (the default), Calico also needs to be able to manage `tunl*` interfaces. When VXLAN is enabled, Calico also needs to be able to manage the `vxlan.calico` interface.
+
 - 端口要求
 
   | 配置                           | 主机                   | 连接类型             | 端口/协议               |
@@ -57,25 +61,33 @@ watch kubectl get pods -n calico-system
 
 ### 使用yaml manifests部署(不建议使用，可以对底层 Kubernetes 资源进行高度特定修改时使用)
 
-- 新版3.26.3
+!!! note 
 
-[calico.yaml](calico.yaml)
-[calico-vxlan.yaml](calico-vxlan.yaml)
+    以下官方提供的manifests，calico-vxlan.yaml均为`vxlanMode: CrossSubnet`，calico.yaml均为`ipipMode: Always`.
+
+```bash
+# 最新版
+#vxlan
+wget https://github.com/projectcalico/calico/blob/master/manifests/calico-vxlan.yaml
+#ipip
+wget https://github.com/projectcalico/calico/blob/master/manifests/calico.yaml
+```
 
 - 历史版本
 
-[calico-3.22.3.yaml](calico-3.22.3.yaml)
-[calico-vxlan-3.22.3.yaml](calico-vxlan-3.22.3.yaml)
-[calico-vxlan-3.19.1.yaml](calico-vxlan-3.19.1.yaml)
+> 修改版本和文件名即可。浏览器访问或下载或`kubectl create -f`
 
+1. `<=v3.21`
 
-```bash
-#calico版本是v3.19.1
-kubectl apply -f calico-vxlan-3.19.1.yaml
+   - `https://docs.projectcalico.org/archive/v3.15/manifests/calico-vxlan.yaml`
 
-# 最新版20220528
-#vxlan
-wget https://github.com/projectcalico/calico/blob/master/manifests/calico-vxlan.yaml
-#ipip模式
-wget https://github.com/projectcalico/calico/blob/master/manifests/calico.yaml
-```
+   - `https://docs.projectcalico.org/archive/v3.15/manifests/calico.yaml`
+
+2. `v3.22 <= version <= v3.25`
+
+   - `https://docs.tigera.io/archive/v3.22/manifests/calico.yaml`
+
+3. `>= v3.26`
+
+   - `https://github.com/projectcalico/calico/blob/v3.24.4/manifests/calico.yaml`
+
