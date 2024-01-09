@@ -59,7 +59,7 @@ helm install calico projectcalico/tigera-operator --version v3.26.4 --namespace 
 watch kubectl get pods -n calico-system
 ```
 
-### 使用yaml manifests部署(不建议使用，可以对底层 Kubernetes 资源进行高度特定修改时使用)
+### 使用yaml manifests部署(仅建议对底层Kubernetes资源进行高度特定修改时，或者只作为cni插件，不使用其他calico功能时使用)
 
 !!! note 
 
