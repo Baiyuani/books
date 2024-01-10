@@ -77,17 +77,17 @@ wget https://github.com/projectcalico/calico/blob/master/manifests/calico.yaml
 
 > 修改版本和文件名即可。浏览器访问或下载或`kubectl create -f`
 
-1. `<=v3.21`
+- `<=v3.21`
 
    - `https://docs.projectcalico.org/archive/v3.15/manifests/calico-vxlan.yaml`
 
    - `https://docs.projectcalico.org/archive/v3.15/manifests/calico.yaml`
 
-2. `v3.22 <= version <= v3.25`
+- `v3.22 <= version <= v3.25`
 
    - `https://docs.tigera.io/archive/v3.22/manifests/calico.yaml`
 
-3. `>= v3.26`
+- `>= v3.26`
 
    - `https://github.com/projectcalico/calico/blob/v3.24.4/manifests/calico.yaml`
 

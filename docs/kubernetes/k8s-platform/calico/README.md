@@ -129,3 +129,14 @@ Calico 可以选择选择性地仅封装跨越子网边界的流量。建议使�
 
 ## [故障排除和诊断](https://docs.tigera.io/calico/latest/operations/troubleshoot/troubleshooting)
 
+## ipip vs vxlan
+
+- ipip
+  - 性能更好，资源占用少
+  - 是将ip包封装在另一个ip包，所以只能传输ip包，其他非ip包将被丢弃，在设计上无法将非 IP 数据包作为下一个标头进行传输(IPIP 的范围仅限于两个 Intranet 之间单播 IP 数据包的隧道传输。所有广播和多播都在门口丢弃。此外，它严格来说是OSI 第 3 层— IPV4 和/或 IPV6 协议。它的主要优点是资源占用非常少。)
+  - 仅支持ipv4
+
+- vxlan
+  - VxLAN 是OSI 第 2 层隧道协议。该协议的功能类似于桥接器/交换机。它通过隧道传输所有以太网流量，包括那些不可路由的数据包。
+  - 支持ipv4和ipv6，如果集群使用了ipv6则只能使用vxlan
+  - 相较ipip功能性更强，例如租户隔离，支持非ip数据包。但开销更大，IP in IP uses a 20-byte header, IPv4 VXLAN uses a 50-byte header, IPv6 VXLAN uses a 70-byte header
