@@ -320,4 +320,51 @@ metricsinstances                                        monitoring.grafana.com/v
 kubectl taint nodes <node-name> node.kubernetes.io/out-of-service=nodeshutdown:NoExecute
 ```
 
+## [PodDisruptionBudget](https://kubernetes.io/zh-cn/docs/tasks/run-application/configure-pdb/)
+
+首先了解[干扰Disruptions](https://kubernetes.io/zh-cn/docs/concepts/workloads/pods/disruptions/)
+
+```yaml
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: zk-pdb
+spec:
+  # 要求最少有2个pod可用
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: zookeeper
+```
+
+```yaml
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: zk-pdb
+spec:
+  # 最多允许1个pod不可用
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: zookeeper
+```
+
+## Kubernetes 组件运行状况 SLI
+
+> Kubernetes v1.29 [stable] 从v1.27开始默认启用
+
+```shell
+~# kubectl get --raw "/metrics/slis"
+# HELP kubernetes_healthcheck [STABLE] This metric records the result of a single healthcheck.
+# TYPE kubernetes_healthcheck gauge
+kubernetes_healthcheck{name="etcd",type="healthz"} 1
+kubernetes_healthcheck{name="etcd",type="livez"} 1
+kubernetes_healthcheck{name="etcd",type="readyz"} 1
+kubernetes_healthcheck{name="etcd-readiness",type="readyz"} 1
+kubernetes_healthcheck{name="informer-sync",type="readyz"} 1
+kubernetes_healthcheck{name="ping",type="healthz"} 1
+kubernetes_healthcheck{name="ping",type="livez"} 1
+kubernetes_healthcheck{name="ping",type="readyz"} 1
+```
 

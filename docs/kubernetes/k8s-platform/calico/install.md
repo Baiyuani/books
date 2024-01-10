@@ -14,6 +14,8 @@ tags:
 
 - Calico must be able to manage `cali*` interfaces on the host. When IPIP is enabled (the default), Calico also needs to be able to manage `tunl*` interfaces. When VXLAN is enabled, Calico also needs to be able to manage the `vxlan.calico` interface.
 
+- 如果您的 Linux 发行版附带安装的 Firewalld 或其他 iptables 管理器，则应将其禁用。这些可能会干扰 Calico 添加的规则并导致意外行为。
+
 - 端口要求
 
   | 配置                           | 主机                   | 连接类型             | 端口/协议               |
@@ -73,21 +75,21 @@ wget https://github.com/projectcalico/calico/blob/master/manifests/calico-vxlan.
 wget https://github.com/projectcalico/calico/blob/master/manifests/calico.yaml
 ```
 
-- 历史版本
+#### 历史版本
 
 > 修改版本和文件名即可。浏览器访问或下载或`kubectl create -f`
 
 - `<=v3.21`
 
-   - `https://docs.projectcalico.org/archive/v3.15/manifests/calico-vxlan.yaml`
-
-   - `https://docs.projectcalico.org/archive/v3.15/manifests/calico.yaml`
+     - `https://docs.projectcalico.org/archive/v3.15/manifests/calico-vxlan.yaml`
+  
+     - `https://docs.projectcalico.org/archive/v3.15/manifests/calico.yaml`
 
 - `v3.22 <= version <= v3.25`
 
-   - `https://docs.tigera.io/archive/v3.22/manifests/calico.yaml`
+     - `https://docs.tigera.io/archive/v3.22/manifests/calico.yaml`
 
 - `>= v3.26`
 
-   - `https://github.com/projectcalico/calico/blob/v3.24.4/manifests/calico.yaml`
+     - `https://github.com/projectcalico/calico/blob/v3.24.4/manifests/calico.yaml`
 
