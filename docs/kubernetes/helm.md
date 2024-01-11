@@ -4,8 +4,6 @@ tags:
   - kubernetes
 ---
 
-# Note
-
 ## 1.常用命令
 
 ```shell
