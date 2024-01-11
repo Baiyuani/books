@@ -77,7 +77,15 @@ wget https://github.com/projectcalico/calico/blob/master/manifests/calico.yaml
 
 #### 历史版本
 
-> 修改版本和文件名即可。浏览器访问或下载或`kubectl create -f`
+> 不同版本链接，需要其他版本，则修改url中的版本和结尾文件名。浏览器访问或下载或`kubectl create -f`
+
+!!! note
+
+    部分老版本需要修改`pod cidr`，具体看yaml中这个环境变量默认是否注释，默认注释则不需要配置，默认没注释则需要修改为实际环境的
+            ```yaml
+            - name: CALICO_IPV4POOL_CIDR
+              value: "172.18.0.0/16"
+            ```
 
 - `<=v3.21`
 
