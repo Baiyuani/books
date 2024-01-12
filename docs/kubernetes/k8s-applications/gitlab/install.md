@@ -17,7 +17,59 @@ kubectl create ns gitlab
 kubectl -n gitlab create -f gitlab-ce-single.yaml
 ```
 
-- 配置文件位于`/etc/gitlab/gitlab.rb`
+- 配置文件位于`/etc/gitlab/gitlab.rb`，修改配置文件后重启pod
+
+```config
+# 部署后首要配置，gitlab的访问地址
+external_url 'https://gitlab.local.site'
+
+# 认证对接配置
+gitlab_rails['omniauth_enabled'] = true
+gitlab_rails['omniauth_block_auto_created_users'] = false
+gitlab_rails['omniauth_allow_single_sign_on'] = [ 'oauth2_generic']
+gitlab_rails['omniauth_external_providers'] = ['oauth2_generic','openid_connect']
+gitlab_rails['omniauth_providers'] = [
+ {
+   "name" => "oauth2_generic",
+   "label" => "Login with ketanyun",
+   "app_id" => "rYaw6jf0l48a47yWG2Ok",
+   "app_secret" => "64C20883CD529EAEDC159B075E3161108F451037768FD3F4",
+   "args" => {
+     client_options: {
+         'site' => 'https://cloud.ketanyun.cn',
+         'user_info_url' => 'https://cloud.ketanyun.cn/sso/apis/v2/me/profile',
+         'authorize_url': 'https://cloud.ketanyun.cn/sso/oauth2/authorize?scope=profile', 
+         'token_url': 'https://cloud.ketanyun.cn/sso/oauth2/token?scope=profile' 
+       },
+     "user_response_structure": {
+        "root_path": [], # i.e. if attributes are returned in JsonAPI format (in a 'user' node nested under a 'data' node)
+         "id_path": [ "entities", 0, "account"],
+         "attributes": { } # if the nickname attribute of a user is called 'username'
+       } 
+     }
+   }
+ ]
+
+# 镜像库registry服务器启用
+registry_external_url 'http://registry.local.site'
+registry['enable'] = true
+registry['registry_http_addr'] = "0.0.0.0:5000"
+
+# gitlab设置启用镜像库。host和port填镜像库显示在gitlab上的地址
+gitlab_rails['registry_enabled'] = true
+gitlab_rails['registry_host'] = "registry.local.site"
+#gitlab_rails['registry_port'] = "80"
+gitlab_rails['registry_path'] = "/var/opt/gitlab/gitlab-rails/shared/registry"
+#registry['token_realm'] = "https://git.ketanyun.cn"
+
+
+nginx['enable'] = true
+nginx['client_max_body_size'] = '2048m'
+#nginx['redirect_http_to_https'] = true
+#nginx['redirect_http_to_https_port'] = 80
+#nginx['ssl_certificate'] = "/etc/gitlab/ssl/git.ketanyun.cn.crt"
+#nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/git.ketanyun.cn.key"
+```
 
 ## 使用helm安装
 
