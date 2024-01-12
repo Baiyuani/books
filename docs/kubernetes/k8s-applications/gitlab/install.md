@@ -29,26 +29,25 @@ gitlab_rails['omniauth_block_auto_created_users'] = false
 gitlab_rails['omniauth_allow_single_sign_on'] = [ 'oauth2_generic']
 gitlab_rails['omniauth_external_providers'] = ['oauth2_generic','openid_connect']
 gitlab_rails['omniauth_providers'] = [
- {
-   "name" => "oauth2_generic",
-   "label" => "Login with xxxxx",
-   "app_id" => "xxxxxxxxxxxxxxxxxxxxxx",
-   "app_secret" => "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-   "args" => {
-     client_options: {
-         'site' => 'https://oatuh.site',
-         'user_info_url' => 'https://oatuh.site/sso/apis/v2/me/profile',
-         'authorize_url': 'https://oatuh.site/sso/oauth2/authorize?scope=profile', 
-         'token_url': 'https://oatuh.site/sso/oauth2/token?scope=profile' 
-       },
-     "user_response_structure": {
-        "root_path": [], # i.e. if attributes are returned in JsonAPI format (in a 'user' node nested under a 'data' node)
-         "id_path": [ "entities", 0, "account"],
-         "attributes": { } # if the nickname attribute of a user is called 'username'
-       } 
-     }
-   }
- ]
+{
+    "name" => "oauth2_generic",
+    "label" => "Login with xxxxx",
+    "app_id" => "xxxxxxxxxxxxxxxxxxxxxx",
+    "app_secret" => "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "args" => {
+         client_options: {
+             'site' => 'https://oatuh.site',
+             'user_info_url' => 'https://oatuh.site/sso/apis/v2/me/profile',
+             'authorize_url': 'https://oatuh.site/sso/oauth2/authorize?scope=profile', 
+             'token_url': 'https://oatuh.site/sso/oauth2/token?scope=profile' 
+         },
+         "user_response_structure": {
+            "root_path": [], # i.e. if attributes are returned in JsonAPI format (in a 'user' node nested under a 'data' node)
+             "id_path": [ "entities", 0, "account"],
+             "attributes": { } # if the nickname attribute of a user is called 'username'
+         } 
+    }
+}]
 
 # 镜像库registry服务器启用
 registry_external_url 'http://registry.local.site'
