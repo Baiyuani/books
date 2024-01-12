@@ -31,15 +31,15 @@ gitlab_rails['omniauth_external_providers'] = ['oauth2_generic','openid_connect'
 gitlab_rails['omniauth_providers'] = [
  {
    "name" => "oauth2_generic",
-   "label" => "Login with ketanyun",
-   "app_id" => "rYaw6jf0l48a47yWG2Ok",
-   "app_secret" => "64C20883CD529EAEDC159B075E3161108F451037768FD3F4",
+   "label" => "Login with xxxxx",
+   "app_id" => "xxxxxxxxxxxxxxxxxxxxxx",
+   "app_secret" => "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
    "args" => {
      client_options: {
-         'site' => 'https://cloud.ketanyun.cn',
-         'user_info_url' => 'https://cloud.ketanyun.cn/sso/apis/v2/me/profile',
-         'authorize_url': 'https://cloud.ketanyun.cn/sso/oauth2/authorize?scope=profile', 
-         'token_url': 'https://cloud.ketanyun.cn/sso/oauth2/token?scope=profile' 
+         'site' => 'https://oatuh.site',
+         'user_info_url' => 'https://oatuh.site/sso/apis/v2/me/profile',
+         'authorize_url': 'https://oatuh.site/sso/oauth2/authorize?scope=profile', 
+         'token_url': 'https://oatuh.site/sso/oauth2/token?scope=profile' 
        },
      "user_response_structure": {
         "root_path": [], # i.e. if attributes are returned in JsonAPI format (in a 'user' node nested under a 'data' node)
