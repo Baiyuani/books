@@ -10,7 +10,11 @@ tags:
 [gitlab-ce-single.yaml](manifests/gitlab-ce-single.yaml)
 
 ```shell
-kubectl create -f gitlab-ce-single.yaml
+kubectl label node <nodeName> node-role.kubernetes.io/critical-apps=gitlab
+kubectl taint nodes <node-name> node-role.kubernetes.io/critical-apps=gitlab:NoSchedule
+
+kubectl create ns gitlab
+kubectl -n gitlab create -f gitlab-ce-single.yaml
 ```
 
 - 配置文件位于`/etc/gitlab/gitlab.rb`
