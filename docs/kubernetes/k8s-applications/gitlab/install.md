@@ -20,8 +20,8 @@ kubectl -n gitlab create -f gitlab-ce-single.yaml
 - 配置文件位于`/etc/gitlab/gitlab.rb`，修改配置文件后重启pod
 
 ```config
-# 部署后首要配置，gitlab的访问地址
-external_url 'https://gitlab.local.site'
+# 部署后首要配置，gitlab的访问地址。协议配置为https时要求gitlab本地必须有证书，可以配置为http，证书在ingress上配置
+external_url 'http://gitlab.local.site'
 
 # 认证对接配置
 gitlab_rails['omniauth_enabled'] = true
@@ -36,10 +36,10 @@ gitlab_rails['omniauth_providers'] = [
     "app_secret" => "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
     "args" => {
          client_options: {
-             'site' => 'https://oatuh.site',
-             'user_info_url' => 'https://oatuh.site/sso/apis/v2/me/profile',
-             'authorize_url': 'https://oatuh.site/sso/oauth2/authorize?scope=profile', 
-             'token_url': 'https://oatuh.site/sso/oauth2/token?scope=profile' 
+             'site' => 'https://oauth.site',
+             'user_info_url' => 'https://oauth.site/sso/apis/v2/me/profile',
+             'authorize_url': 'https://oauth.site/sso/oauth2/authorize?scope=profile', 
+             'token_url': 'https://oauth.site/sso/oauth2/token?scope=profile' 
          },
          "user_response_structure": {
             "root_path": [], # i.e. if attributes are returned in JsonAPI format (in a 'user' node nested under a 'data' node)
@@ -62,9 +62,8 @@ gitlab_rails['registry_host'] = "registry.local.site"
 gitlab_rails['registry_path'] = "/var/opt/gitlab/gitlab-rails/shared/registry"
 #registry['token_realm'] = "https://git.ketanyun.cn"
 
-# 默认不用开，使用外部代理
-#nginx['enable'] = true
-#nginx['client_max_body_size'] = '2048m'
+nginx['enable'] = true
+nginx['client_max_body_size'] = '2048m'
 #nginx['redirect_http_to_https'] = true
 #nginx['redirect_http_to_https_port'] = 80
 #nginx['ssl_certificate'] = "/etc/gitlab/ssl/git.ketanyun.cn.crt"
