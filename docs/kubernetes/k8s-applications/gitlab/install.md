@@ -49,7 +49,8 @@ gitlab_rails['omniauth_providers'] = [
     }
 }]
 
-# 镜像库registry服务器启用
+# 镜像库registry服务器启用.
+# registry_external_url 协议配置为https时要求gitlab本地必须有证书，可以配置为http，证书在ingress上配置
 registry_external_url 'http://registry.local.site'
 registry['enable'] = true
 registry['registry_http_addr'] = "0.0.0.0:5000"
@@ -61,9 +62,9 @@ gitlab_rails['registry_host'] = "registry.local.site"
 gitlab_rails['registry_path'] = "/var/opt/gitlab/gitlab-rails/shared/registry"
 #registry['token_realm'] = "https://git.ketanyun.cn"
 
-
-nginx['enable'] = true
-nginx['client_max_body_size'] = '2048m'
+# 默认不用开，使用外部代理
+#nginx['enable'] = true
+#nginx['client_max_body_size'] = '2048m'
 #nginx['redirect_http_to_https'] = true
 #nginx['redirect_http_to_https_port'] = 80
 #nginx['ssl_certificate'] = "/etc/gitlab/ssl/git.ketanyun.cn.crt"
