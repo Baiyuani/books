@@ -97,7 +97,6 @@ metadata:
     helm.sh/chart: gitlab-ce-0.0.1
   name: gitlab-registry
 spec:
-  externalTrafficPolicy: Cluster
   ports:
   - port: 5000
     protocol: TCP
@@ -220,7 +219,7 @@ metadata:
 #    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
     nginx.ingress.kubernetes.io/proxy-body-size: 2048m
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "720"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+#    nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/use-regex: "true"
   labels:
     app.kubernetes.io/instance: gitlab-ce
@@ -264,7 +263,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
     nginx.ingress.kubernetes.io/send-timeout: "600"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+#    nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/use-regex: "true"
   labels:
     app.kubernetes.io/instance: gitlab-ce
