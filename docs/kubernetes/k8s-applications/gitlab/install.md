@@ -70,6 +70,8 @@ nginx['client_max_body_size'] = '2048m'
 #nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/git.ketanyun.cn.key"
 ```
 
+下一步，安装[minio](./minio.md)
+
 ## 使用helm安装
 
 !!! note

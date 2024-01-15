@@ -30,12 +30,18 @@ helm install runner-cache-minio minio/minio \
 --set resources.requests.cpu='100m'
 ```
 
-附：安装后建议为bucket配置lifecycle，防止数据持续增长最终写满磁盘。
+下一步，安装[gitlab-runner](./runner.md)
+
+## 设置存储桶生命周期
+
+> 安装后建议为bucket配置lifecycle，防止数据持续增长最终写满磁盘。console页面操作或者使用`mc`命令行
+
+### minio console页面操作
 
 访问minio-console -> Buckets -> runner -> Lifecycle -> Add Lifecycle Rule -> After 填写数据保留多少天 -> save
 
 
-## mc ilm 设置对象生命周期
+### mc ilm 设置对象生命周期
 
 https://min.io/docs/minio/linux/reference/minio-mc.html
 
@@ -73,3 +79,4 @@ chmod +x mc
 ## 移除指定的ilm策略
 ./mc ilm rm --id "ci9t02ik5q2hvnbimsc0" ketanyun/runner
 ```
+
