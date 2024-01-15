@@ -32,7 +32,11 @@ helm upgrade --install gitlab-runner -f gitlab-runner-values.yaml gitlab/gitlab-
 --set image.image='gitlab/gitlab-runner' \
 --set image.tag='v16.7.0' \
 --set runners.cache.secretName='runner-minio-access' \
---set rbac.create=true
+--set rbac.create=true \
+--set podSecurityContext.runAsUser=999 \
+--set podSecurityContext.fsGroup=999 
+
+
 
 # 标记构建节点，仅允许构建在满足条件的节点运行
 kubectl label node <nodeName> node-role.kubernetes.io/gitlab=runner
