@@ -1,3 +1,40 @@
+---
+tags: 
+  - minio
+  - gitlab
+---
+
+## 安装minio
+
+```shell
+helm repo add minio https://charts.min.io/
+
+# rootUser 管理员用户
+# users 创建普通用户，secretKey为用户的密码
+# svcaccts 创建service account给gitlab-runner使用。注意accessKey和secretKey需要满足复杂度要求
+helm install runner-cache-minio minio/minio \
+--namespace gitlab --create-namespace \
+--version 5.0.15 \
+--set mode='standalone' \
+--set persistence.storageClass='nfs-client' \
+--set persistence.size='500Gi' \
+--set rootUser='minio' \
+--set rootPassword='' \
+--set buckets[0].name=runner,buckets[0].policy=none,buckets[0].purge=false \
+--set users[0].accessKey=runner,users[0].secretKey=fgGft567gs,users[0].policy=readwrite \
+--set svcaccts[0].accessKey=GbbNXEe1c2s1hj9srvWp,svcaccts[0].secretKey=pEhzoHydH3zEYPVO7NEsXsHznHy4lfJvkuNqJTrn,svcaccts[0].user=runner \
+--set consoleIngress.enabled=true \
+--set consoleIngress.hosts[0]='minio.xxx.xxx' \
+--set consoleIngress.ingressClassName=nginx \
+--set resources.requests.memory='128Mi' \
+--set resources.requests.cpu='100m'
+```
+
+附：安装后建议为bucket配置lifecycle，防止数据持续增长最终写满磁盘。
+
+访问minio-console -> Buckets -> runner -> Lifecycle -> Add Lifecycle Rule -> After 填写数据保留多少天 -> save
+
+
 ## mc ilm 设置对象生命周期
 
 https://min.io/docs/minio/linux/reference/minio-mc.html

@@ -16,9 +16,10 @@ tags:
 helm repo add gitlab https://charts.gitlab.io
 helm search repo -l gitlab/gitlab-runner
 
+# runnerToken从gitlab页面，创建runner时获取
 # appVersion: 16.7.0
 helm install gitlab-runner -f gitlab-runner-values.yaml gitlab/gitlab-runner \
---create-namespace --namespace <NAMESPACE> \
+--create-namespace --namespace gitlab \
 --version 0.60.0 \
 --set runnerToken='' \
 --set gitlabUrl=https://gitlab.example.com 
