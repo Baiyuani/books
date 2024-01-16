@@ -10,8 +10,6 @@ tags:
 
 [官方文档](https://docs.gitlab.com/runner/install/kubernetes.html)
 
-[gitlab-runner-values.yaml](manifests/gitlab-runner-values.yaml)
-
 
 ### 创建cd用的service account
 
@@ -65,10 +63,9 @@ helm upgrade --install gitlab-runner -f gitlab-runner-values.yaml gitlab/gitlab-
 --set podSecurityContext.runAsUser=999 \
 --set podSecurityContext.fsGroup=999 
 
-
-
 # 标记构建节点，仅允许构建在满足条件的节点运行
 kubectl label node <nodeName> node-role.kubernetes.io/gitlab=runner
 kubectl taint nodes <node-name> node-role.kubernetes.io/gitlab=runner:NoSchedule
 ```
 
+[gitlab-runner-values.yaml](manifests/gitlab-runner-values.yaml)
