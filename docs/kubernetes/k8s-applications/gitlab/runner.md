@@ -31,7 +31,7 @@ kubectl create sa -n gitlab gitlab-cd
 2. 自定义权限（建议，仅授权必须的权限，可后期动态调整）
     ```shell
     NS=gitlab
-    kubectl -n ${NS} apply -f gitlab-cd-clusterrole.yaml
+    kubectl apply -f gitlab-cd-clusterrole.yaml
     kubectl create clusterrolebinding gitlab-cd-${NS}-cluster-permission --clusterrole=gitlab-cd --serviceaccount=${NS}:gitlab-cd
     unset NS
     ```
