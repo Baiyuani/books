@@ -12,6 +12,7 @@ runners:
         namespace = "{{.Release.Namespace}}"
         image = "ubuntu:22.04"
         privileged = true
+        service_account = "gitlab-cd"
     
         cpu_limit = "1"
         cpu_request = "1"
