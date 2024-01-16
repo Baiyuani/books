@@ -20,8 +20,29 @@ kubectl -n gitlab create -f gitlab-ce-single.yaml
 - 配置文件位于`/etc/gitlab/gitlab.rb`，修改配置文件后重启pod
 
 ```config
-# 部署后首要配置，gitlab的访问地址。协议配置为https时要求gitlab本地必须有证书，可以配置为http，证书在ingress上配置
-external_url 'http://gitlab.local.site'
+# 部署后首要配置，gitlab的访问地址。影响在平台上显示的url地址，填写真正的外部访问协议+域名
+external_url 'https://gitlab.local.site'
+nginx['enable'] = true
+nginx['client_max_body_size'] = '2048m'
+# 监听端口指定为80，协议为http。ssl证书在外部代理上配置，例如ingress
+nginx['listen_port'] = 80
+nginx['listen_https'] = false
+#nginx['redirect_http_to_https'] = true
+#nginx['redirect_http_to_https_port'] = 80
+#nginx['ssl_certificate'] = "/etc/gitlab/ssl/git.ketanyun.cn.crt"
+#nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/git.ketanyun.cn.key"
+
+# 镜像库registry服务器启用.
+# registry_external_url 协议配置为https时要求gitlab本地必须有证书，可以配置为http，证书在ingress上配置
+registry_external_url 'http://registry.local.site'
+registry['enable'] = true
+registry['registry_http_addr'] = "0.0.0.0:5000"
+# gitlab设置启用镜像库。host和port填镜像库显示在gitlab上的地址
+gitlab_rails['registry_enabled'] = true
+gitlab_rails['registry_host'] = "registry.local.site"
+#gitlab_rails['registry_port'] = "80"
+gitlab_rails['registry_path'] = "/var/opt/gitlab/gitlab-rails/shared/registry"
+
 
 # 认证对接配置
 gitlab_rails['omniauth_enabled'] = true
@@ -49,25 +70,6 @@ gitlab_rails['omniauth_providers'] = [
     }
 }]
 
-# 镜像库registry服务器启用.
-# registry_external_url 协议配置为https时要求gitlab本地必须有证书，可以配置为http，证书在ingress上配置
-registry_external_url 'http://registry.local.site'
-registry['enable'] = true
-registry['registry_http_addr'] = "0.0.0.0:5000"
-
-# gitlab设置启用镜像库。host和port填镜像库显示在gitlab上的地址
-gitlab_rails['registry_enabled'] = true
-gitlab_rails['registry_host'] = "registry.local.site"
-#gitlab_rails['registry_port'] = "80"
-gitlab_rails['registry_path'] = "/var/opt/gitlab/gitlab-rails/shared/registry"
-#registry['token_realm'] = "https://git.ketanyun.cn"
-
-nginx['enable'] = true
-nginx['client_max_body_size'] = '2048m'
-#nginx['redirect_http_to_https'] = true
-#nginx['redirect_http_to_https_port'] = 80
-#nginx['ssl_certificate'] = "/etc/gitlab/ssl/git.ketanyun.cn.crt"
-#nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/git.ketanyun.cn.key"
 ```
 
 下一步，安装[minio](./minio.md)
