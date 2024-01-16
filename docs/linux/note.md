@@ -4,7 +4,6 @@ tags:
   - linux
   - cli
 ---
-  - # Note
 
 ## 设置系统代理 
 
@@ -102,3 +101,22 @@ chronyc -a makestep
 systemctl enable chronyd
 ```
 
+## rsync增量同步
+
+- 使用rsync协议，同步服务端文件
+
+```shell
+~$ rsync rsync://mirrors.tuna.tsinghua.edu.cn/kubernetes
+
+drwxr-xr-x              4 2020/03/02 10:28:26 .
+drwxr-xr-x              4 2020/03/02 11:33:16 apt
+drwxr-xr-x              3 2020/03/02 14:19:34 yum
+```
+
+```shell
+RSYNC_OPTS="-aHvh --no-o --no-g --stats --exclude .~tmp~/ --delete --delete-excluded --delete-after --delay-updates --safe-links --timeout=120 --contimeout=120"
+upstream="rsync://mirrors.tuna.tsinghua.edu.cn/kubernetes/"
+dest="$DIR"
+
+rsync ${RSYNC_OPTS} "$upstream" "$dest"
+```
