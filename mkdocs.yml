@@ -67,7 +67,7 @@ theme:
     - navigation.instant.prefetch
     - navigation.instant.progress
     - navigation.tracking
-    - navigation.sections
+#    - navigation.sections
     - navigation.path
     - navigation.top
     - search.suggest
