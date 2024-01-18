@@ -15,6 +15,9 @@ tags:
     Access to a Kubernetes v1.11.3+ cluster.
     ```
 
+```shell
+sudo apt install make
+```
 
 - 安装kubebuilder
 
