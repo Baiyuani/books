@@ -8,7 +8,7 @@ tags:
 
 ## [安装](https://gofrp.org/zh-cn/docs/setup/)
 
-[Release](https://gofrp.org/zh-cn/docs/setup/)
+[Release](https://github.com/fatedier/frp/releases)
 
 - 具备公网IP的服务器安装
 
