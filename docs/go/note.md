@@ -10,9 +10,9 @@ tags:
 ## 初始化项目linux
 
 ```shell
-curl -O https://dl.google.com/go/go1.21.5.linux-amd64.tar.gz
+curl -O https://dl.google.com/go/go1.21.6.linux-amd64.tar.gz
 
-rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.21.5.linux-amd64.tar.gz
+rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.21.6.linux-amd64.tar.gz
 
 # 设置go环境变量
 sudo tee /etc/profile.d/go.sh << 'EOF'
@@ -61,6 +61,10 @@ go build helloworld.go
 # $GOROOT 中的可执行文件安装在 $GOROOT/bin 或 $GOTOOLDIR 而不是 $GOBIN。 
 # 构建和缓存非可执行包但不安装。
 go install golang.org/x/tools/gopls@latest
+
+# vscode ctrl+shift+P 
+go:install/update tools
+# 然后勾选所有，安装
 
 # 修改go环境变量
 go env -w GOBIN=/path/to/your/bin
@@ -497,6 +501,35 @@ func main() {
     defer fmt.Println("!")
 
     os.Exit(3)
+}
+```
+
+## 读取环境变量
+
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+)
+
+func imageForMemcached() (string, error) {
+	var imageEnvVar = "MEMCACHED_IMAGE"
+	image, found := os.LookupEnv(imageEnvVar)
+	if !found {
+		return "", fmt.Errorf("Unable to find %s environment variable with the image", imageEnvVar)
+	}
+	return image, nil
+}
+
+func main() {
+    i, err := imageForMemcached()
+    if err != nil {
+        fmt.Println(err)
+    } else {
+        fmt.Println(i)
+    }
 }
 ```
 
