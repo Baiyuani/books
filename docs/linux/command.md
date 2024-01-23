@@ -69,6 +69,9 @@ iptables -A INPUT -j DROP
 # 修改FORWARD链的默认策略设置为DROP
 iptables -t filter -P FORWARD DROP   #-t指定所要操作的表，如果没有指定，则默认的表为filter.
 
+# 允许访问公网
+iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+
 # 清空当前规则
 iptables -F
 
