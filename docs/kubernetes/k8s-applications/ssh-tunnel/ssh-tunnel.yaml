@@ -21,8 +21,8 @@ spec:
     spec:
       hostAliases:
         - hostnames:
-            - gpt.ketanyun.com
-          ip: 4.236.152.69
+            - gpt.xxx.com
+          ip: x.x.x.x
       containers:
       - name: ssh-tunnel
         image: synin/ssh:latest
@@ -32,7 +32,7 @@ spec:
           - -D 
           - 0.0.0.0:1337
           - -Ng
-          - sshtunnel@gpt.ketanyun.com
+          - sshtunnel@gpt.xxx.com
         livenessProbe:
           failureThreshold: 3
           initialDelaySeconds: 1
