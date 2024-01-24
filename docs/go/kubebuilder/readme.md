@@ -50,7 +50,19 @@ kubebuilder init --domain ${KB_DOMAIN} --repo ${KB_DOMAIN}/${KB_PROJECT}
 - 创建api
 
 ```shell
-kubebuilder create api --group webapp --version v1 --kind Guestbook
+kubebuilder create api --group apps --version v1alpha1 --kind Guestbook
+
+# 使用deploy-image/v1-alpha插件
+kubebuilder create api \
+--group apps \
+--version v1alpha1 \
+--kind SshTunnel \
+--image=synin/ssh:latest \
+--image-container-command="ssh,-D,0.0.0.0:1337,-Ng,sshtunnel@gpt.xxx.com" \
+--image-container-port="1337" \
+--run-as-user="1001" \
+--plugins="deploy-image/v1-alpha" \
+--make=false
 ```
 
 - 安装
