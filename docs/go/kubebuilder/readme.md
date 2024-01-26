@@ -5,7 +5,7 @@ tags:
   - k8s-operator
 ---
 
-## [初始化项目](https://book.kubebuilder.io/quick-start)
+# [初始化项目](https://book.kubebuilder.io/quick-start)
 
 - 环境准备
     ```
