@@ -33,3 +33,7 @@ https://book.kubebuilder.io/cronjob-tutorial/new-api
 
 与 Go API 类型一起创建的默认 CustomResourceDefinition 清单使用 API version v1。如果您的项目打算支持早于 v1.16 的 Kubernetes 集群版本，则必须 从Makefile 变量中设置--crd-version v1beta1
 
+https://book.kubebuilder.io/cronjob-tutorial/webhook-implementation
+
+与 Go webhook 实现一起创建的默认 WebhookConfiguration 清单使用 API version v1。如果您的项目打算支持 v1.16 之前的 Kubernetes 集群版本，请设置--webhook-version v1beta1。
+

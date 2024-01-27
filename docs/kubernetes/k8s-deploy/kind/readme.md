@@ -5,4 +5,5 @@
 ```shell
 kind create cluster --config=config-with-port-mapping.yaml --image=kindest/node:v1.19.16
 kind create cluster --config=config-with-port-mapping.yaml --image=kindest/node:v1.24.15
+kind create cluster --config=config-with-port-mapping.yaml --image=kindest/node:v1.29.0
 ```

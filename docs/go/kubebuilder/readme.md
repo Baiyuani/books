@@ -100,3 +100,24 @@ make uninstall
 make undeploy
 ```
 
+- 实现webhooks
+
+https://book.kubebuilder.io/cronjob-tutorial/webhook-implementation
+
+```shell
+kubebuilder create webhook --group batch --version v1 --kind CronJob --defaulting --programmatic-validation
+# 与 Go webhook 实现一起创建的默认 WebhookConfiguration 清单使用 API version v1。如果您的项目打算支持 v1.16 之前的 Kubernetes 集群版本，请设置--webhook-version v1beta1
+```
+
+```shell
+helm install \
+  cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --set installCRDs=true \
+  --set prometheus.enabled=false \
+  --set webhook.timeoutSeconds=10 \
+  --set ingressShim.defaultIssuerName=letsencrypt-prod \
+  --set ingressShim.defaultIssuerKind=ClusterIssuer \
+  --set ingressShim.defaultIssuerGroup=cert-manager.io
+```
