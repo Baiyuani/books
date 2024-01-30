@@ -47,29 +47,34 @@ gitlab_rails['registry_path'] = "/var/opt/gitlab/gitlab-rails/shared/registry"
 # 认证对接配置
 gitlab_rails['omniauth_enabled'] = true
 gitlab_rails['omniauth_block_auto_created_users'] = false
-gitlab_rails['omniauth_allow_single_sign_on'] = [ 'oauth2_generic']
+gitlab_rails['omniauth_allow_single_sign_on'] = ['oauth2_generic']
 gitlab_rails['omniauth_external_providers'] = ['oauth2_generic','openid_connect']
 gitlab_rails['omniauth_providers'] = [
-{
-    "name" => "oauth2_generic",
-    "label" => "Login with xxxxx",
-    "app_id" => "xxxxxxxxxxxxxxxxxxxxxx",
-    "app_secret" => "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    "args" => {
-         client_options: {
-             'site' => 'https://oauth.site',
-             'user_info_url' => 'https://oauth.site/sso/apis/v2/me/profile',
-             'authorize_url': 'https://oauth.site/sso/oauth2/authorize?scope=profile', 
-             'token_url': 'https://oauth.site/sso/oauth2/token?scope=profile' 
-         },
-         "user_response_structure": {
-            "root_path": [], # i.e. if attributes are returned in JsonAPI format (in a 'user' node nested under a 'data' node)
-             "id_path": [ "entities", 0, "account"],
-             "attributes": { } # if the nickname attribute of a user is called 'username'
-         } 
+  {
+    name: "oauth2_generic",
+    label: "Login with xxxxx", # optional label for login button, defaults to "Oauth2 Generic"
+    app_id: "<your_app_client_id>",
+    app_secret: "<your_app_client_secret>",
+    args: {
+      client_options: {
+        site: "https://oauth.site",
+        user_info_url: "https://oauth.site/sso/apis/v2/me/profile",
+        authorize_url: "https://oauth.site/sso/oauth2/authorize?scope=profile",
+        token_url: "https://oauth.site/sso/oauth2/token?scope=profile"
+      },
+      user_response_structure: {
+        root_path: [],
+        id_path: ["entities", 0, "account"],
+        attributes: {
+        }
+      },
+      authorize_params: {
+        scope: "openid profile"
+      },
+      strategy_class: "OmniAuth::Strategies::OAuth2Generic"
     }
-}]
-
+  }
+]
 ```
 
 下一步，安装[minio](./minio.md)
