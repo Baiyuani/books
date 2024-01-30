@@ -88,7 +88,7 @@ gitlab_rails['omniauth_providers'] = [
 #设置默认的storageClass
 kubectl patch storageclass nfs-client -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 
-# appVersion: v16.7.0
+# appVersion: v16.8.1
 # certmanager和ingress最好单独装
 helm repo add gitlab https://charts.gitlab.io/
 helm repo update
@@ -98,7 +98,7 @@ helm upgrade --install gitlab gitlab/gitlab -n gitlab --create-namespace \
   --set global.hosts.externalIP=10.10.10.10 \
   --set certmanager-issuer.email=me@example.com \
   --set postgresql.image.tag=13.6.0 \
-  --version=7.7.0 \
+  --version=7.8.1 \
   --set certmanager.install=false \
   --set nginx-ingress.enabled=false \
   --set prometheus.install=false \

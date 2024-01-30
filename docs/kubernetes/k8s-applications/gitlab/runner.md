@@ -49,15 +49,15 @@ kubectl create secret generic runner-minio-access \
     --from-literal=secretkey="pEhzoHydH3zEYPVO7NEsXsHznHy4lfJvkuNqJTrn"
 
 # runnerToken从gitlab页面，创建runner时获取
-# appVersion: 16.7.0
+# appVersion: 16.8.0
 helm upgrade --install gitlab-runner -f gitlab-runner-values.yaml gitlab/gitlab-runner \
 --create-namespace --namespace gitlab \
---version 0.60.0 \
+--version 0.61.0 \
 --set runnerToken='' \
 --set gitlabUrl=https://gitlab.example.com \
 --set image.registry='docker.io' \
 --set image.image='gitlab/gitlab-runner' \
---set image.tag='v16.7.0' \
+--set image.tag='v16.8.0' \
 --set runners.cache.secretName='runner-minio-access' \
 --set rbac.create=true \
 --set podSecurityContext.runAsUser=999 \
