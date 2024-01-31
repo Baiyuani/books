@@ -55,16 +55,16 @@ CMD ["./get-cpu-os"]
 ```shell
 # -t 指定镜像地址，需要指定正确的registry+repo:tag，因为构建完就要推送到远程仓库
 # --push 推送到远程registry
-docker buildx build --builder multiarch -t test:1 --platform linux/amd64,linux/arm64 --push .
+docker buildx build --builder multiarch -t test:1 --platform linux/amd64,linux/arm64 --provenance=false --sbom=false --push .
 ```
 
-- 构建的镜像manifest信息错误
+#### 附：禁用buildx的attestations 
 
 ```shell
 # 等同于docker manifest inspect
 docker buildx imagetools inspect <username>/<image>:latest
 
-# 输出如下，包含unknown
+# 输出如下，包含unknown，会影响一些镜像构建工具获取基础镜像信息
 Name:      oci.ketanyun.cn/open/openjdk:test
 MediaType: application/vnd.oci.image.index.v1+json
 Digest:    sha256:8c1ed60c573473130802d7bada0fb8ece18f580682801512dfa5f369575d39a7
