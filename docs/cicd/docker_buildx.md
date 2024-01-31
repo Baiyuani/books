@@ -32,7 +32,6 @@ docker buildx inspect multiarch
 docker buildx rm multiarch
 ```
 
-
 ## 修改Dockerfile
 
 ```shell
@@ -56,10 +55,49 @@ CMD ["./get-cpu-os"]
 ```shell
 # -t 指定镜像地址，需要指定正确的registry+repo:tag，因为构建完就要推送到远程仓库
 # --push 推送到远程registry
-docker buildx build --builder multiarch -t test:1 --platform linux/amd64,linux/arm64 --push .
+docker buildx build --builder multiarch -t test:1 --platform linux/amd64,linux/arm64 --provenance=false --sbom=false --push .
+```
 
+#### 附：禁用buildx的attestations 
+
+```shell
 # 等同于docker manifest inspect
 docker buildx imagetools inspect <username>/<image>:latest
+
+# 输出如下，包含unknown，会影响一些镜像构建工具获取基础镜像信息
+Name:      oci.ketanyun.cn/open/openjdk:test
+MediaType: application/vnd.oci.image.index.v1+json
+Digest:    sha256:8c1ed60c573473130802d7bada0fb8ece18f580682801512dfa5f369575d39a7
+
+Manifests:
+  Name:        oci.ketanyun.cn/open/openjdk:test@sha256:b906f0389fbb2a2ac098ec60da9ece830f5232d060aa109298264fd7f171a33c
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    linux/amd64
+
+  Name:        oci.ketanyun.cn/open/openjdk:test@sha256:c242cd2a710b431245072a38698494e013f86efdc6f2dbb923b8932637826bf1
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    linux/arm64
+
+  Name:        oci.ketanyun.cn/open/openjdk:test@sha256:aceebdd26e3cbe92610a19e85f21f043c22d4c2f907d8988cccb6dbcb08100d3
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    unknown/unknown
+  Annotations:
+    vnd.docker.reference.digest: sha256:b906f0389fbb2a2ac098ec60da9ece830f5232d060aa109298264fd7f171a33c
+    vnd.docker.reference.type:   attestation-manifest
+
+  Name:        oci.ketanyun.cn/open/openjdk:test@sha256:344161645c61cf4ca9c4b36e438b626b12908e45916900d3bdddc4d170dbb7e4
+  MediaType:   application/vnd.oci.image.manifest.v1+json
+  Platform:    unknown/unknown
+  Annotations:
+    vnd.docker.reference.digest: sha256:c242cd2a710b431245072a38698494e013f86efdc6f2dbb923b8932637826bf1
+    vnd.docker.reference.type:   attestation-manifest
+```
+
+```shell
+# 通过在build命令添加以下参数可解决
+--provenance=false --sbom=false
+
+docker buildx build --builder multiarch -t test:1 --platform linux/amd64,linux/arm64 --provenance=false --sbom=false --push .
 ```
 
 ## 如果没有使用docker desktop，则需要手动启用qemu
@@ -73,5 +111,5 @@ docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 或者参考docker官方文档：https://docs.docker.com/build/building/multi-platform/
 
 ```shell
- docker run --privileged --rm tonistiigi/binfmt --install all
+docker run --privileged --rm tonistiigi/binfmt --install all
 ```
