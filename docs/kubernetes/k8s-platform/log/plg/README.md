@@ -34,6 +34,14 @@ helm upgrade --install loki grafana/loki -n loki \
 --set singleBinary.persistence.storageClass='local-path' \
 --set singleBinary.nodeSelector.'kubernetes\.io/hostname'='k8s-node2' \
 --set loki.commonConfig.replication_factor=1 \
+--set singleBinary.resources.limits.cpu=1500m \
+--set singleBinary.resources.limits.memory=1500Mi \
+--set singleBinary.resources.requests.cpu=500m \
+--set singleBinary.resources.requests.memory=500Mi \
+--set minio.resources.limits.cpu=1000m \
+--set minio.resources.limits.memory=1Gi \
+--set minio.resources.requests.cpu=100m \
+--set minio.resources.requests.memory=128Mi \
 --set minio.enabled=true \
 --set minio.mode='standalone' \
 --set minio.persistence.storageClass='nfs-client' \
