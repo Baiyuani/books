@@ -47,3 +47,13 @@ ansible -i inventory/localhost-inventory.ini all -m shell -a 'sed -i "/www.dachu
 ```shell
 ansible all -m script -a "run.sh"
 ```
+
+## hosts 
+
+> 20240131 从k8s-playbooks的hosts.j2中移除，
+
+```shell
+{% for host in groups['all'] %}
+{{ hostvars[host].ip | default(hostvars[host].ansible_default_ipv4.address) }} {{ hostvars[host].ansible_hostname }}
+{% endfor %}
+```
