@@ -373,3 +373,44 @@ kubernetes_healthcheck{name="ping",type="livez"} 1
 kubernetes_healthcheck{name="ping",type="readyz"} 1
 ```
 
+## 环境变量env的值包含其他环境变量
+
+
+```yaml
+          env:
+            - name: DB_DRIVER
+              valueFrom:
+                secretKeyRef:
+                  name: walrus
+                  key: db_driver
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: walrus
+                  key: db_user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: walrus
+                  key: db_password
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: walrus
+                  key: db_name
+            - name: SERVER_SETTING_LOCAL_ENVIRONMENT_MODE
+              valueFrom:
+                secretKeyRef:
+                  name: walrus
+                  key: local_environment_mode
+            - name: SERVER_ENABLE_TLS
+              valueFrom:
+                secretKeyRef:
+                  name: walrus
+                  key: enable_tls
+            - name: SERVER_DATA_SOURCE_ADDRESS
+              value: $(DB_DRIVER)://$(DB_USER):$(DB_PASSWORD)@database:5432/$(DB_NAME)?sslmode=disable
+            - name: SERVER_CASDOOR_SERVER
+              value: http://identity-access-manager:8000
+```
+
