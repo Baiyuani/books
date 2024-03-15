@@ -21,6 +21,6 @@ helm install pgsql oci://registry-1.docker.io/bitnamicharts/postgresql --version
 --set primary.resources.limits.cpu=1000m \
 --set primary.resources.requests.memory=256Mi \
 --set primary.resources.requests.cpu=250m \
--n saas
+-n saas -f values.yaml
 ```
 
