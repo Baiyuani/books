@@ -32,12 +32,13 @@ helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --timeout 20m0s
 --set controller.dnsPolicy=ClusterFirstWithHostNet  \
 --set controller.hostNetwork=true  \
 --set controller.ingressClassResource.default=true  \
+--set controller.priorityClassName='system-cluster-critical' \
 --set controller.config.enable-underscores-in-headers='true' \
 --set controller.config.max-worker-connections='65531' \
 --set controller.config.server-tokens='false'  \
 --set controller.config.use-gzip="true" \
---set controller.config.ssl-redirect="false"
-
+--set controller.config.ssl-redirect="false" \
+--set controller.config.allow-snippet-annotations=true
 
 # 开启prometheus metrics
 --set controller.metrics.enabled=true \
