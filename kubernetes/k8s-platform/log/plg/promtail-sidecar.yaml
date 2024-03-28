@@ -1,0 +1,72 @@
+#--- Deployment.yaml
+# https://grafana.com/docs/loki/latest/clients/promtail/installation/
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: promtail-deployment
+spec:
+  selector:
+    matchLabels:
+      name: promtail
+  template:
+    metadata:
+      labels:
+        name: promtail
+    spec:
+      serviceAccountName: SERVICE_ACCOUNT
+      volumes:
+      - name: logs
+        emptyDir: {}
+      - name: infoplus-promtail-config
+        configMap:
+          name: infoplus-promtail-config
+      containers:
+      - name: promtail-container
+        image: grafana/promtail:2.8.4
+        args:
+        - -config.file=/etc/promtail/promtail.yaml
+        - -config.expand-env=true
+        - "-client.url=http://loki-gateway.loki.svc/loki/api/v1/push"
+        volumeMounts:
+        - name: logs
+          mountPath: /logs
+          readOnly: true
+        - name: infoplus-promtail-config
+          mountPath: /etc/promtail
+
+
+---
+# ---configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: infoplus-promtail-config
+data:
+  promtail.yaml: |
+    # client:
+    #   backoff_config:
+    #     max_period: 5s
+    #     max_retries: 20
+    #     min_period: 100ms
+    #   batchsize: 102400
+    #   batchwait: 1s
+    #   timeout: 10s
+    server:
+      http_listen_port: 3101
+
+    positions:
+      filename: /mnt/positions.yaml
+
+    target_config:
+      sync_period: 10s
+    scrape_configs:
+      - job_name: infoplus-logs
+        static_configs:
+          - targets:
+              - localhost
+            labels:
+              job: promtail_sidecar
+              pod: ${HOSTNAME:localhost}
+              __path__: /logs/*.log
+

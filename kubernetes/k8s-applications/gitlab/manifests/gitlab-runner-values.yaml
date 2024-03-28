@@ -1,0 +1,46 @@
+## Configuration for the Pods that the runner launches for each new job
+##
+runners:
+  # runner configuration, where the multi line strings is evaluated as
+  # template so you can specify helm values inside of it.
+  #
+  # tpl: https://helm.sh/docs/howto/charts_tips_and_tricks/#using-the-tpl-function
+  # runner configuration: https://docs.gitlab.com/runner/configuration/advanced-configuration.html
+  config: |
+    [[runners]]
+      [runners.kubernetes]
+        namespace = "{{.Release.Namespace}}"
+        image = "ubuntu:22.04"
+        privileged = true
+        service_account = "gitlab-cd"
+    
+        cpu_limit = "1"
+        cpu_request = "1"
+        memory_limit = "4000Mi"
+        memory_request = "4000Mi"
+    
+        service_cpu_limit = "1000m"
+        service_cpu_request = "1000m"
+        service_memory_limit = "2000Mi"
+        service_memory_request = "2000Mi"
+    
+        helper_cpu_limit = "500m"
+        helper_cpu_request = "500m"
+        helper_memory_limit = "1000Mi"
+        helper_memory_request = "1000Mi"
+    
+      [runners.kubernetes.node_selector]
+        "node-role.kubernetes.io/gitlab" = "runner"
+      [runners.kubernetes.node_tolerations]
+        "node-role.kubernetes.io/gitlab=runner" = "NoSchedule"
+
+      [runners.cache]
+        Type = "s3"
+        Path = "runner"
+        Shared = true
+        [runners.cache.s3]
+          ServerAddress = "runner-cache-minio:9000"
+          BucketName = "runner"
+          Insecure = true
+          AuthenticationType = "access-key"
+    

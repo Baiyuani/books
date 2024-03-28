@@ -1,0 +1,7 @@
+dn: uid=0000,ou=People,dc=ketanyun,dc=com
+objectClass: top
+objectClass: organizationalPerson
+objectClass: person
+objectClass: inetOrgPerson
+sn: 0000
+cn: 0000
