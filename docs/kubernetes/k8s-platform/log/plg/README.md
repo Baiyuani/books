@@ -20,10 +20,10 @@ helm repo update
 
 ### 一、[单节点部署](https://github.com/grafana/loki/tree/main/production/helm/loki)(优先使用，资源使用少)
 ```shell
-# loki 5.41.4
+# loki 5.47.2
 helm upgrade --install loki grafana/loki -n loki \
 --create-namespace \
---version 5.41.4 \
+--version 5.47.2 \
 --set loki.auth_enabled=false \
 --set monitoring.selfMonitoring.enabled=false \
 --set monitoring.selfMonitoring.grafanaAgent.installOperator=false \
@@ -155,10 +155,10 @@ minio:
 ## 部署promtail
 
 ```shell
-# promtail 6.15.3
+# promtail 6.15.5
 # 注意：默认配置docker容器日志路径为/var/lib/docker/containers，可根据实际环境情况将正确的docker路径添加配置进去即可
 helm upgrade --install promtail grafana/promtail -n loki \
---version 6.15.3 \
+--version 6.15.5 \
 --set configmap.enabled=true \
 --set serviceMonitor.enabled=false \
 --set tolerations[0].operator='Exists' 

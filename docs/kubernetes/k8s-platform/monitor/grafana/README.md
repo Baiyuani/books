@@ -37,7 +37,7 @@ kubectl create secret generic grafana-admin -n prometheus \
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 helm upgrade --install grafana grafana/grafana -n prometheus \
---version 7.0.19 \
+--version 7.3.7 \
 --set ingress.enabled=true \
 --set ingress.hosts[0]='grafana.site.domain' \
 --set ingress.ingressClassName=nginx \
