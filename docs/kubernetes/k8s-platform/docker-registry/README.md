@@ -173,3 +173,56 @@ WantedBy=multi-user.target
 
 [docker-registry.yaml](docker-registry.yaml)
 
+## 7. 常用命令
+
+```shell
+# 列出所有镜像
+curl -qsS localhost:5000/v2/_catalog | python3 -m json.tool
+
+# 列出镜像的所有tag
+curl -qsS localhost:5000/v2/kubernetes/pause/tags/list | python3 -m json.tool
+
+# docker registry cli 列出所有镜像和tag
+docker run --rm anoxis/registry-cli -r http://192.168.182.21:5000
+
+# 当registry也在本地docker时，可以直接链接到registry容器
+docker run --rm --link registry anoxis/registry-cli -r http://registry:5000
+```
+
+## 8. docker registry ui   
+
+https://github.com/Joxit/docker-registry-ui
+
+
+```shell
+mkdir docker-registry-ui
+cd docker-registry-ui
+vim docker-compose.yml
+docker compose up -d
+```
+
+```yaml
+version: '3.8'
+
+services:
+  registry-ui:
+    image: joxit/docker-registry-ui:main
+    restart: always
+    ports:
+      - 80:80
+    environment:
+      - SINGLE_REGISTRY=true
+      - REGISTRY_TITLE=Docker Registry UI
+      - DELETE_IMAGES=true
+      - SHOW_CONTENT_DIGEST=true
+      - NGINX_PROXY_PASS_URL=http://registry-server:5000
+      - SHOW_CATALOG_NB_TAGS=true
+      - CATALOG_MIN_BRANCHES=1
+      - CATALOG_MAX_BRANCHES=1
+      - TAGLIST_PAGE_SIZE=100
+      - REGISTRY_SECURED=false
+      - CATALOG_ELEMENTS_LIMIT=1000
+    container_name: registry-ui
+```
+
+
