@@ -10,6 +10,8 @@ k8s > 1.12
 
 ### 安装步骤
 
+> 如果环境中已经使用k8s-playbook自动安装了local-path-provisioner，也可以按下面步骤再次安装，没有影响
+
 #### 1. 修改[local-path-storage.yaml](./local-path-storage.yaml)中的存储路径配置（会将该节点上pod使用local-path时的数据存放在该目录），以下为几种配置示例
 
 - 默认路径（即没有为节点明确存储路径时，所有节点都使用该配置）
