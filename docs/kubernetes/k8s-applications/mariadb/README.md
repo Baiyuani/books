@@ -1,7 +1,11 @@
 
 # Mariadb
 
+> 文档分为部署和备份两部分，操作时请不要遗漏备份
+
 ## 部署
+
+> 标准安装要求使用helm部署
 
 ### 一、helm部署
 
@@ -10,6 +14,7 @@
 #### 0. 准备工作
 
 - 需要可用的存储类，生产环境要求使用`local-path`，非生产不做要求。[安装local-path-provisioner](https://git.ketanyun.cn/charts/docs/-/tree/master/%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/k8s%E9%9B%86%E7%BE%A4%E7%BB%84%E4%BB%B6/local-path-provisioner)
+- 评估部署方式，后面1.2.3. 三选一
 
 #### 1. helm部署mariadb(正式环境，主从)
 
@@ -143,6 +148,6 @@ sudo apt-get install mariadb-server
 
 参考[mysql参数部署规范](https://git.ketanyun.cn/operation/docs/-/wikis/mysql%E5%8F%82%E6%95%B0%E9%83%A8%E7%BD%B2%E8%A7%84%E8%8C%83)配置参数
 
-- 自动备份
+## 定期备份
 
 参考[backup/README.md](backup/README.md)
