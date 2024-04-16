@@ -1,12 +1,74 @@
-# 部署
+# local-path-provisioner
 
+## 安装
 
 https://github.com/rancher/local-path-provisioner
 
+### 安装要求
+
 k8s > 1.12
 
+### 安装步骤
+
+#### 1. 修改[local-path-storage.yaml](./local-path-storage.yaml)中的存储路径配置（会将该节点上pod使用local-path时的数据存放在该目录），以下为几种配置示例
+
+- 默认路径（即没有为节点明确存储路径时，所有节点都使用该配置）
+
+```yaml
+data:
+  config.json: |-
+    {
+            "nodePathMap":[
+            {
+                    "node":"DEFAULT_PATH_FOR_NON_LISTED_NODES",
+                    "paths":["/opt/local-path-provisioner"]
+            }
+            ]
+    }
+```
+
+- 为`k8s-node1`单独设置存储路径（即`k8s-node1`上的pod使用local-path时，将数据存储在`/data/local-path-provisioner`目录，其他节点使用默认配置）
+
+```yaml
+data:
+  config.json: |-
+    {
+            "nodePathMap":[
+            {
+                    "node":"DEFAULT_PATH_FOR_NON_LISTED_NODES",
+                    "paths":["/opt/local-path-provisioner"]
+            },
+            {
+                    "node":"k8s-node1",
+                    "paths":["/data/local-path-provisioner"]
+            }
+            ]
+    }
+```
+
+- 集群中有两台运行数据库的节点，节点名称为`mariadb-primary`和`mariadb-secondary`，其他节点不提供local-path
+
+```yaml
+data:
+  config.json: |-
+    {
+            "nodePathMap":[
+            {
+                    "node":"mariadb-primary",
+                    "paths":["/data/local-path-provisioner"]
+            },
+            {
+                    "node":"mariadb-secondary",
+                    "paths":["/data/local-path-provisioner"]
+            }
+            ]
+    }
+```
+
+#### 2. 执行安装
+
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml
+kubectl apply -f ./local-path-storage.yaml
 ```
 
 注意：
