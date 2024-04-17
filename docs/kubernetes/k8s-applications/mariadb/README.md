@@ -125,6 +125,37 @@ helm upgrade --install mariadb mariadb-10.5.1.tgz -f values.yaml  \
 --set primary.extraEnvVars[0].value='Asia/Shanghai' 
 ```
 
+#### 4. 部署后检查
+
+- 部署完成后，检查mariadb对应的pv，是否正确对应了节点，以及存储路径是否正确
+
+```shell
+ubuntu@k8s-node1:~$ kubectl get pvc -n saas | grep mariadb
+data-mariadb-0                                  Bound    pvc-fcf2e3a1-f2c2-48d3-bcae-ed5b7a8d579d   20Gi       RWO            local-path     8d
+
+ubuntu@k8s-node1:~$ kubectl describe pv pvc-fcf2e3a1-f2c2-48d3-bcae-ed5b7a8d579d
+Name:              pvc-fcf2e3a1-f2c2-48d3-bcae-ed5b7a8d579d
+Labels:            <none>
+Annotations:       pv.kubernetes.io/provisioned-by: rancher.io/local-path
+Finalizers:        [kubernetes.io/pv-protection]
+StorageClass:      local-path
+Status:            Bound
+Claim:             saas/data-mariadb-0
+Reclaim Policy:    Retain
+Access Modes:      RWO
+VolumeMode:        Filesystem
+Capacity:          20Gi
+Node Affinity:     
+  Required Terms:  
+    Term 0:        kubernetes.io/hostname in [k8s-node1]   # 确认节点是否正确
+Message:           
+Source:
+    Type:          HostPath (bare host directory volume)
+    Path:          /data/local-path-provisioner/pvc-fcf2e3a1-f2c2-48d3-bcae-ed5b7a8d579d_saas_data-mariadb-0   # 确认存储路径是否正确
+    HostPathType:  DirectoryOrCreate
+Events:            <none>
+```
+
 ### 二、虚拟化部署mariadb（仅做记录，正式部署要求使用helm在集群中）
 
 > 注意：数据库需要和北京时间一致，故安装前必须设置服务器时区`timedatectl set-timezone Asia/Shanghai`，并配置时间同步服务
