@@ -58,6 +58,13 @@ kubectl -o custom-columns=NAME:.metadata.name,IMAGE:.spec.containers[*].image \
 -n devel get pods
 ```
 
+## 获取workload和image
+
+```shell
+kubectl -o custom-columns=TYPE:.kind,NAME:.metadata.name,IMAGE:.spec.template.spec.containers[*].image \
+get deploy,sts -n ketanyun
+```
+
 ## apply目录
 
 ```shell
