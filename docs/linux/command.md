@@ -235,3 +235,39 @@ Time per request:       30449.217 [ms] (mean)     ###平均每个请求消耗的
 Time per request:       10.150 [ms] (mean, across all concurrent requests)  ###上面的请求除以并发数
 Transfer rate:          4898.81 [Kbytes/sec] received   ###传输速率
 ```
+
+## nc
+
+```shell
+apt install netcat -y
+
+
+```
+
+```shell
+# 创建TCP服务器
+## -l 监听地址 端口
+nc -l 127.0.0.1 8080
+
+# 客户端以TCP协议连接到服务端
+nc 127.0.0.1 8080
+```
+
+- 测试udp端口
+
+```shell
+# netcat 测试udp端口
+## -v 详细信息
+## -u udp
+nc -vu 114.114.114.114 53
+```
+
+- 传输文件
+
+```shell
+# 源服务器
+cat file | nc -l 1234
+
+# 目标服务器
+nc host_ip 1234 > file
+```
