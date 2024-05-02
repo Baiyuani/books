@@ -27,12 +27,13 @@ helm install runner-cache-minio minio/minio \
 --set consoleIngress.hosts[0]='minio.xxx.xxx' \
 --set consoleIngress.ingressClassName=nginx \
 --set resources.requests.memory='128Mi' \
---set resources.requests.cpu='100m'
+--set resources.requests.cpu='100m' \
+--set customCommands[0].command='ilm add --expiry-days 180 myminio/runner'
 ```
 
 下一步，安装[gitlab-runner](./runner.md)
 
-## 设置存储桶生命周期
+## 设置存储桶生命周期(配置方法说明，默认已通过helm values设置)
 
 > 安装后建议为bucket配置lifecycle，防止数据持续增长最终写满磁盘。console页面操作或者使用`mc`命令行
 
