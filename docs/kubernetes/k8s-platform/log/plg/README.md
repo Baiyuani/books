@@ -18,8 +18,28 @@ helm repo update
 
 ## 部署loki
 
-### 一、[单节点部署](https://github.com/grafana/loki/tree/main/production/helm/loki)(优先使用，资源使用少)
+由3部分组成：
+
+- loki: 日志处理中心（内部附带一个minio，作为实际日志数据存储后端）
+- grafana: 客户端，日志查询页面
+- promtail: 采集程序日志，投递到loki
+
+
+
+### [单节点部署](https://github.com/grafana/loki/tree/main/production/helm/loki)(优先使用，资源使用少)
+
+- 首先需要安装[local-path-provisioner](https://git.ketanyun.cn/charts/docs/-/tree/master/%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/k8s%E9%9B%86%E7%BE%A4%E7%BB%84%E4%BB%B6/local-path-provisioner)
+
+- 安装
+
 ```shell
+#--set singleBinary.nodeSelector.'kubernetes\.io/hostname'='k8s-node2' \  loki运行节点，由于本机存储，后续不能更换节点
+#--set minio.rootUser='' \     minio的root用户名
+#--set minio.rootPassword='' \    minio的root用户密码
+#--set minio.consoleIngress.hosts[0]='loki-minio.xxx.xxx' \    minio的控制台域名
+# singleBinary.persistence.storageClass 不能使用nfs，有性能要求
+#--set minio.customCommands[0].command='ilm add --expiry-days 180 myminio/chunks'   设置日志保留时间，示例为保留180天
+
 # loki 5.47.2
 helm upgrade --install loki grafana/loki -n loki \
 --create-namespace \
@@ -51,11 +71,10 @@ helm upgrade --install loki grafana/loki -n loki \
 --set minio.consoleIngress.enabled=true \
 --set minio.consoleIngress.hosts[0]='loki-minio.xxx.xxx' \
 --set minio.consoleIngress.ingressClassName=nginx \
+--set minio.customCommands[0].command='ilm add --expiry-days 180 myminio/chunks' \
 --set podDisruptionBudget=''
 # 如果--set singleBinary.replicas=1时
 #--set loki.commonConfig.replication_factor=1 \
-
-# singleBinary.persistence.storageClass 不能使用nfs，有性能要求
 ```
 
 
@@ -164,7 +183,7 @@ helm upgrade --install promtail grafana/promtail -n loki \
 --set tolerations[0].operator='Exists' 
 
 
-# 默认tolerations
+# 默认tolerations，非必须
 --set tolerations[0].key='node-role.kubernetes.io/master' \
 --set tolerations[0].operator='Exists' \
 --set tolerations[0].effect='NoSchedule' \
@@ -182,16 +201,59 @@ helm upgrade --install promtail grafana/promtail -n loki \
 ```
 
 
-## sidecar示例
-
-[infoplus-sts.yaml](infoplus-sts.yaml)
-
-[promtail-sidecar.yaml](promtail-sidecar.yaml)
+## 部署grafana
 
 
-## grafana查询
+```shell
+kubectl create secret generic grafana-admin -n loki \
+--from-literal=admin-user=admin \
+--from-literal=admin-password='xxxx'
 
-```logql
-# 解析json格式日志，只输出log内容
-{} | json | line_format `{{.log}}`
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+helm upgrade --install grafana grafana/grafana -n loki \
+--version 7.3.7 \
+--set ingress.enabled=true \
+--set ingress.hosts[0]='grafana.site.domain' \
+--set ingress.ingressClassName=nginx \
+--set persistence.enabled=true \
+--set persistence.storageClassName='nfs-client'  \
+--set initChownData.enabled=false \
+--set admin.existingSecret=grafana-admin 
 ```
+
+
+
+## 配置数据源(配置方法说明，默认已通过helm values设置)
+
+访问grafana页面
+
+![alt text](.imgs/limage.png)
+![alt text](.imgs/limage-1.png)
+![alt text](.imgs/limage-2.png)
+
+http://loki-gateway
+![alt text](.imgs/image-3.png)
+
+![alt text](.imgs/image-5.png)
+
+
+
+## 配置数据生命周期(配置方法说明，默认已通过helm values设置)
+
+访问minio console页面，访问方式为以下三个参数设置
+
+```shell
+--set minio.rootUser='' \
+--set minio.rootPassword='' \
+--set minio.consoleIngress.hosts[0]='loki-minio.xxx.xxx' \
+```
+
+![Alt text](.imgs/image.png)
+
+![Alt text](.imgs/image-1.png)
+
+设置数据保留多少天
+
+![Alt text](.imgs/image-2.png)
+
