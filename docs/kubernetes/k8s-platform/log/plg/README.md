@@ -219,7 +219,13 @@ helm upgrade --install grafana grafana/grafana -n loki \
 --set persistence.enabled=true \
 --set persistence.storageClassName='nfs-client'  \
 --set initChownData.enabled=false \
---set admin.existingSecret=grafana-admin 
+--set admin.existingSecret=grafana-admin \
+--set datasources."datasources\.yaml".apiVersion="1" \
+--set datasources."datasources\.yaml".datasources[0].name='Loki' \
+--set datasources."datasources\.yaml".datasources[0].type='loki' \
+--set datasources."datasources\.yaml".datasources[0].url='http://loki-gateway' \
+--set datasources."datasources\.yaml".datasources[0].access='proxy' \
+--set datasources."datasources\.yaml".datasources[0].isDefault=true 
 ```
 
 
