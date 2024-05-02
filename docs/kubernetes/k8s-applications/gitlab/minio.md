@@ -28,7 +28,8 @@ helm install runner-cache-minio minio/minio \
 --set consoleIngress.ingressClassName=nginx \
 --set resources.requests.memory='128Mi' \
 --set resources.requests.cpu='100m' \
---set customCommands[0].command='ilm add --expiry-days 180 myminio/runner'
+--set customCommands[0].command='ilm add --expiry-days 180 myminio/runner' \
+--set-string customCommandJob.annotations."helm\.sh/hook-weight"="5"
 ```
 
 下一步，安装[gitlab-runner](./runner.md)
