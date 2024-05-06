@@ -1,3 +1,8 @@
+---
+tags:
+  - shell
+  - linux
+---
 
 ## 脚本执行的几种方式 
 
@@ -51,5 +56,38 @@ shell的内建命令exec将并不启动新的shell，而是用要被执行命令
 当在一个shell里面执行exec ls后，会列出了当前目录，然后这个shell就自己退出了。（后续命令不再执行）
 因为这个shell已被替换为仅执行ls命令的进程，执行结束自然也就退出了。
 需要的时候可以用sub shell 避免这个影响，一般将exec命令放到一个shell脚本里面，用主脚本调用这个脚本，调用点处可以用bash a.sh（a.sh就是存放该命令的脚本），这样会为a.sh建立一个sub shell去执行，当执行到exec后，该子脚本进程就被替换成了相应的exec的命令。
+
+## shellcheck
+
+#### 安装
+
+- debian/ubuntu
+
+```shell
+sudo apt install shellcheck
+```
+
+- centos
+
+```shell
+sudo yum -y install epel-release
+sudo yum install ShellCheck
+```
+
+- vim
+
+```shell
+mkdir -p ~/.vim/pack/git-plugins/start
+git clone --depth 1 https://github.com/dense-analysis/ale.git ~/.vim/pack/git-plugins/start/ale
+```
+
+- VSCode：通过 vscode-shellcheck 安装。
+
+#### 使用
+
+```shell
+shellcheck yourscript
+```
+
 
 
