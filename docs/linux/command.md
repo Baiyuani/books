@@ -271,3 +271,23 @@ cat file | nc -l 1234
 # 目标服务器
 nc host_ip 1234 > file
 ```
+
+## find 
+
+```shell
+find /logs ! -path '/logs/messengers/*' -name "*.tgz" -type f -mtime +180 -print -delete
+find /logs ! -path '/logs/messengers/*' -name "*.log" -type f -mtime +2 -print -exec tar -zcvf {}.tgz -C /logs {} --remove-files \;
+
+```
+
+
+find命令的结尾符主要有以下几种：
+
+1. `;`（分号）：表示指令结束。这是最常见的结尾符，用于单个命令的结束，在命令行上使用时需要用反斜杠`\\`进行转义。
+   示例：`find /path/to/search -name “*.txt” -exec echo {} \;`
+
+2. `+`（加号）：表示多个指令结束，将匹配到的文件以参数列表的形式传递给后面的指令。这种结尾符在处理大量文件时效率更高，因为它将多个文件一次性传递给指令而不是每个文件分别调用指令。使用加号结尾符时，必须将加号用引号括起来，以防止shell对其进行解释。
+   示例：`find /path/to/search -name “*.txt” -exec echo {} +`
+
+3. `\;`（转义分号）：在命令行上使用分号作为结尾符时，需要使用反斜杠对分号进行转义，以防止shell对其进行解释。这种方式与使用单个分号作为结尾符的效果相同。
+   示例：`find /path/to/search -name “*.txt” -exec echo {} \;`
