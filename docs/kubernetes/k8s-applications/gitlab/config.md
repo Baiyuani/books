@@ -7,6 +7,12 @@ tags:
 
 ## 对接oauth
 
+1. sso创建应用
+
+    账号主体选择openid，scope勾选授权码认证的openid和profile
+
+2. 配置gitlab，修改配置文件gitlab.rb
+
 - [omniauth配置说明](https://docs.gitlab.com/ee/integration/omniauth.html)
 
 - [oauth2配置说明](https://docs.gitlab.com/ee/integration/oauth2_generic.html)
