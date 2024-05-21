@@ -35,7 +35,9 @@ gitlab_rails['omniauth_providers'] = [
         root_path: [],
         id_path: ["sub"],
         attributes: {
-          nickname: "userName"
+          name: "name",
+          nickname: "userName",
+          email: "email"
         }
       },
       authorize_params: {
