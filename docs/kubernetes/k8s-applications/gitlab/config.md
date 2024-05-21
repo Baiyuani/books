@@ -5,10 +5,11 @@ tags:
 
 # 配置
 
-## [对接oauth](https://docs.gitlab.com/16.8/ee/integration/oauth_provider.html)
+## 对接oauth
 
-https://docs.gitlab.com/16.8/ee/integration/oauth2_generic.html
+- [omniauth配置说明](https://docs.gitlab.com/ee/integration/omniauth.html)
 
+- [oauth2配置说明](https://docs.gitlab.com/ee/integration/oauth2_generic.html)
 
 ```rb
 
@@ -34,6 +35,7 @@ gitlab_rails['omniauth_providers'] = [
         root_path: [],
         id_path: ["sub"],
         attributes: {
+          nickname: "userName"
         }
       },
       authorize_params: {
