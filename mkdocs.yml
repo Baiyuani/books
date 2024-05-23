@@ -57,8 +57,8 @@ theme:
     view: material/eye
   font:
 #    text: "Roboto"
-    text: "Merriweather"
-#    text: "Open Sans"
+#    text: "Merriweather"
+    text: "Open Sans"
   language: zh
   features:
     - navigation.tabs
