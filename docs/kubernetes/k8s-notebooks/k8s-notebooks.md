@@ -437,7 +437,9 @@ docker ps -q | xargs docker inspect -f '{{.State.Pid}}    {{ index .Config.Label
 
 ## nsenter命令解决容器内部命令不足的问题
 
-- https://blog.csdn.net/IOT_AI/article/details/137592170
+- [网络文件参考](https://blog.csdn.net/IOT_AI/article/details/137592170)
+
+- 说明
 
 ```shell
 root@tracy:~# crictl ps -q | xargs crictl inspect -o go-template --template '{{ .info.pid }}    {{ index .info.config.labels "io.kubernetes.pod.namespace" }}         {{  index .info.config.labels "io.kubernetes.pod.name" }}'
@@ -479,5 +481,23 @@ root@tracy:~# ip a
        valid_lft forever preferred_lft forever
     inet6 fe80::20c:29ff:feff:2691/64 scope link 
        valid_lft forever preferred_lft forever
+```
+
+```shell
+# 进入特定进程的网络命名空间
+nsenter --net -t [PID] -- ip a
+
+# 同时进入多个命名空间
+nsenter --net --pid -t [PID] -- bash
+
+# 访问容器的文件系统
+nsenter --mount -t [PID] -- bash
+
+# --preserve-credentials选项允许在执行命令时保留用户的UID和GID
+nsenter --preserve-credentials -n -t [PID] -- id
+uid=0(root) gid=0(root) groups=0(root)
+
+# 检查容器中的网络连接
+nsenter --target [PID] --net -- ss -lntup
 ```
 
