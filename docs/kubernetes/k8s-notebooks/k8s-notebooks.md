@@ -437,6 +437,8 @@ docker ps -q | xargs docker inspect -f '{{.State.Pid}}    {{ index .Config.Label
 
 ## nsenter命令解决容器内部命令不足的问题
 
+- https://blog.csdn.net/IOT_AI/article/details/137592170
+
 ```shell
 root@tracy:~# crictl ps -q | xargs crictl inspect -o go-template --template '{{ .info.pid }}    {{ index .info.config.labels "io.kubernetes.pod.namespace" }}         {{  index .info.config.labels "io.kubernetes.pod.name" }}'
 16152    loki         loki-0
