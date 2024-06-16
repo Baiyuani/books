@@ -120,3 +120,16 @@ dest="$DIR"
 
 rsync ${RSYNC_OPTS} "$upstream" "$dest"
 ```
+
+## 系统日志
+
+```shell
+dmesg
+
+journalctl -f
+
+journalctl -xe
+
+journalctl -xeu kubelet
+```
+
