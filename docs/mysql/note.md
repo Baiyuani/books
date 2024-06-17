@@ -331,4 +331,11 @@ Benchmark
         Average number of queries per client: 750
 ```
 
+## 查看锁表
+
+```sql
+SELECT * FROM information_schema.INNODB_TRX; 
+
+kill trx_mysql_thread_id;
+```
 
