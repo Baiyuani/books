@@ -73,6 +73,7 @@ helm upgrade --install loki grafana/loki -n loki \
 --set minio.consoleIngress.ingressClassName=nginx \
 --set minio.customCommands[0].command='ilm add --expiry-days 180 myminio/chunks' \
 --set-string minio.customCommandJob.annotations."helm\.sh/hook-weight"="5" \
+--set-string minio.customCommandJob.annotations."helm\.sh/hook"="post-install" \
 --set podDisruptionBudget=''
 # 如果--set singleBinary.replicas=1时
 #--set loki.commonConfig.replication_factor=1 \
