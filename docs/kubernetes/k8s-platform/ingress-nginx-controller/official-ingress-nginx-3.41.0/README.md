@@ -33,6 +33,7 @@ helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --timeout 20m0s
 --set controller.hostNetwork=true  \
 --set controller.ingressClassResource.enabled=true  \
 --set controller.ingressClassResource.default=true  \
+--set controller.config.log-format-upstream='$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" $request_length $request_time [$proxy_upstream_name] [$proxy_alternative_upstream_name] $upstream_addr $upstream_response_length $upstream_response_time $upstream_status $req_id $http_x_correlation_id' \
 --set controller.config.enable-underscores-in-headers='true' \
 --set controller.config.max-worker-connections='65531' \
 --set controller.config.server-tokens='false'  \
