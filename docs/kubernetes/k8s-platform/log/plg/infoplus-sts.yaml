@@ -37,7 +37,7 @@ spec:
         - -config.file=/etc/promtail/promtail.yaml
         - -config.expand-env=true
         - -client.url=http://loki-gateway.loki.svc/loki/api/v1/push
-        image: grafana/promtail:2.8.4
+        image: grafana/promtail:2.9.3
         imagePullPolicy: IfNotPresent
         name: promtail-container
         resources: {}

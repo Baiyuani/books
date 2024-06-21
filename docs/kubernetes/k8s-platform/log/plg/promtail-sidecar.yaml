@@ -23,7 +23,7 @@ spec:
           name: infoplus-promtail-config
       containers:
       - name: promtail-container
-        image: grafana/promtail:2.8.4
+        image: grafana/promtail:2.9.3
         args:
         - -config.file=/etc/promtail/promtail.yaml
         - -config.expand-env=true
