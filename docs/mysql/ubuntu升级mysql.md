@@ -8,6 +8,24 @@ mysqlcheck -u root -p --all-databases --check-upgrade
 
 ### 升级操作系统到ubuntu16.04，mysql会跟随apt源升级，注意升级前备份数据，备份数据库配置文件
 
+- 可选修改软件源 https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/
+
+- 执行升级
+
+```shell
+apt update
+apt dist-upgrade
+
+reboot
+
+# 中间提示是否重启服务选yes
+do-release-upgrade
+
+# 验证
+lsb_release -a 
+```
+
+
 # ubuntu 16.04 mysql5.7 升级 mysql8.0
 
 ### 升级前检查，有错误需先解决
