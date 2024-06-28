@@ -1,0 +1,87 @@
+## 配置参考
+
+## container模式，可使用ds模式采集节点容器日志
+---
+    filebeat.inputs:
+    - type: container
+      exclude_lines: ['kube-probe']
+      exclude_files: ['\.gz$']
+      fields:
+        log_type: container
+      paths:
+        - /var/log/containers/*.log
+      processors:
+      - add_kubernetes_metadata:
+          host: ${NODE_NAME}
+          matchers:
+          - logs_path:
+              logs_path: "/var/log/containers/"
+
+    setup.template.name: "filebeat"     # 设置一个新的模板，模板的名称，默认filebeat
+    setup.template.pattern: "filebeat-*" # 模板匹配那些索引，这里表示以nginx开头的所有的索引，默认filebeat-*
+    setup.template.enabled: false     # 关掉默认的模板配置
+    setup.template.overwrite: true    # 开启新设置的模板
+    setup.ilm.enabled: false  # 索引生命周期管理ilm功能默认开启，开启的情况下索引名称只能为filebeat-*
+
+    output.elasticsearch:
+      host: '${NODE_NAME}'
+      hosts: '${ELASTICSEARCH_HOSTS:elasticsearch-master:9200}'
+      index: "%{[fields.log_type]}-%{[agent.version]}-%{+yyyy.MM.dd}"
+
+# 默认
+---
+    filebeat.inputs:
+    - type: container
+      paths:
+        - /var/log/containers/*.log
+      processors:
+      - add_kubernetes_metadata:
+          host: ${NODE_NAME}
+          matchers:
+          - logs_path:
+              logs_path: "/var/log/containers/"
+
+    output.elasticsearch:
+      host: '${NODE_NAME}'
+      hosts: '${ELASTICSEARCH_HOSTS:elasticsearch-master:9200}'
+
+
+
+## 旧
+---
+    filebeat.inputs:
+      - type: log
+        enabled: true
+        paths:
+          - /var/log/containers/*.log
+        fields:
+          app: k8s
+          type: basic
+        fields_under_root: true
+
+    setup.ilm.enabled: false
+    #setup.template.name: "containers-log"
+    #setup.template.pattern: "containers-log-*"
+
+    output.elasticsearch:
+      hosts: ['es-elasticsearch-master:9200']
+      index: "%{[fields.log_type]}-%{[agent.version]}-%{+yyyy.MM.dd}"
+
+
+
+## 推荐模式
+---
+    filebeat.inputs:
+    - type: filestream
+      id: my-filestream-id
+      paths:
+        - /var/log/containers/*.log
+      processors:
+      - add_kubernetes_metadata:
+          host: ${NODE_NAME}
+          matchers:
+          - logs_path:
+              logs_path: "/var/log/containers/
+    output.elasticsearch:
+      host: '${NODE_NAME}'
+      hosts: '${ELASTICSEARCH_HOSTS:elasticsearch-master:9200}'

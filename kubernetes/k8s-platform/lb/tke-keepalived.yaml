@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    scheduler.alpha.kubernetes.io/critical-pod: ""
+  name: keepalived
+  namespace: kube-system
+spec:
+  containers:
+  - image: 172.17.1.119:60080/tkestack/keepalived:v2.2.1-v3.8-6dbf4182
+    name: keepalived
+    args:
+    - --log-console
+    - --dont-fork
+    securityContext:
+      capabilities:
+        add:
+        - SYS_NICE
+        - SYS_MODULE
+        - NET_ADMIN
+        - NET_BIND_SERVICE
+        - NET_RAW
+        - CHOWN
+        - SETGID
+        - SETUID
+        - KILL
+        - SYS_RESOURCE
+    volumeMounts:
+    - mountPath: /etc/keepalived/
+      name: conf-volume
+  hostNetwork: true
+  priorityClassName: system-cluster-critical
+  volumes:
+  - hostPath:
+      path: /etc/kubernetes/keepalived/
+      type: DirectoryOrCreate
+    name: conf-volume

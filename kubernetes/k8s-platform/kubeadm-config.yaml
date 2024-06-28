@@ -1,0 +1,88 @@
+apiServer:
+  certSANs:
+  - 127.0.0.1
+  - 172.17.0.170
+  - 172.17.0.255
+  - 172.17.1.119
+  - 172.17.1.20
+  - ::1
+  - localhost
+  extraArgs:
+    audit-log-format: json
+    audit-log-maxage: "30"
+    audit-log-maxbackup: "10"
+    audit-log-maxsize: "200"
+    audit-log-mode: batch
+    audit-log-path: /etc/kubernetes/audit/audit.log
+    audit-policy-file: /etc/kubernetes/audit/policy.yaml
+    default-not-ready-toleration-seconds: "30"
+    default-unreachable-toleration-seconds: "30"
+    enable-aggregator-routing: "true"
+    experimental-encryption-provider-config: /etc/kubernetes/encryption-provider.conf
+    feature-gates: EphemeralContainers=true,CSIStorageCapacity=true
+    profiling: "false"
+    runtime-config: storage.k8s.io/v1alpha1=true
+    tls-cipher-suites: TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+    token-auth-file: /etc/kubernetes/known_tokens.csv
+  extraVolumes:
+  - hostPath: /etc/kubernetes
+    mountPath: /etc/kubernetes
+    name: vol-dir-0
+  timeoutForControlPlane: 4m0s
+apiVersion: kubeadm.k8s.io/v1beta2
+certificatesDir: /etc/kubernetes/pki
+clusterName: global
+controlPlaneEndpoint: 172.17.1.119:6443
+controllerManager:
+  extraArgs:
+    allocate-node-cidrs: "false"
+    cluster-cidr: 10.3.0.0/16
+    experimental-cluster-signing-duration: 87600h
+    feature-gates: EphemeralContainers=true,CSIStorageCapacity=true
+    node-cidr-mask-size: "24"
+    port: "10252"
+    profiling: "false"
+    service-cluster-ip-range: 10.4.0.0/16
+    terminated-pod-gc-threshold: "50"
+    tls-cipher-suites: TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+  extraVolumes:
+  - hostPath: /etc/kubernetes
+    mountPath: /etc/kubernetes
+    name: vol-dir-0
+dns:
+  imageTag: 1.7.0
+  type: CoreDNS
+etcd:
+  local:
+    dataDir: /var/lib/etcd
+    extraArgs:
+      auto-compaction-mode: revision
+      auto-compaction-retention: "24"
+      cipher-suites: TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+      max-request-bytes: "3145728"
+    imageTag: v3.4.13
+    serverCertSANs:
+    - etcd
+    - etcd.kube-system
+    - 172.17.1.119
+    - etcd
+featureGates:
+  IPv6DualStack: false
+imageRepository: 172.17.1.119:60080/tkestack
+kind: ClusterConfiguration
+kubernetesVersion: v1.21.10
+networking:
+  dnsDomain: cluster.local
+  serviceSubnet: 10.4.0.0/16
+scheduler:
+  extraArgs:
+    feature-gates: EphemeralContainers=true,CSIStorageCapacity=true
+    policy-config-file: /etc/kubernetes/scheduler-policy-config.json
+    port: "10251"
+    profiling: "false"
+    tls-cipher-suites: TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+    use-legacy-policy-config: "true"
+  extraVolumes:
+  - hostPath: /etc/kubernetes
+    mountPath: /etc/kubernetes
+    name: vol-dir-0
