@@ -89,5 +89,15 @@ git clone --depth 1 https://github.com/dense-analysis/ale.git ~/.vim/pack/git-pl
 shellcheck yourscript
 ```
 
+## set -o pipefail
 
+在默认情况下，一个管道命令（由多个命令通过管道符 | 连接而成的命令）的退出状态是最后一个命令的退出状态，而不考虑前面的命令是否执行成功。
+
+```shell
+command1 | command2
+```
+
+如果 command1 失败（返回非零退出状态），但 command2 成功（返回零退出状态），那么整个管道命令的退出状态是 0（成功）。
+
+但是如果你使用了set -o pipefail，那么如果 command1 失败，整个管道命令的退出状态就是 command1 的退出状态，即使 command2 成功。
 
