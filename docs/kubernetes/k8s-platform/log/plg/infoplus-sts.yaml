@@ -4,8 +4,6 @@ metadata:
   annotations:
     meta.helm.sh/release-name: infoplus
     meta.helm.sh/release-namespace: ketanyun
-  creationTimestamp: "2023-09-20T06:35:30Z"
-  generation: 3
   labels:
     app.kubernetes.io/instance: infoplus
     app.kubernetes.io/managed-by: Helm
@@ -14,8 +12,6 @@ metadata:
     helm.sh/chart: infoplus-0.4.1
   name: infoplus
   namespace: ketanyun
-  resourceVersion: "1050519"
-  uid: 5d155fc5-6f72-4e1f-a4c0-d52424f2a221
 spec:
   podManagementPolicy: OrderedReady
   replicas: 1
@@ -27,7 +23,6 @@ spec:
   serviceName: infoplus
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app.kubernetes.io/instance: infoplus
         app.kubernetes.io/name: infoplus
@@ -58,8 +53,6 @@ spec:
           value: mariadb:3306/infoplus
         - name: INFOPLUS_MYSQL_USERNAME
           value: infoplus
-        - name: INFOPLUS_MYSQL_PASSWORD
-          value: 80KfP7iTtgZi
         - name: INFOPLUS_CONTEXT_PATH
           value: infoplus
         - name: OAUTH_SCOPES
@@ -70,11 +63,6 @@ spec:
           value: infoplus-redis-headless
         - name: INFOPLUS_REDIS_PORT
           value: "6379"
-        - name: INFOPLUS_REDIS_PASS
-          valueFrom:
-            secretKeyRef:
-              key: redis-password
-              name: infoplus-redis
         - name: CLOUD_DOMAINS
           value: '*'
         - name: CLOUD_HOSTS
@@ -136,7 +124,6 @@ spec:
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
-      serviceAccount: infoplus
       serviceAccountName: infoplus
       terminationGracePeriodSeconds: 30
       volumes:
@@ -150,13 +137,3 @@ spec:
     rollingUpdate:
       partition: 0
     type: RollingUpdate
-status:
-  availableReplicas: 1
-  collisionCount: 0
-  currentReplicas: 1
-  currentRevision: infoplus-855cf577d5
-  observedGeneration: 3
-  readyReplicas: 1
-  replicas: 1
-  updateRevision: infoplus-855cf577d5
-  updatedReplicas: 1

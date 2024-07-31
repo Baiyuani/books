@@ -231,6 +231,20 @@ helm upgrade --install grafana grafana/grafana -n loki \
 ```
 
 
+## sidecar示例
+
+[infoplus-sts.yaml](infoplus-sts.yaml)
+
+[promtail-sidecar.yaml](promtail-sidecar.yaml)
+
+
+## grafana查询
+
+```logql
+# 解析json格式日志，只输出log内容
+{} | json | line_format `{{.log}}`
+```
+
 
 ## 配置数据源(配置方法说明，默认已通过helm values设置)
 
