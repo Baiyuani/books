@@ -79,6 +79,18 @@ go env -w GOBIN=/path/to/your/bin
 
 ---
 
+## 包管理
+
+```shell
+# 查看所有可更新的依赖
+go list -m -u all
+
+# 更新所有依赖
+go get -u ./...
+```
+
+---
+
 ## 单行注释
 
 ```go
