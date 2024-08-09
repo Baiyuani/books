@@ -1,0 +1,29 @@
+---
+apiVersion: pingcap.com/v1alpha1
+kind: TidbInitializer
+metadata:
+  name: slave-tidb-init
+  namespace: tidb
+spec:
+  image: tnir/mysqlclient
+  # imagePullPolicy: IfNotPresent
+  cluster:
+    namespace: tidb
+    name: slave-tidb
+  initSql: |
+    create database slavedb1;
+  # initSqlConfigMap: tidb-initsql
+  passwordSecret: slave-tidb-secret
+  # permitHost: 172.6.5.8
+  # resources:
+  #   limits:
+  #     cpu: 1000m
+  #     memory: 500Mi
+  #   requests:
+  #     cpu: 100m
+  #     memory: 50Mi
+  # timezone: "Asia/Shanghai"
+  # tolerations:
+  #   - effect: NoSchedule
+  #     key: node-role.kubernetes.io/tidb
+  #     operator: Exists

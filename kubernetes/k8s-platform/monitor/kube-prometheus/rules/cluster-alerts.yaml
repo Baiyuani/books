@@ -1,0 +1,53 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    app.kubernetes.io/component: prometheus
+    app.kubernetes.io/instance: kube-prometheus
+    app.kubernetes.io/name: kube-prometheus
+  name: cluster-alerts
+spec:
+  groups:
+  - name: k8s_cluster
+    rules:
+    - alert: KubernetesOutOfCapacity
+      annotations:
+        description: |-
+          {{ $labels.node }} is out of pods capacity
+        summary: Kubernetes out of capacity
+      expr: sum(kube_pod_info) by (node) / sum(kube_node_status_allocatable{resource='pods'})
+        by (node) * 100 > 90
+      for: 5m
+      labels:
+        severity: warning
+    - alert: KubernetesVolumeOutOfDiskSpace
+      annotations:
+        description: |-
+          Persistent volume claim is almost full (< 10% left)
+          Namespace: {{ $labels.namespace }} 
+          PVC: {{ $labels.persistentvolumeclaim }}
+        summary: Kubernetes Volume out of disk space
+      expr: kubelet_volume_stats_available_bytes / kubelet_volume_stats_capacity_bytes
+        * 100 < 10
+      for: 5m
+      labels:
+        severity: warning
+    - alert: KubernetesPersistentvolumeError
+      annotations:
+        description: |-
+          Persistent volume {{ $labels.persistentvolume }} is in bad state
+        summary: Kubernetes PersistentVolume error
+      expr: kube_persistentvolume_status_phase{phase=~"Failed|Pending"} > 0
+      for: 5m
+      labels:
+        severity: critical
+    - alert: KubernetesApiServerErrors
+      annotations:
+        description: |-
+          Kubernetes API server {{ $labels.instance }} is experiencing high error rate
+        summary: Kubernetes API server errors
+      expr: sum(rate(apiserver_request_total{job="apiserver",code=~"^(?:5..)$"}[2m]))
+        / sum(rate(apiserver_request_total{job="apiserver"}[2m])) * 100 > 3
+      for: 5m
+      labels:
+        severity: critical
