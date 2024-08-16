@@ -1,7 +1,4 @@
-# Note
-
-curl -X POST http://10.102.52.14:9090/-/reload
-
+# dev
 
 ## 检查metrics接口的数据格式是否正确
 curl http://ketanyun-v2.ketanyun.svc.cluster.local:8080/metrics | promtool check metrics

@@ -15,9 +15,13 @@
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 
-kubectl patch storageclass nfs-client -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+#kubectl patch storageclass nfs-client -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 
 helm show values prometheus-community/kube-prometheus-stack --version 61.9.0
+
+kubectl create secret generic grafana-admin -n prometheus \
+--from-literal=admin-user=admin \
+--from-literal=admin-password='xxxx'
 
 helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
 --version 61.9.0 -n prometheus --create-namespace \
@@ -28,12 +32,31 @@ helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheu
 --set alertmanager.ingress.enabled=true \
 --set grafana.ingress.enabled=true \
 --set prometheus.ingress.enabled=true \
---set thanosRuler.ingress.enabled=true \
 --set alertmanager.ingress.hosts[0]=alertmanager.local.domain \
 --set grafana.ingress.hosts[0]=grafana.local.domain \
 --set prometheus.ingress.hosts[0]=prometheus.local.domain \
---set thanosRuler.ingress.hosts[0]=thanosruler.local.domain 
+--set grafana.persistence.enabled=true \
+--set grafana.persistence.storageClassName='nfs-client' \
+--set grafana.persistence.size="10Gi" \
+--set grafana.initChownData.enabled=false \
+--set grafana.admin.existingSecret=grafana-admin \
+--set alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.storageClassName="nfs-client" \
+--set alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.resources.requests.storage="50Gi" \
+--set prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName="nfs-client" \
+--set prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage="100Gi" \
+--set prometheus.prometheusSpec.retention="10d" \
+--set prometheus.prometheusSpec.retentionSize="" \
+--set alertmanager.alertmanagerSpec.replicas=1 \
+--set prometheus.prometheusSpec.replicas=1 
 
+
+
+
+# thanos
+--set thanosRuler.enabled=true \
+--set thanosRuler.ingress.enabled=true \
+--set thanosRuler.ingress.hosts[0]=thanosruler.local.domain \
+--set thanosRuler.thanosRulerSpec.replicas=1
 ```
 
 
