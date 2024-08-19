@@ -11,37 +11,21 @@ tags:
 ### [官方charts](https://github.com/grafana/helm-charts/tree/main/charts/grafana)
 
 ```shell
-kubectl create secret generic grafana-admin -n prometheus \
+kubectl create secret generic grafana-admin -n ops \
 --from-literal=admin-user=admin \
 --from-literal=admin-password='xxxx'
 
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
-helm upgrade --install grafana grafana/grafana -n prometheus \
---version 7.3.7 \
---set ingress.enabled=true \
---set ingress.hosts[0]='grafana.site.domain' \
---set ingress.ingressClassName=nginx \
---set persistence.enabled=true \
---set persistence.storageClassName='nfs-client'  \
---set initChownData.enabled=false \
---set admin.existingSecret=grafana-admin 
+helm upgrade --install grafana grafana/grafana -n ops \
+--version 8.4.5 
 ```
 
 ## 平台使用
 
-- 访问grafana
-
-- 配置Prometheus为数据源
-
-```shell
-#TODO
-```
-
 - 导入dashboard
 
 [dashboards](https://github.com/Baiyuani/books/tree/main/docs/kubernetes/k8s-platform/monitor/grafana/dashboards)
-
 
 | ID  | Description | Data origin | 
 |-----|-------------|-------------|
