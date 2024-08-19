@@ -21,7 +21,7 @@
 
 - [node-exporter.md](node-exporter.md)
 
-- [blackbox-exporter.md](blackbox-exporter.md)
+- [blackbox-exporter.md](blackbox-exporter)
 
 ## Configuration
 
