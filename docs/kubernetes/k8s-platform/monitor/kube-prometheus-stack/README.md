@@ -10,6 +10,8 @@
 - Kubernetes 1.19+
 - Helm 3+
 
+- [values.yaml](values.yaml)
+- [values-origin-61.9.0.yaml](values-origin-61.9.0.yaml)
 
 ```shell
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
@@ -23,32 +25,10 @@ kubectl create secret generic grafana-admin -n prometheus \
 --from-literal=admin-user=admin \
 --from-literal=admin-password='xxxx'
 
-helm upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+helm upgrade --install kube-prometheus-stack \
+prometheus-community/kube-prometheus-stack \
 --version 61.9.0 -n prometheus --create-namespace \
---set prometheusOperator.admissionWebhooks.patch.image.registry="registry.aliyuncs.com" \
---set prometheusOperator.admissionWebhooks.patch.image.repository="google_containers/kube-webhook-certgen" \
---set kube-state-metrics.image.registry="myifeng" \
---set kube-state-metrics.image.repository="registry.k8s.io_kube-state-metrics_kube-state-metrics" \
---set alertmanager.ingress.enabled=true \
---set grafana.ingress.enabled=true \
---set prometheus.ingress.enabled=true \
---set alertmanager.ingress.hosts[0]=alertmanager.local.domain \
---set grafana.ingress.hosts[0]=grafana.local.domain \
---set prometheus.ingress.hosts[0]=prometheus.local.domain \
---set grafana.persistence.enabled=true \
---set grafana.persistence.storageClassName='nfs-client' \
---set grafana.persistence.size="10Gi" \
---set grafana.initChownData.enabled=false \
---set grafana.admin.existingSecret=grafana-admin \
---set alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.storageClassName="nfs-client" \
---set alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.resources.requests.storage="50Gi" \
---set prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName="nfs-client" \
---set prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage="100Gi" \
---set prometheus.prometheusSpec.retention="10d" \
---set prometheus.prometheusSpec.retentionSize="" \
---set alertmanager.alertmanagerSpec.replicas=1 \
---set prometheus.prometheusSpec.replicas=1 
-
+-f values.yaml
 
 
 
