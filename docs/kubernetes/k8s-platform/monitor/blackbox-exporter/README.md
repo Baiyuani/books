@@ -6,5 +6,8 @@
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 
-helm install [RELEASE_NAME] prometheus-community/prometheus-blackbox-exporter -f values.yaml
+helm upgrade --install kube-prometheus-stack-blackbox-exporter \
+prometheus-community/prometheus-blackbox-exporter \
+-n prometheus --create-namespace \
+-f values.yaml
 ```
