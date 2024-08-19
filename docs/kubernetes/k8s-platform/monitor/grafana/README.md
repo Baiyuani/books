@@ -8,25 +8,6 @@ tags:
 
 ## 使用helm部署
 
-### [bitnami](https://github.com/bitnami/charts/tree/dc8c5401abbd03e63ff102e120979faeba0ee365/bitnami/grafana)
-
-- 如果helm安装失败，可以使用[yaml安装](https://grafana.com/docs/grafana/v9.0/setup-grafana/installation/kubernetes/)
-
-```shell
-helm repo add bitnami https://charts.bitnami.com/bitnami
-
-# grafana
-helm upgrade --install grafana bitnami/grafana -n prometheus  \
---version 9.2.1 \
---set global.storageClass='nfs-client'  \
---set persistence.size=10Gi \
---set ingress.enabled=true \
---set ingress.hostname=grafana.site.domain \
---set ingress.ingressClassName=nginx \
---set admin.user='admin' \
---set admin.password='xxxx' 
-```
-
 ### [官方charts](https://github.com/grafana/helm-charts/tree/main/charts/grafana)
 
 ```shell
@@ -46,8 +27,6 @@ helm upgrade --install grafana grafana/grafana -n prometheus \
 --set initChownData.enabled=false \
 --set admin.existingSecret=grafana-admin 
 ```
-
-
 
 ## 平台使用
 
@@ -79,4 +58,3 @@ helm upgrade --install grafana grafana/grafana -n prometheus \
 |13659|Blackbox Exporter (HTTP prober)|blckbox|
 |14928|Prometheus Blackbox Exporter| blackbox|
 |15760  | Kubernetes / Views / Pods | pods|
-
