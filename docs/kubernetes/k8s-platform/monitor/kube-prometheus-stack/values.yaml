@@ -15,8 +15,8 @@ alertmanager:
     - name: 'default'
       wechat_configs:
       - agent_id: "1000002"
-        api_secret: vk14yyC6TyvXTKDzykeWVqSv0GfNCxd8Z-IUymEU_MQ
-        corp_id: ww59fbb1b02cdfd07f
+        api_secret:
+        corp_id:
         send_resolved: true
         to_user: 'DongZiHao'
 
