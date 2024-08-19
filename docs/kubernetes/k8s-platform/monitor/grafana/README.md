@@ -10,6 +10,8 @@ tags:
 
 ### [官方charts](https://github.com/grafana/helm-charts/tree/main/charts/grafana)
 
+- [values.yaml](values.yaml)
+
 ```shell
 kubectl create secret generic grafana-admin -n ops \
 --from-literal=admin-user=admin \
@@ -17,8 +19,9 @@ kubectl create secret generic grafana-admin -n ops \
 
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
-helm upgrade --install grafana grafana/grafana -n ops \
---version 8.4.5 
+helm upgrade --install grafana grafana/grafana \
+--version 8.4.5 -n ops --create-namespace \
+-f values.yaml
 ```
 
 ## 平台使用

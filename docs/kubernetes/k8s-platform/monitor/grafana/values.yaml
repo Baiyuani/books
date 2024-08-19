@@ -12,7 +12,7 @@ datasources:
 ingress:
   enabled: true
   hosts:
-  - loki-grafana.local.domain
+  - grafana.local.domain
   ingressClassName: nginx
 initChownData:
   enabled: false

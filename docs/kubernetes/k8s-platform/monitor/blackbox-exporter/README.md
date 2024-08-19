@@ -8,6 +8,6 @@ helm repo update
 
 helm upgrade --install kube-prometheus-stack-blackbox-exporter \
 prometheus-community/prometheus-blackbox-exporter \
--n prometheus --create-namespace \
+-n ops --create-namespace \
 -f values.yaml
 ```
