@@ -17,11 +17,11 @@
 
 ### Exporter
 
-- [mysql-exporter](mysql-exporter)
+- [mysql-exporter](exporters/mysql-exporter)
 
-- [node-exporter.md](node-exporter.md)
+- [node-exporter.md](exporters/node-exporter.md)
 
-- [blackbox-exporter.md](blackbox-exporter)
+- [blackbox-exporter.md](exporters/blackbox-exporter)
 
 ## Configuration
 
