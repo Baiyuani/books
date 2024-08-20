@@ -1,8 +1,15 @@
 # Kubernetes 仪表板（Dashboard）
 
-> 参考文档：https://kubernetes.io/zh/docs/tasks/access-application-cluster/web-ui-dashboard/
+> 参考文档: https://kubernetes.io/zh/docs/tasks/access-application-cluster/web-ui-dashboard/
+>
+> github: https://github.com/kubernetes/dashboard/
+
 
 ## 部署
+
+> version: 7.5.0
+> 
+> kubeVersion: ">=1.21.0-0"
 
 ```shell
 # 添加 kubernetes-dashboard 仓库
