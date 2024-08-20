@@ -18,23 +18,6 @@ kubectl create secret docker-registry registry -n ketanyun \
 ```
 
 
-## dashboard登录token生成
-dashboard创建用户，生成token
-```shell
-kubectl create sa dashboard-admin -n kube-system
-```
-给用户绑定角色
-```shell
-kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=kube-system:dashboard-admin
-```
-查看用户的token：
-```shell
-kubectl describe secrets -n kube-system $(kubectl -n kube-system get secret | awk '/dashboard-admin/{print $1}')
-```
-
-
-
-
 ## [kubectl 使用token的方式连接到集群](https://www.cnblogs.com/AnAng/p/12056963.html)
 
 首先得有一个账户
