@@ -1,0 +1,15 @@
+csi:
+  registrar:
+    repository: myifeng/registry.k8s.io_sig-storage_csi-node-driver-registrar
+  provisioner:
+    repository: myifeng/registry.k8s.io_sig-storage_csi-provisioner
+  snapshotter:
+    repository: myifeng/registry.k8s.io_sig-storage_csi-snapshotter
+  attacher:
+    repository: myifeng/registry.k8s.io_sig-storage_csi-attacher
+  resizer:
+    repository: myifeng/registry.k8s.io_sig-storage_csi-resizer
+
+
+
+    
