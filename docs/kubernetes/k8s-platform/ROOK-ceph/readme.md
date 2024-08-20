@@ -35,13 +35,20 @@ TODO
 >
 > 如下为测试用例
 
-- [cluster-test.yaml](manifests/cluster-test.yaml)
+- 创建ceph集群[cluster-test.yaml](https://github.com/rook/rook/blob/release-1.14/deploy/examples/cluster-test.yaml)
 
 ```shell
 kubectl create -f cluster-test.yaml
 ```
 
-- 块存储[storageclass-test.yaml](manifests%2Fstorageclass-test.yaml)
+- 块存储，创建存储类[storageclass-test.yaml](https://github.com/rook/rook/blob/release-1.14/deploy/examples/csi/rbd/storageclass-test.yaml)
 
-- 文件系统存储[filesystem-test.yaml](manifests%2Ffilesystem-test.yaml)
+- [块存储使用示例](https://github.com/rook/rook/tree/release-1.14/deploy/examples/csi/rbd)
+
+- 创建文件系统存储[filesystem-test.yaml](https://github.com/rook/rook/blob/release-1.14/deploy/examples/filesystem-test.yaml)
+
+- 创建文件系统存储类[storageclass.yaml](https://github.com/rook/rook/blob/release-1.14/deploy/examples/csi/cephfs/storageclass.yaml)
+
+- [文件系统存储使用示例](https://github.com/rook/rook/tree/release-1.14/deploy/examples/csi/cephfs)
+
 
