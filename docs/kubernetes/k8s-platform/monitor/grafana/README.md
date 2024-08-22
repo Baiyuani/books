@@ -29,3 +29,5 @@ helm upgrade --install grafana grafana/grafana \
 - [Node Exporter Full](https://grafana.com/grafana/dashboards/1860-node-exporter-full/)
 - [Felix Dashboard (Calico)](https://grafana.com/grafana/dashboards/12175-felix-dashboard-calico/)
 - [Loki stack monitoring (Promtail, Loki)](https://grafana.com/grafana/dashboards/14055-loki-stack-monitoring-promtail-loki/)
+- [Blackbox Exporter (HTTP prober)](https://grafana.com/grafana/dashboards/13659-blackbox-exporter-http-prober/)
+- [MinIO Dashboard](https://grafana.com/grafana/dashboards/13502-minio-dashboard/)
