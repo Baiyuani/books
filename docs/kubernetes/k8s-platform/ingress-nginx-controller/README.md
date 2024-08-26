@@ -1,6 +1,6 @@
 # ingress-nginx-controller
 
-1. [official-ingress-nginx-4.7.1](official-ingress-nginx-4.7.1)
+1. [official-ingress-nginx-4.7.5](official-ingress-nginx-4.7.5)
 
     ingress-nginx 官方charts，需要集群版本v1.20+
 

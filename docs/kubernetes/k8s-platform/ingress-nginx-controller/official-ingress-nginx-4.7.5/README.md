@@ -1,4 +1,4 @@
-# 官方 4.7.1 
+# 官方 4.7.5
 
 
 github： https://github.com/kubernetes/ingress-nginx     
@@ -22,7 +22,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
 helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --timeout 20m0s \
---version 4.7.1 \
+--version 4.7.5 \
 --namespace ingress-nginx --create-namespace  \
 --set controller.image.image='nginx-ingress-controller' \
 --set controller.image.registry='registry.aliyuncs.com/google_containers' \
