@@ -73,9 +73,9 @@ spec:
             - name: REGISTRY_AUTH_HTPASSWD_PATH
               value: /auth/htpasswd
             - name: REGISTRY_HTTP_TLS_CERTIFICATE
-              value: /certs/domain.crt
+              value: /certs/tls.crt
             - name: REGISTRY_HTTP_TLS_KEY
-              value: /certs/domain.key
+              value: /certs/tls.key
           ports:
             - containerPort: 5000
               name: http

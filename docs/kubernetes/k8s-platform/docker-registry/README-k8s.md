@@ -30,6 +30,8 @@ docker run \
 
 ## 3.安装registry
 ```shell
+kubectl create ns docker-registry
+
 kubectl create secret tls docker-registry-tls -n docker-registry \
 --cert certs/domain.crt \
 --key certs/domain.key
@@ -37,6 +39,22 @@ kubectl create secret tls docker-registry-tls -n docker-registry \
 kubectl create secret generic docker-registry-auth -n docker-registry \
 --from-file=auth/htpasswd
 
-kubectl apply -f docker-registry.yaml
+kubectl apply -n docker-registry -f docker-registry.yaml
+```
+
+## 4. 测试
+
+```shell
+curl -qsS https://myregistry.domain.com/v2/_catalog -k --user testuser:testpassword
+```
+
+
+## 5. containerd配置
+
+```toml
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."myregistry.domain.com"]
+          endpoint = ["https://myregistry.domain.com"]
+        [plugins."io.containerd.grpc.v1.cri".registry.configs."myregistry.domain.com".tls]
+          insecure_skip_verify = true
 ```
 
