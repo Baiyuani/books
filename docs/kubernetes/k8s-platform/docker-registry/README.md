@@ -130,7 +130,6 @@ Test that you can now pull an image from the registry or push an image to the re
 
 ## 5. 使用systemd 管理registry
 
-
 # registry.socket
 
 `vim /lib/systemd/system/registry.socket`
@@ -168,12 +167,7 @@ ExecStart=/usr/bin/docker run --name %N \
 WantedBy=multi-user.target
 ```
 
-
-## 6. k8s yaml
-
-[docker-registry.yaml](docker-registry.yaml)
-
-## 7. 常用命令
+## 6. 常用命令
 
 ```shell
 # 列出所有镜像
@@ -189,7 +183,7 @@ docker run --rm anoxis/registry-cli -r http://192.168.182.21:5000
 docker run --rm --link registry anoxis/registry-cli -r http://registry:5000
 ```
 
-## 8. docker registry ui   
+## 7. docker registry ui   
 
 https://github.com/Joxit/docker-registry-ui
 
