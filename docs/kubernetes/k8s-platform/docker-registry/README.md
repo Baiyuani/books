@@ -130,7 +130,6 @@ Test that you can now pull an image from the registry or push an image to the re
 
 ## 5. 使用systemd 管理registry
 
-# registry.socket
 
 `vim /lib/systemd/system/registry.socket`
 
