@@ -55,7 +55,6 @@ spec:
         - "/tengine-ingress-controller"
         - "--configmap=$(POD_NAMESPACE)/tengine-ingress-configuration"
         - "--controller-class=k8s.io/tengine-ingress"
-#        - --ingress-class=tengine-ingress-class
         - "--annotations-prefix=nginx.ingress.kubernetes.io"
         - "--v=1"
         - --healthz-port=10254
@@ -194,8 +193,10 @@ subjects:
 apiVersion: networking.k8s.io/v1
 kind: IngressClass
 metadata:
-#  annotations:
-#    ingressclass.kubernetes.io/is-default-class: "true"
-  name: tengine-ingress-class
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+  name: nginx
+# 多个ingress controller时注意修改
+#  name: tengine-ingress-class
 spec:
   controller: k8s.io/tengine-ingress
