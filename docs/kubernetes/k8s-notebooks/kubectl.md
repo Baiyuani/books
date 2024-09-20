@@ -119,3 +119,31 @@ Usage:
 Use "kubectl auth <command> --help" for more information about a given command.
 Use "kubectl options" for a list of global command-line options (applies to all commands).
 ```
+
+## kubectl debug
+
+> Kubernetes v1.25 [stable]
+>
+> 集群低版本需要修改kube-apiserver、kube-scheduler、kubelet启动配置参数，添加--feature-gates=EphemeralContainers=true
+>
+> 不满足要求时可以使用[nsenter](./k8s-notebooks.md#nsenter命令解决容器内部命令不足的问题)
+
+```shell
+kubectl debug $(kubectl get pod -l app=sleep -n ambient-demo -o jsonpath='{.items[0].metadata.name}') -it -n ambient-demo  --image nicolaka/netshoot  -- ss -ntlp
+
+kubectl debug $(kubectl get pod -l app=sleep -n ambient-demo -o jsonpath='{.items[0].metadata.name}') -it --image gcr.io/istio-release/base --profile=netadmin -n ambient-demo -- iptables-save
+```
+
+## kubectl logs 
+
+```shell
+# 查看pod日志
+kubectl logs ${POD_NAME}
+# 查看workload日志
+kubectl logs deploy/${DEPLOYMENT_NAME}
+# 获取有指定labels的pods的日志
+kubectl logs -l ${LABELS}
+
+-f [mum] # tail
+-p  # 获取pod的前一个容器的日志
+```
