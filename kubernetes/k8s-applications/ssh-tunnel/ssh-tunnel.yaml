@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ssh-tunnel
+  name: ssh-tunnel
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: ssh-tunnel
+  template:
+    metadata:
+      labels:
+        app: ssh-tunnel
+    spec:
+      hostAliases:
+        - hostnames:
+            - gpt.xxx.com
+          ip: x.x.x.x
+      containers:
+      - name: ssh-tunnel
+        image: synin/ssh:latest
+        imagePullPolicy: IfNotPresent
+        command:
+          - ssh
+          - -D 
+          - 0.0.0.0:1337
+          - -p
+          - "22"
+          - -Ng
+          - sshtunnel@gpt.xxx.com
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 1
+          periodSeconds: 20
+          successThreshold: 1
+          tcpSocket: 
+            port: 1337
+          timeoutSeconds: 3
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 1
+          periodSeconds: 20
+          successThreshold: 1
+          tcpSocket: 
+            port: 1337
+          timeoutSeconds: 3
+        startupProbe:
+          failureThreshold: 30
+          initialDelaySeconds: 5
+          periodSeconds: 3
+          successThreshold: 1
+          tcpSocket: 
+            port: 1337
+          timeoutSeconds: 2
+        resources: {}
+        ports:
+        - containerPort: 1337
+          protocol: TCP
+          name: socks
+        securityContext:
+          runAsUser: 1001
+        volumeMounts:
+        - name: pk
+          mountPath: /home/sshonly/.ssh
+          readOnly: True
+      volumes:
+      - name: pk
+        secret:
+          defaultMode: 0400
+          secretName: ssh-tunnel-pk
+      # imagePullSecrets:
+      #   - name: gitlab-registry-qtgl
+      restartPolicy: Always
+      securityContext:
+        fsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      dnsPolicy: ClusterFirst
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ssh-tunnel
+  name: ssh-tunnel
+spec:
+  ports:
+  - protocol: TCP
+    port: 1337
+    targetPort: socks
+    name: socks
+  selector:
+    app: ssh-tunnel
+  sessionAffinity: None
+  type: ClusterIP

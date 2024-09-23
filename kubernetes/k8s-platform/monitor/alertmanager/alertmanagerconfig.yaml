@@ -1,0 +1,32 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: config-example
+  namespace: ops
+  labels:
+    alertmanagerConfig: example
+spec:
+  route:
+    groupBy: ['namespace']
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 12h
+    receiver: 'default'
+  # 告警渠道
+  receivers:
+  - name: 'default'
+    wechatConfigs:
+    - sendResolved: true
+      apiSecret:
+        key: secret
+        name: alertmanagerconfig-receiver-wechat-apisecret
+      corpID: ww59fbb1b02cdfd07f
+#      message: '{{ template "wechat.default.message" . }}'
+#      message: '{{ template "wechat.cluster.message" . }}'
+#      messageType: 'text'
+      agentID: "1000002"
+#      toUser: '@all'
+      toUser: 'DongZiHao'
+#      toParty: '1'
+#      toParty: '{{ template "wechat.default.to_party" . }}'
+#      toTag: '{{ template "wechat.default.to_tag" . }}'
