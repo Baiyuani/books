@@ -20,7 +20,7 @@
 
 - 正式环境部署，要求mariadb单独运行在固定的节点上，并且使用`local-path`。以下示例中，节点`mariadb-primary`和`mariadb-secondary`分别运行主库和从库，具体操作时可以修改为正确的节点名称。
 
-- 修改[values.yaml](./values.yaml)中`primary.configuration`和`secondary.configuration`的`innodb_buffer_pool_size`，设置为服务器内存的80%
+- 修改[values.yaml](./values.yaml)中`primary.configuration`和`secondary.configuration`的`innodb_buffer_pool_size`，设置为服务器内存的50%
 
 ```bash
 #auth.rootPassword 数据库root密码
