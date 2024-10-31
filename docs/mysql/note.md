@@ -46,53 +46,53 @@ order by data_length desc;
 
 
 
-## 3. 主从异常处理方法
+## 3. [主从异常处理方法](https://database.51cto.com/art/202011/632010.htm)
 
-https://database.51cto.com/art/202011/632010.htm
 
 
 ## 4. 查看非sleep进程
 
+```sql
 select * from information_schema.`PROCESSLIST` p where p.COMMAND != "sleep" ORDER BY p.TIME DESC;
-
+```
 
 ## 5. 后台执行命令
 
+```shell
 nohup mysql -usa -pabcd1234 -e 'source /db.sql' &
 nohup mysql -uroot -p1qaz@WSX -h192.168.1.11 -P32614 -e 'ALTER TABLE `dj1910`.`polls_choice` add INDEX choice_text(`choice_text`)' >/dev/null 2>& 1 &
+```
 
 
-## 6. mysql:Prepared statement needs to be re-prepared解决办法
-https://blog.csdn.net/haibo0668/article/details/81262323
+## 6. mysql:Prepared statement needs to be re-prepared[解决办法](https://blog.csdn.net/haibo0668/article/details/81262323)
+
 
 
 
 ## 7. 备份
 
-```sql
+```shell
 # 排除一些库
 mysql -uroot -p'P@ssw0rd01!' -h192.171.225.227 -N -e "show databases;"|grep -Ev "information_schema|performance_schema|mysql"|xargs mysqldump -uroot -p'P@ssw0rd01!' -h192.171.225.227 --databases > yewu-20220928.sql
 ```
 
 
 ## 8. 恢复
+
 ```shell
 # 从备份sql中过滤
 cat 2023-02-23_all.sql | sed -n '/INSERT INTO `ykpjgl` VALUES/p' > /tmp/xxx.sql
 ```
 
 
-
 ## 9. 修改用户密码
 
-
-```shell
+```sql
 ALTER USER root@'%' IDENTIFIED BY 'xxxx';
 ```
 
-
-
 ## 10. 主从恢复
+
 ```sql
 -- primary执行
 show master status;
@@ -116,7 +116,9 @@ stop slave;
 set global sql_slave_skip_counter =1; 
 start slave; 
 show slave status \G
-
+```
+                  
+```shell                  
 xtrabackup --defaults-file=/etc/my.cnf --backup --user=root --password=xxxx --target-dir=/mnt/full-$(date +%F-%H%M)
 xtrabackup --prepare --target-dir=/home/infoplus/full-2023-07-06-0957
 xtrabackup --defaults-file=/etc/my.cnf --copy-back --target-dir=/home/infoplus/full-2023-07-06-0957
@@ -135,7 +137,10 @@ yum install MariaDB-backup
 ```
 
 - [命令使用参考](https://www.modb.pro/db/11297)
+
 [官方文档](https://mariadb.com/kb/en/mariabackup-options/)
+
+
 ```shell
 mariabackup --defaults-file=/etc/my.cnf --backup  --user=backupuser  --password='tany' -S /tmp/mysql.sock --target-dir=/data/backup
 #全量备份, 需要指定新目录，文件直接放在目录里，不像xtra那样自动新建以日期命名的目录；
@@ -152,6 +157,7 @@ mv backup3 ../			#调整目录位置，备份时指定备份目录/data/backup*�
 ```
 
 - 备份和恢复案例
+
 ```shell
 # 全量备份
 mariabackup --defaults-file=/mnt/my.cnf --backup --user=root --password='1qaz@WSX' --host=172.19.205.0 --port=3306 --target-dir=/mnt/backup/full-$(date +%F-%H%M)
@@ -179,7 +185,6 @@ chown -R mysql:mysql /var/lib/mysql/
 
 systemctl start mysqld
 ```
-
 
 
 ### 容器化mariadb如何使用mariabackup
@@ -234,8 +239,6 @@ mysqlslap  -h192.168.182.16 -uroot -p'1qaz@WSX' \
 --concurrency=200 --iterations=10 --auto-generate-sql --auto-generate-sql-load-type=mixed \
 --auto-generate-sql-add-autoincrement --engine=innodb --number-of-queries=150000 
 ```
-
-
 
 
 ```shell
