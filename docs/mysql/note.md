@@ -50,10 +50,14 @@ order by data_length desc;
 
 
 
-## 4. 查看非sleep进程
+## 4. 查看连接情况
 
 ```sql
+-- 非sleep连接
 select * from information_schema.`PROCESSLIST` p where p.COMMAND != "sleep" ORDER BY p.TIME DESC;
+
+-- 按用户和IP统计连接情况
+select USER,SUBSTRING_INDEX(HOST, ':', 1) as ip, count(1) as count  from information_schema.PROCESSLIST p GROUP BY  ip, USER  ORDER BY count DESC;
 ```
 
 ## 5. 后台执行命令
