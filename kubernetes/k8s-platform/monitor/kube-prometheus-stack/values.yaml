@@ -1,0 +1,74 @@
+alertmanager:
+  config:
+    route:
+      group_by: ['namespace']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 12h
+      receiver: 'default'
+      routes:
+      - receiver: 'null'
+        matchers:
+          - alertname = "Watchdog"
+    receivers:
+    - name: 'null'
+    - name: 'default'
+      wechat_configs:
+      - agent_id: "1000002"
+        api_secret:
+        corp_id:
+        send_resolved: true
+        to_user: 'DongZiHao'
+
+  alertmanagerSpec:
+    replicas: 1
+    storage:
+      volumeClaimTemplate:
+        spec:
+          resources:
+            requests:
+              storage: 50Gi
+          storageClassName: nfs-client
+  ingress:
+    enabled: true
+    hosts:
+    - alertmanager.local.domain
+grafana:
+  admin:
+    existingSecret: grafana-admin
+  ingress:
+    enabled: true
+    hosts:
+    - grafana.local.domain
+  initChownData:
+    enabled: false
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClassName: nfs-client
+kube-state-metrics:
+  image:
+    registry: myifeng
+    repository: registry.k8s.io_kube-state-metrics_kube-state-metrics
+prometheus:
+  ingress:
+    enabled: true
+    hosts:
+    - prometheus.local.domain
+  prometheusSpec:
+    replicas: 1
+    retention: 10d
+    retentionSize: ""
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          resources:
+            requests:
+              storage: 100Gi
+          storageClassName: nfs-client
+prometheusOperator:
+  admissionWebhooks:
+    patch:
+      image:
+        registry: registry.aliyuncs.com
+        repository: google_containers/kube-webhook-certgen

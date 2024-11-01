@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: prometheus
+    app.kubernetes.io/instance: kube-prometheus
+    app.kubernetes.io/name: kube-prometheus
+  name: prometheus-webhook-wx
+spec:
+  selector:
+    matchLabels:
+      run: prometheus-webhook-wx
+  template:
+    metadata:
+      labels:
+        run: prometheus-webhook-wx
+    spec:
+      containers:
+      - args:
+#        - --adapter=/app/prometheusalert/dingtalk.js=/adapter/dingtalk=https://oapi.dingtalk.com/robot/send?access_token={token}#{secret}
+        - --adapter=/app/prometheusalert/wx.js=/adapter/wx=https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f8ee834f-02a6-4516-a9c7-5a2456082c11
+        image: registry.cn-shanghai.aliyuncs.com/baiyuani/webhook
+        name: prometheus-webhook-wx
+        ports:
+        - containerPort: 80
+          protocol: TCP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: prometheus
+    app.kubernetes.io/instance: kube-prometheus
+    app.kubernetes.io/name: kube-prometheus
+  name: prometheus-webhook-wx
+spec:
+  ports:
+  - port: 8060
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: prometheus-webhook-wx
+  type: ClusterIP

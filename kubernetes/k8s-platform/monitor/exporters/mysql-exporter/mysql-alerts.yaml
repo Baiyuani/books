@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    app.kubernetes.io/component: prometheus
+    app.kubernetes.io/instance: kube-prometheus
+    app.kubernetes.io/name: kube-prometheus
+  name: mysql-alerts
+spec:
+  groups:
+  - name: MySQLdAlerts
+    rules:
+    - alert: MySQLDown
+      expr: mysql_up != 1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        description: 'MySQL {{$labels.job}} on {{$labels.instance}} is not up.'
+        summary: MySQL not up.

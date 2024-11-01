@@ -1,0 +1,3 @@
+primary:
+  extendedConfiguration: |
+    max_connections = 2000

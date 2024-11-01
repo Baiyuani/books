@@ -1,0 +1,202 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tengine-ingress
+
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: tengine-deployment
+  namespace: tengine-ingress
+spec:
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: tengine
+  template:
+    metadata:
+      labels:
+        app: tengine
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - k8s-node6
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: tengine
+                namespaces:
+                  - tengine-ingress
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+      nodeSelector:
+        kubernetes.io/os: linux
+      priorityClassName: system-cluster-critical
+      containers:
+      - name: tengine
+        image: tengine-ingress-registry.cn-hangzhou.cr.aliyuncs.com/tengine/tengine-ingress:1.1.0
+        command: ["/usr/bin/dumb-init"]
+        args:
+        - "--"
+        - "/tengine-ingress-controller"
+        - "--configmap=$(POD_NAMESPACE)/tengine-ingress-configuration"
+        - "--controller-class=k8s.io/tengine-ingress"
+        - "--annotations-prefix=nginx.ingress.kubernetes.io"
+        - "--v=1"
+        - --healthz-port=10254
+        - --health-check-path=/healthz
+        - --health-check-timeout=10
+        env:
+        - name: log_level
+          value: "1"
+        - name: "POD_NAME"
+          valueFrom:
+            fieldRef:
+              fieldPath: "metadata.name"
+        - name: "POD_NAMESPACE"
+          valueFrom:
+            fieldRef:
+              fieldPath: "metadata.namespace"
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 10254
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /healthz
+            port: 10254
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        - containerPort: 443
+          name: https
+          protocol: TCP
+        - containerPort: 10254
+          name: metrics
+          protocol: TCP
+        - containerPort: 8181
+          name: server
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 100m
+            memory: 90Mi
+      dnsPolicy: ClusterFirstWithHostNet
+      hostNetwork: true
+      tolerations:
+      - operator: Exists
+      terminationGracePeriodSeconds: 300
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tengine-ingress-configuration
+  namespace: tengine-ingress
+data:
+  allow-snippet-annotations: 'true'
+  enable-underscores-in-headers: 'true'
+  max-worker-connections: '65531'
+  server-tokens: 'false'
+  ssl-redirect: 'false'
+  use-gzip: 'true'
+  use-http2: 'true'
+  log-format-upstream: '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" $request_length $request_time [$proxy_upstream_name] [$proxy_alternative_upstream_name] $upstream_addr $upstream_response_length $upstream_response_time $upstream_status $req_id $http_x_correlation_id'
+  access-log-path: '/dev/stdout'
+  error-log-path: "/dev/stderr"
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: tengine-reader
+  namespace: tengine-ingress
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: [ "get", "list", "watch"]
+- apiGroups: ["coordination.k8s.io"]
+  resources: ["leases"]
+  verbs: [ "get", "list", "watch", "create", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: default-tengine-reader
+  namespace: tengine-ingress
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: tengine-reader
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: tengine-ingress
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: tengine-cluster-role
+  namespace: tengine-ingress
+rules:
+- apiGroups: [""]
+  resources: ["secrets", "configmaps", "endpoints", "services"]
+  verbs: [ "get", "list", "watch"]
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses", "ingressclasses"]
+  verbs: [ "get", "list", "watch"]
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses/status"]
+  verbs: [ "get", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tengine-cluster-role-binding
+roleRef:
+  kind: ClusterRole
+  name: tengine-cluster-role
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: tengine-ingress
+
+---
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+  name: nginx
+# 多个ingress controller时注意修改
+#  name: tengine-ingress-class
+spec:
+  controller: k8s.io/tengine-ingress

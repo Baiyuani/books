@@ -1,0 +1,83 @@
+apiServer:
+  #未知
+  extraArgs:
+    authorization-mode: Node,RBAC
+  timeoutForControlPlane: 4m0s
+apiVersion: kubeadm.k8s.io/v1beta3
+certificatesDir: /etc/kubernetes/pki
+clusterName: kubernetes
+#集群控制入口端点
+controlPlaneEndpoint: cluster-endpoint:6443
+controllerManager: {}
+dns: {}
+etcd:
+  local:
+    ## etcd数据存储目录
+    dataDir: /var/lib/etcd
+#镜像源
+imageRepository: registry.aliyuncs.com/google_containers
+kind: ClusterConfiguration
+#集群版本
+kubernetesVersion: v1.24.4
+networking:
+  dnsDomain: cluster.local
+  #podcidr svccidr
+  podSubnet: 172.18.0.0/16
+  serviceSubnet: 172.19.0.0/16
+scheduler: {}
+---
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+bindAddress: 0.0.0.0
+bindAddressHardFail: false
+clientConnection:
+  acceptContentTypes: ""
+  burst: 0
+  contentType: ""
+  kubeconfig: /var/lib/kube-proxy/kubeconfig.conf
+  qps: 0
+# podcidr
+clusterCIDR: 172.18.0.0/16
+configSyncPeriod: 0s
+conntrack:
+  maxPerCore: null
+  min: null
+  tcpCloseWaitTimeout: null
+  tcpEstablishedTimeout: null
+detectLocal:
+  bridgeInterface: ""
+  interfaceNamePrefix: ""
+detectLocalMode: ""
+enableProfiling: false
+## 健康探针端口监听的地址
+healthzBindAddress: 0.0.0.0
+hostnameOverride: ""
+iptables:
+  masqueradeAll: false
+  masqueradeBit: null
+  minSyncPeriod: 0s
+  syncPeriod: 0s
+ipvs:
+  excludeCIDRs: null
+  minSyncPeriod: 0s
+  scheduler: ""
+  strictARP: false
+  syncPeriod: 0s
+  tcpFinTimeout: 0s
+  tcpTimeout: 0s
+  udpTimeout: 0s
+kind: KubeProxyConfiguration
+## 监控数据端口监听的地址
+metricsBindAddress: 0.0.0.0
+## 运行模式。ipvs或者iptables，默认为空（iptables）
+mode: "ipvs"
+nodePortAddresses: null
+oomScoreAdj: null
+portRange: ""
+showHiddenMetricsForVersion: ""
+udpIdleTimeout: 0s
+winkernel:
+  enableDSR: false
+  forwardHealthCheckVip: false
+  networkName: ""
+  rootHnsEndpointName: ""
+  sourceVip: ""

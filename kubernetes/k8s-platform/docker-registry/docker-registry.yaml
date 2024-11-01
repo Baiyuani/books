@@ -1,0 +1,142 @@
+---
+# Source: helper/templates/pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: docker-registry-pvc
+  labels:
+    app.kubernetes.io/name: docker-registry
+    app.kubernetes.io/instance: docker-registry
+spec:
+  accessModes:
+    - "ReadWriteMany"
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: nfs-client
+  volumeMode: Filesystem
+---
+# Source: helper/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: docker-registry
+  labels:
+    app.kubernetes.io/name: docker-registry
+    app.kubernetes.io/instance: docker-registry
+spec:
+  ports:
+    - name: http
+      port: 5000
+      targetPort: http
+  selector:
+    app.kubernetes.io/name: docker-registry
+    app.kubernetes.io/instance: docker-registry
+  sessionAffinity: None
+  type: ClusterIP
+---
+# Source: helper/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-registry
+  labels:
+    app.kubernetes.io/name: docker-registry
+    app.kubernetes.io/instance: docker-registry
+spec:
+  minReadySeconds: 0
+  progressDeadlineSeconds: 600
+  revisionHistoryLimit: 10
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: docker-registry
+      app.kubernetes.io/instance: docker-registry
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: docker-registry
+        app.kubernetes.io/instance: docker-registry
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: docker-registry
+          image: registry:2
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: REGISTRY_AUTH
+              value: htpasswd
+            - name: REGISTRY_AUTH_HTPASSWD_REALM
+              value: "Registry Realm"
+            - name: REGISTRY_AUTH_HTPASSWD_PATH
+              value: /auth/htpasswd
+            - name: REGISTRY_HTTP_TLS_CERTIFICATE
+              value: /certs/tls.crt
+            - name: REGISTRY_HTTP_TLS_KEY
+              value: /certs/tls.key
+          ports:
+            - containerPort: 5000
+              name: http
+              protocol: TCP
+          volumeMounts:
+            - name: docker-registry-pvc
+              mountPath: /var/lib/registry
+            - name: docker-registry-tls
+              mountPath: /certs
+              readOnly: True
+            - name: docker-registry-auth
+              mountPath: /auth
+              readOnly: True
+      volumes:
+        - name: docker-registry-pvc
+          persistentVolumeClaim:
+            claimName: docker-registry-pvc
+        - secret:
+            secretName: docker-registry-tls
+          name: docker-registry-tls
+        - secret:
+            secretName: docker-registry-auth
+          name: docker-registry-auth
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+---
+# Source: helper/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: docker-registry
+  labels:
+    app.kubernetes.io/name: docker-registry
+    app.kubernetes.io/instance: docker-registry
+  annotations:
+#    nginx.ingress.kubernetes.io/affinity: cookie
+#    cert-manager.io/cluster-issuer: letsencrypt-prod
+#    kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/proxy-body-size: 5000m
+    nginx.ingress.kubernetes.io/proxy-buffer-size: 512k
+    nginx.ingress.kubernetes.io/proxy-buffering: "on"
+    nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "720"
+    nginx.ingress.kubernetes.io/proxy-max-temp-file-size: 1024m
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/send-timeout: "600"
+#    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: "nginx"
+  rules:
+    - host: myregistry.domain.com
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: docker-registry
+                port:
+                  number: 5000

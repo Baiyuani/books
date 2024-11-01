@@ -1,0 +1,34 @@
+apiVersion: pingcap.com/v1alpha1
+kind: DMCluster
+metadata:
+  name: advanced-tidb-dm
+spec:
+  version: v6.5.0
+  pvReclaimPolicy: Retain
+  discovery: {}
+  nodeSelector:
+    app.kubernetes.io/component: tidb
+  tolerations:
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/tidb
+      operator: Exists
+  master:
+    baseImage: pingcap/dm
+    maxFailoverCount: 0
+    replicas: 1
+    # if storageClassName is not set, the default Storage Class of the Kubernetes cluster will be used
+    storageClassName: local-path
+    storageSize: "10Gi"
+    requests: {}
+    config: {}
+    # service:
+    #   type: NodePort
+  worker:
+    baseImage: pingcap/dm
+    maxFailoverCount: 0
+    replicas: 1
+    # if storageClassName is not set, the default Storage Class of the Kubernetes cluster will be used
+    storageClassName: local-path
+    storageSize: "100Gi"
+    requests: {}
+    config: {}

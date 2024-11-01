@@ -1,0 +1,20 @@
+
+users:
+  "admin": xxxxxx
+auths:
+  "admin":
+  - target: .*
+    useRegexp: true
+    actions:
+    - pull
+    - push
+    - delete
+  - target: catalog
+    type: registry
+    actions:
+    - "*"
+  _anonymous:
+  - target: .*
+    useRegexp: true
+    actions:
+    - pull
