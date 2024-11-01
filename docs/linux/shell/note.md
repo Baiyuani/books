@@ -101,3 +101,37 @@ command1 | command2
 
 但是如果你使用了set -o pipefail，那么如果 command1 失败，整个管道命令的退出状态就是 command1 的退出状态，即使 command2 成功。
 
+## [flock](https://linux.die.net/man/1/flock)
+
+https://blog.csdn.net/weixin_31748605/article/details/116879655
+
+```shell
+*/5 * * * * flock -xn /tmp/lock -c 'start.sh >/dev/null 2>&1'
+```
+
+- e.g.
+
+```shell
+(
+flock -s 200
+
+# ... commands executed under lock ...
+echo $$
+
+) 200>/var/lock/mylockfile
+```
+
+```shell
+#!/bin/bash
+
+{
+
+flock -n 3
+
+[ $? -eq 1 ] && { echo fail; exit; }
+
+echo $$
+
+} 3<>mylockfile
+```
+
